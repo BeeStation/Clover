@@ -417,7 +417,9 @@
 #endif
 		//Cloud data
 		if (cdn)
-			var/http[] = world.Export( "http://spacebee.goonhub.com/api/cloudsave?list&ckey=[ckey]&api_key=[config.ircbot_api]" )
+			if(!config.cloudsave_url)
+				logTheThing( "debug", src, null, "no cloudsave url set" )
+			var/http[] = world.Export( "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]" )
 			if( !http )
 				logTheThing( "debug", src, null, "failed to have their cloud data loaded: Couldn't reach Goonhub" )
 
