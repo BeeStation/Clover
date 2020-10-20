@@ -54,12 +54,12 @@
 	logTheThing("admin_help", client.mob, null, "HELP: [msg]")
 	logTheThing("diary", client.mob, null, "HELP: [msg]", "ahelp")
 
-	if (!first_adminhelp_happened)
+	if (!first_adminhelp_happened && config.weblog_viewer_url)
 		first_adminhelp_happened = 1
 		var/ircmsg[] = new()
 		ircmsg["key"] = "Loggo"
 		ircmsg["name"] = "First Adminhelp Notice"
-		ircmsg["msg"] = "Logs for this round can be found here: https://mini.xkeeper.net/ss13/admin/log-get.php?id=[config.server_id]&date=[roundLog_date]"
+		ircmsg["msg"] = "Logs for this round can be found here: [config.weblog_viewer_url]/ss13/admin/log-get.php?id=[config.server_id]&date=[roundLog_date]"
 		ircbot.export("help", ircmsg)
 
 	var/ircmsg[] = new()

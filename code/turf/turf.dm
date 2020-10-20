@@ -899,7 +899,7 @@
 
 		clickable.maptext = {"<span class='ol vga'>
 Welcome to Goonstation!
-New? <a style='color: #88f;' href="https://mini.xkeeper.net/ss13/tutorial/">Check the tutorial</a>!
+New? <a style='color: #88f;' href="[config.weblog_viewer_url]/ss13/tutorial/">Check the tutorial</a>!
 Have questions? Ask mentors with \[F3]!
 Need an admin? Message us with \[F1].
 
