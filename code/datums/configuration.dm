@@ -76,6 +76,8 @@
 	var/goonhub_api_token = null
 	var/goonhub_api_web_token = null
 
+	var/cloudsave_url = null
+
 	//Goonhub2 server
 	var/goonhub2_hostname = null
 
@@ -359,6 +361,9 @@
 
 			if ("player_notes_auth")
 				config.player_notes_auth = trim(value)
+
+			if("cloudsave_url")
+				config.cloudsave_url = trim(value)
 
 			else
 				logDiary("Unknown setting in configuration: '[name]'")
