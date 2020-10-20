@@ -3505,8 +3505,8 @@ var/global/noir = 0
 				alert("You cannot perform this action. You must be of a higher administrative rank!", null, null, null, null, null)
 
 		if ("view_logs_web")
-			if ((src.level >= LEVEL_MOD) && !src.tempmin)
-				usr << link("https://mini.xkeeper.net/ss13/admin/log-get.php?id=[config.server_id]&date=[roundLog_date]")
+			if ((src.level >= LEVEL_MOD) && !src.tempmin && config.weblog_viewer_url)
+				usr << link("[config.weblog_viewer_url]/ss13/admin/log-get.php?id=[config.server_id]&date=[roundLog_date]")
 
 		if ("view_logs")
 			if ((src.level >= LEVEL_MOD) && !src.tempmin)
