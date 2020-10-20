@@ -367,7 +367,11 @@
 		if (IsGuestKey(user.key))
 			return 0
 
-		var/http[] = world.Export( "http://spacebee.goonhub.com/api/cloudsave?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
+		if(!config.cloudsave_url)
+			logTheThing( "debug", src, null, "no cloudsave url set" )
+			return "Cloudsave Disabled."
+
+		var/http[] = world.Export( "[config.cloudsave_url]get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
 		if( !http )
 			return "Failed to contact Goonhub!"
 
@@ -387,11 +391,14 @@
 			return "Failed to retrieve cloud data, try rejoining."
 		if (IsGuestKey( user.key ))
 			return 0
+		if(!config.cloudsave_url)
+			logTheThing( "debug", src, null, "no cloudsave url set" )
+			return "Cloudsave Disabled."
 
 		var/savefile/save = src.savefile_save( user, 1, 1 )
 		var/exported = save.ExportText()
 		//world << "Exported: [exported]"
-		var/http[] = world.Export( "http://spacebee.goonhub.com/api/cloudsave?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]" )
+		var/http[] = world.Export( "[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]" )
 		if( !http )
 			return "Failed to contact Goonhub!"
 
@@ -402,7 +409,7 @@
 		return 1
 
 	cloudsave_delete( client/user, var/name )
-		var/http[] = world.Export( "http://spacebee.goonhub.com/api/cloudsave?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
+		var/http[] = world.Export( "[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
 		if( !http )
 			return "Failed to contact Goonhub!"
 		user.cloudsaves.Remove( name )
