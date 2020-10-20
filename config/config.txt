@@ -88,3 +88,6 @@ SERVERREGION Development
 
 CDN http://cdn.goonhub.com
 ENV dev
+
+# URL for cloudsaves
+CLOUDSAVE_URL http://spacebee.goonhub.com/api/cloudsave
