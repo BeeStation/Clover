@@ -863,7 +863,7 @@ var/f_color_selector_handler/F_Color_Selector
 			if (emergency_shuttle.location == SHUTTLE_LOC_STATION) shuttle = 0 - emergency_shuttle.timeleft()
 			else shuttle = emergency_shuttle.timeleft()
 		else shuttle = "welp"
-		s["shuttle_time"] = shuttle
+		s["shuttle_timer"] = shuttle
 		var/elapsed
 		if (current_state < GAME_STATE_FINISHED)
 			if (current_state <= GAME_STATE_PREGAME) elapsed = "pre"
@@ -877,6 +877,7 @@ var/f_color_selector_handler/F_Color_Selector
 			n++
 		s["players"] = n
 		s["map_name"] = getMapNameFromID(map_setting)
+		s["security_level"] = "N/A" //Goon doesn't have security levels
 		return list2params(s)
 
 	else // Discord bot communication (or callbacks)
