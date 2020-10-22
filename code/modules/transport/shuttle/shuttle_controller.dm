@@ -38,6 +38,19 @@ datum/shuttle_controller
 			setdirection(-1)
 			ircbot.event("shuttlerecall", src.timeleft())
 
+	proc/get_location()
+		switch(location)
+			if(SHUTTLE_LOC_CENTCOM)
+				return "CentCom"
+			if(SHUTTLE_LOC_STATION)
+				return "Station"
+			if(SHUTTLE_LOC_TRANSIT)
+				return "Transit"
+			if(SHUTTLE_LOC_RETURNED)
+				return "CentCom"
+			else
+				return "Unknown"
+
 
 	// returns the time (in seconds) before shuttle arrival
 	// note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
