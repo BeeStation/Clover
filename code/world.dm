@@ -908,6 +908,13 @@ var/f_color_selector_handler/F_Color_Selector
 		s["players"] = n
 		s["map_name"] = getMapNameFromID(map_setting)
 		s["security_level"] = "N/A" //Goon doesn't have security levels
+		s["revision"] = vcs_revision
+		s["revision_date"] = BUILD_TIME_FULL
+		s["admins"] = onlineAdmins ? onlineAdmins.len : 0
+		s["active_players"] = total_clients() //Goon doesn't seem to have AFK tracking? Just send the number of clients, who cares
+		s["shuttle_mode"] = emergency_shuttle.get_location() //Not exact parity but good enough
+		s["round_duration"] = ticker ? round((world.time-ticker.round_elapsed_ticks)/10) : 0
+		s["gamestate"] = current_state
 		return list2params(s)
 
 	else // Discord bot communication (or callbacks)
