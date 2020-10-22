@@ -78,6 +78,7 @@
 
 	var/cloudsave_url = null
 	var/weblog_viewer_url = null
+	var/tutorial_url = null
 
 	//Goonhub2 server
 	var/goonhub2_hostname = null
@@ -368,6 +369,8 @@
 
 			if("weblog_viewer_url")
 				config.weblog_viewer_url = trim(value)
+			if("tutorial_url")
+				config.tutorial_url = trim(value)
 
 			else
 				logDiary("Unknown setting in configuration: '[name]'")

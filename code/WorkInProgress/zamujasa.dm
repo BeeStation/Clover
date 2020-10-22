@@ -935,7 +935,7 @@
 		src.anchored = 2
 		src.mouse_opacity = 1
 		src.maptext = {"<div class='c pixel sh' style="background: #00000080;"><strong>-- Welcome to Goonstation! --</strong>
-New? <a href="[config.weblog_viewer_url]/ss13/tutorial/" style="color: #8888ff; font-weight: bold;" clss="ol">Click here for a tutorial!</a>
+New? <a href="[config.tutorial_url]/ss13/tutorial/" style="color: #8888ff; font-weight: bold;" clss="ol">Click here for a tutorial!</a>
 Ask mentors for help with <strong>F3</strong>
 Contact admins with <strong>F1</strong>
 Read the rules, don't grief, and have fun!</div>"}
