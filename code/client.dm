@@ -1019,7 +1019,9 @@ var/global/curr_day = null
 		return "Failed to talk to Goonhub; try rejoining."//oh no
 	clouddata[key] = "[value]"
 	SPAWN_DBG(0)//I do not advocate this! So basically hide your eyes for one line of code.
-		world.Export( "http://spacebee.goonhub.com/api/cloudsave?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]" )//If it fails, oh well...
+		if(!config.cloudsave_url)
+			logTheThing( "debug", src, null, "no cloudsave url set" )
+		world.Export( "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]" )//If it fails, oh well...
 //Returns some cloud data on the client
 /client/proc/cloud_get( var/key )
 	return clouddata ? clouddata[key] : null
