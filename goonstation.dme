@@ -18,12 +18,6 @@ var/datum/preMapLoad/preMapLoad = new
 //Standard Library Inclusions
 #include "_std\__std.dme"
 
-//Secret Code Handling
-#ifndef FASTDMM
-#include "+secret\__secret.dme"
-#endif
-#include "code\__secret_public.dme"
-
 // BEGIN_INCLUDE
 #include "code\area.dm"
 #include "code\atom.dm"
@@ -1718,10 +1712,6 @@ var/datum/preMapLoad/preMapLoad = new
 #include "interface\skin.dmf"
 #include "maps\config\map.dm"
 // END_INCLUDE
-
-#ifdef SECRETS_ENABLED
-#include "+secret\_secretAfter.dme"
-#endif
 
 #ifdef INCLUDE_BUGGY_LUA_SHIT
 #include "code\WorkInProgress\LuaJIT.dm"
