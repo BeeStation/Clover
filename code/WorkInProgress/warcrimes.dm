@@ -358,18 +358,6 @@ var/fartcount = 0
 			SPAWN_DBG(1 SECOND)
 				say("One of them [JOHN_PICK("people")] folks from the station helped us raise the cash. Lil bro been dreamin bout it fer years.")
 			return
-		#ifdef SECRETS_ENABLED
-		if (istype(W, /obj/item/paper/grillnasium/fartnasium_recruitment))
-			if(ON_COOLDOWN(src, "attackby_chatter", 3 SECONDS)) return
-			boutput(M, "<span class='notice'><b>You show [W] to [src]</b> </span>")
-			SPAWN_DBG(1 SECOND)
-				say("Well hot dog! [JOHN_PICK("insults")], you wouldn't believe it but I use to work there!")
-				johnbill_shuttle_fartnasium_active = 1
-				sleep(2 SECONDS)
-				say("Yer dag right we can go Juicin around in there! Pack yer shit we're doin a B&E ! ! ! ")
-				emote("dance")
-			return
-		#endif
 		if (istype(W, /obj/item/reagent_containers/food/snacks) || (istype(W, /obj/item/clothing/mask/cigarette/cigarillo) && !gotsmokes))
 			if(ON_COOLDOWN(src, "attackby_chatter", 3 SECONDS)) return
 			boutput(M, "<span class='notice'><b>You offer [W] to [src]</b> </span>")
