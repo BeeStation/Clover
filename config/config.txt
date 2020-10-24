@@ -91,3 +91,9 @@ ENV dev
 
 # URL for cloudsaves
 CLOUDSAVE_URL http://spacebee.goonhub.com/api/cloudsave
+
+# URL for the web log viewer
+WEBLOG_VIEWER_URL https://mini.xkeeper.net
+
+# URL for SS13 tutorial
+TUTORIAL_URL https://mini.xkeeper.net
