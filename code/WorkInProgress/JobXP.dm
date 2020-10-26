@@ -156,40 +156,53 @@ var/global/awarded_xp = 0
 	return
 
 /proc/get_xp(key, field_name="debug", force_new=FALSE)
-	if(!key) return null
+	if (!key)
+		return null
 	if (IsGuestKey(key))
 		return null
-	else if (!config)
+	if (!config)
 		return null
-	else if (!config.medal_hub || !config.medal_password)
-		return null
-	if(!(key in xp_cache) || force_new)
-		var/response = world.GetScores(key, null, config.medal_hub, config.medal_password)
-		if(isnull(response))
+	if (!(key in xp_cache))
+		xp_cache[key] = list()
+	if(!(field_name in xp_cache[key]) || force_new)
+		var/list/request = list(
+			"ckey" = key,
+			"type" = field_name
+			) //Debug might be a valid route for forcing a full xp dump. Not sure. Not implimenting it for now -Franc
+
+		var/list/response = apiHandler.queryAPI("clover/xptrak/get", request, TRUE)
+
+		if(isnull(response) || response.len == 0)
 			return null
-		xp_cache[key] = params2list(response)
-		for(var/field in xp_cache[key])
-			var/num = text2num(xp_cache[key][field])
-			if(!isnull(num))
-				xp_cache[key][field] = num
+
+		xp_cache[key][field_name] = response[key][field_name]
 	if(field_name in xp_cache[key])
-		return xp_cache[key][field_name]
+		if(xp_cache[key][field_name] == null)
+			return 0
+		else
+			return xp_cache[key][field_name]
 	return 0
 
 /proc/get_level(var/key = null, var/field_name="debug")
 	var/xp = get_xp(key, field_name)
 	if(xp)
 		return round(LEVEL_FOR_XP(xp))
-	return null
+	return 0
 
 //Actually sets the xp on byond scores
 /proc/set_xp(var/key = null, var/field_name="debug", var/field_value="0")
-	if(!key) return null
+	if(!key)
+		return null
 	if (IsGuestKey(key))
 		return null
 	else if (!config)
 		return null
-	else if (!config.medal_hub || !config.medal_password)
-		return null
-	var/result = world.SetScores(key, "[field_name]=[field_value]", config.medal_hub, config.medal_password)
-	return result
+	var/list/request = list(
+		"ckey" = key,
+		"type" = field_name,
+		"val" = field_value)
+
+	apiHandler.queryAPI("clover/xptrak/set",request)
+	//The original version of this code returned something, but this return value seemed to never actually be used
+	//So I'm just going to ignore it and treat it as a pure void proc -Francinum
+	return
