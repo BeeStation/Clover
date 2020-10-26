@@ -41,6 +41,9 @@
 (t)tue oct 27 20
 (u)Sovexe
 (*)New verb, Spawn-Demonically.
+(t)mon oct 26 20
+(u)Francinum
+(+)Added aghost to the admin verbs, unifying the individual state toggle verbs. The old ones still exist.
 (t)wed oct 07 20
 (u)Sovexe
 (+)Oceanify no longer overwrites trench hole turfs.
