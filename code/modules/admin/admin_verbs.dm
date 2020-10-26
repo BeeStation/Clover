@@ -641,6 +641,17 @@ var/list/special_pa_observing_verbs = list(
 	else
 		boutput(src, "<span class='notice'>You are already playing!</span>")
 
+/client/proc/aghost() //Unify this proc in a quick hacky manner to make it less painful to be an admin coming from tg.
+	SET_ADMIN_CAT(ADMIN_CAT_SELF)
+	set name = "Set Observe"
+	if(!src.holder)
+		alert("You are not an admin")
+		return
+	if(istype(src.mob, /mob/dead/observer))
+		admin_play()
+	else
+		admin_observe()
+
 /client/proc/get_admin_state()
 	SET_ADMIN_CAT(ADMIN_CAT_SERVER)
 	for(var/client/C)
