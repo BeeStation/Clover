@@ -89,11 +89,13 @@ SERVERREGION Development
 CDN http://cdn.goonhub.com
 ENV dev
 
-# URL for cloudsaves
-CLOUDSAVE_URL http://spacebee.goonhub.com/api/cloudsave
 
 # URL for the web log viewer
 WEBLOG_VIEWER_URL https://mini.xkeeper.net
 
 # URL for SS13 tutorial
 TUTORIAL_URL https://mini.xkeeper.net
+
+banpanel_base http://127.0.0.1:5555
+banpanel_get /usec/bans/get
+banpanel_prev /usec/bans/getPrevious
