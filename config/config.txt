@@ -92,8 +92,15 @@ ENV dev
 # URL for cloudsaves
 CLOUDSAVE_URL http://spacebee.goonhub.com/api/cloudsave
 
+player_notes_baseurl http://localhost:5555/notes
+player_notes_auth AUTH_NOTES
+
 # URL for the web log viewer
 WEBLOG_VIEWER_URL https://mini.xkeeper.net
 
 # URL for SS13 tutorial
 TUTORIAL_URL https://mini.xkeeper.net
+
+banpanel_base http://127.0.0.1:5555
+banpanel_get /usec/bans/get
+banpanel_prev /usec/bans/getPrevious
