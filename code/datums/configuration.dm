@@ -97,6 +97,11 @@
 	var/banpanel_get = null
 	var/banpanel_prev = null
 
+	//banning panel routes.
+	var/banpanel_base = null
+	var/banpanel_get = null
+	var/banpanel_prev = null
+
 	//Goonhub2 server
 	var/goonhub2_hostname = null
 
@@ -425,6 +430,13 @@
 						continue
 					var/list/entry = splittext(line, "=")
 					serverhop_servers[entry[1]] = entry[2]
+
+			if("banpanel_base")
+				banpanel_base = trim(value)
+			if("banpanel_get")
+				banpanel_get = trim(value)
+			if("banpanel_prev")
+				banpanel_prev = trim(value)
 
 			if("banpanel_base")
 				banpanel_base = trim(value)
