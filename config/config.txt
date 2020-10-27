@@ -89,6 +89,11 @@ SERVERREGION Development
 CDN http://cdn.goonhub.com
 ENV dev
 
+# URL for cloudsaves
+CLOUDSAVE_URL http://spacebee.goonhub.com/api/cloudsave
+
+player_notes_baseurl http://localhost:5555/notes
+player_notes_auth AUTH_NOTES
 
 # URL for the web log viewer
 WEBLOG_VIEWER_URL https://mini.xkeeper.net
