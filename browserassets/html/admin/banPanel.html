@@ -98,12 +98,15 @@
 	<script type="text/javascript" src="{{resource("js/errorHandler.js")}}"></script>
 	<script type="text/javascript" language="JavaScript">
 		var triggerError = attachErrorHandler('banPanel', true);
-		
+
 		var ref_src = null /* ref_src */;
 		var CMinutes = null /* cminutes */;
 		var windowName = null /* window_name */;
 		var apiKey = null /* api_key */;
 		var apiDataParams = null /* api_data_params */;
+		var web_base = null /* api_baseroute */;
+		var web_get = null /* api_getroute */;
+		var web_prev = null /* api_prevroute */;
 		var totalBans = 0;
 		var pageLimit = 100; //How many rows per page
 		var viewRemoved = 0;
@@ -174,7 +177,7 @@
 				html += '<a href="?src='+ref_src+'&action=unbane'+urlEncodeParams({id: row.id, target: row.ckey, compID: row.compID, ip: row.ip, reason: row.reason, timestamp: row.timestamp})+'" title="Edit"><i class="icon-edit"></i></a>'+
 						'<a href="?src='+ref_src+'&action=unbanf'+urlEncodeParams({id: row.id, target: row.ckey, compID: row.compID, ip: row.ip})+'" title="Unban"><i class="icon-trash"></i></a>';
 			}
-			
+
 			html +=	'<a href="?src='+ref_src+'&action=notes'+urlEncodeParams({target: row.ckey})+'" title="Notes"><i class="icon-comments-alt"></i></a>'+
 				'</td>'+
 				'<td class="ckey">'+
@@ -232,7 +235,7 @@
 				if (apiKey) {
 					xmlHttp = new XMLHttpRequest();
 
-					xmlHttp.open('GET', 'http://goonhub.com/ss13/bans/get?search['+column+']='+term+'&sort='+sort+'&order='+order+'&offset='+offset+'&limit='+pageLimit+'&removed='+viewRemoved+'&bypass=1&forcejson=1&auth='+apiKey+'&'+apiDataParams+'&t='+Math.random(), false);
+					xmlHttp.open('GET', web_base+web_get+'?search['+column+']='+term+'&sort='+sort+'&order='+order+'&offset='+offset+'&limit='+pageLimit+'&removed='+viewRemoved+'&bypass=1&forcejson=1&auth='+apiKey+'&'+apiDataParams+'&t='+Math.random(), false);
 					xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 					xmlHttp.send();
 					var bansData = xmlHttp.responseText;
@@ -291,7 +294,7 @@
 
 			xmlHttp = new XMLHttpRequest();
 
-			xmlHttp.open('GET', 'http://goonhub.com/ss13/bans/getPrevious?id='+id+'&forcejson=1&bypass=1&auth='+apiKey+'&'+apiDataParams+'&t='+Math.random(), false);
+			xmlHttp.open('GET', web_base+web_prev+'?id='+id+'&forcejson=1&bypass=1&auth='+apiKey+'&'+apiDataParams+'&t='+Math.random(), false);
 			xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xmlHttp.send();
 			var bansData = htmlEncode(xmlHttp.responseText);
@@ -402,7 +405,7 @@
 				e.preventDefault();
 				getPreviousBans($(this).attr('data-previous'));
 			});
-			
+
 			$('.header .addNew').attr('href', '?src='+ref_src+';action=addban');
 
 			$('.switchRemoved').click(function(e) {

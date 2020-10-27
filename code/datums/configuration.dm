@@ -80,6 +80,11 @@
 	var/weblog_viewer_url = null
 	var/tutorial_url = null
 
+	//banning panel routes.
+	var/banpanel_base = null
+	var/banpanel_get = null
+	var/banpanel_prev = null
+
 	//Goonhub2 server
 	var/goonhub2_hostname = null
 
@@ -371,6 +376,13 @@
 				config.weblog_viewer_url = trim(value)
 			if("tutorial_url")
 				config.tutorial_url = trim(value)
+
+			if("banpanel_base")
+				banpanel_base = trim(value)
+			if("banpanel_get")
+				banpanel_get = trim(value)
+			if("banpanel_prev")
+				banpanel_prev = trim(value)
 
 			else
 				logDiary("Unknown setting in configuration: '[name]'")

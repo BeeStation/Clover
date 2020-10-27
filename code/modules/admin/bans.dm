@@ -615,6 +615,22 @@ var/global/list/playersSeen = list()
 */
 
 /////////////////////////
+// BAN PANEL SECURITY PROCS (Cloverfield Module)
+/////////////////////////
+
+///Issue banpanel JWT
+/datum/admins/proc/issue_token()//Bypass
+	var/list/apipayload = list(
+		"servertag" = config.server_id,
+		"administrator" = owner.ckey,
+		"data_version" = config.goonhub_api_version
+	)
+	var/response = apiHandler.queryAPI("usec/auth/get", apipayload, TRUE)
+	return response["token"]
+
+
+
+/////////////////////////
 // BAN PANEL PROCS (called via ejhax)
 /////////////////////////
 
@@ -628,7 +644,10 @@ var/global/list/playersSeen = list()
 	bansHtml = replacetext(bansHtml, "null /* cminutes */", "[CMinutes]")
 	bansHtml = replacetext(bansHtml, "null /* api_data_params */", "'data_server=[serverKey]&data_id=[config.server_id]&data_version=[config.goonhub_api_version]'")
 	if (centralConn)
-		bansHtml = replacetext(bansHtml, "null /* api_key */", "'[md5(config.goonhub_api_web_token)]'")
+		bansHtml = replacetext(bansHtml, "null /* api_key */", "'[issue_token()]'")
+		bansHtml = replacetext(bansHtml, "null /* api_baseroute */", "'[config.banpanel_base]'")
+		bansHtml = replacetext(bansHtml, "null /* api_getroute */", "'[config.banpanel_get]'")
+		bansHtml = replacetext(bansHtml, "null /* api_prevroute */", "'[config.banpanel_prev]'")
 	usr << browse(bansHtml,"window=[windowName];size=1080x500")
 
 
