@@ -629,7 +629,7 @@ var/list/special_pa_observing_verbs = list(
 
 /client/proc/aghost() //Unify this proc in a quick hacky manner to make it less painful to be an admin coming from tg.
 	SET_ADMIN_CAT(ADMIN_CAT_SELF)
-	set name = "Set Observe"
+	set name = "aghost"
 	if(!src.holder)
 		alert("You are not an admin")
 		return
