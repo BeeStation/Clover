@@ -16,6 +16,8 @@
 	var/rounds_participated = null
 	/// how many rounds theyve joined to at least the lobby in, null to differentiate between not set and not seen
 	var/rounds_seen = null
+	/// whether or not they can skip playtime requirements
+	var/bypass_playtime_reqs = FALSE
 	/// a list of cooldowns that has to persist between connections
 	var/list/cooldowns = null
 	/// position of client in in global.clients
@@ -66,6 +68,7 @@
 			return 0
 		src.rounds_participated = text2num(response["participated"])
 		src.rounds_seen = text2num(response["seen"])
+		src.bypass_playtime_reqs = text2num(response["bypass_playtime_reqs"])
 		return 1
 
 	/// returns an assoc list of cached player stats (please update this proc when adding more player stat vars)
