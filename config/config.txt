@@ -102,10 +102,10 @@ WEBLOG_VIEWER_URL https://mini.xkeeper.net
 TUTORIAL_URL https://mini.xkeeper.net
 
 # URL for dectalk
-DECTALK_URL http://spacebee.goonhub.com/api/tts
+#DECTALK_URL http://spacebee.goonhub.com/api/tts
 
 # URL for youtube audio
-YOUTUBE_AUDIO_URL http://yt.goonhub.com/index.php
+#YOUTUBE_AUDIO_URL http://yt.goonhub.com/index.php
 
 # Self-explanatory website URLs
 GITHUB_REPO_URL https://github.com/BeeStation/Clover
