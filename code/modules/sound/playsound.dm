@@ -287,11 +287,11 @@ var/global/admin_sound_channel = 1014 //Ranges from 1014 to 1024
 		src.verbs += /client/verb/stop_all_sounds
 
 /client/proc/play_youtube_audio()
-	if (!config.youtube_audio_key)
-		alert("You don't have access to the youtube audio converter")
-		return 0
 	if(!config.youtube_audio_url)
 		alert("Youtube audio is disabled in the config.")
+		return 0
+	if (!config.youtube_audio_key)
+		alert("You don't have access to the youtube audio converter")
 		return 0
 
 	var/video = input("Input the Youtube video information\nEither the full URL e.g. https://www.youtube.com/watch?v=145RCdUwAxM\nOr just the video ID e.g. 145RCdUwAxM", "Play Youtube Audio") as null|text
