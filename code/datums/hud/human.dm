@@ -525,7 +525,7 @@
 					if (icon_x < 16)
 						master.say_radio()
 					else
-						master.client << link("https://wiki.ss13.co/Construction")
+						master.client << link("[config.wiki_url]/Construction")
 
 			#define clicked_slot(slot) var/obj/item/W = master.get_slot(master.slot); if (W) { master.click(W, params); } else { var/obj/item/I = master.equipped(); if (!I || !master.can_equip(I, master.slot) || istype(I.loc, /obj/item/parts/)) { return; } master.u_equip(I); master.force_equip(I, master.slot); }
 			if("belt")
