@@ -295,7 +295,7 @@ var/global/admin_sound_channel = 1014 //Ranges from 1014 to 1024
 	if (!video)
 		return
 
-	var/url = "http://yt.goonhub.com/index.php?server=[config.server_id]&key=[src.key]&video=[video]&auth=[config.youtube_audio_key]"
+	var/url = "[config.youtube_audio_url]?server=[config.server_id]&key=[src.key]&video=[video]&auth=[config.youtube_audio_key]"
 	var/response[] = world.Export(url)
 	if (!response)
 		boutput(src, "<span class='bold' class='notice'>Something went wrong with the youtube thing! Yell at Wire.</span>")
