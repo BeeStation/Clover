@@ -101,9 +101,27 @@ WEBLOG_VIEWER_URL https://mini.xkeeper.net
 # URL for SS13 tutorial
 TUTORIAL_URL https://mini.xkeeper.net
 
+# URL for dectalk
+DECTALK_URL http://spacebee.goonhub.com/api/tts
+
+# URL for youtube audio
+YOUTUBE_AUDIO_URL http://yt.goonhub.com/index.php
+
+# Self-explanatory website URLs
+GITHUB_REPO_URL https://github.com/BeeStation/Clover
+FORUMS_URL https://forums.beestation13.com/
+WIKI_URL https://wiki.ss13.co/Main_Page
+MAP_WEBVIEW_URL http://goonhub.com/maps/cogmap
+
+# Uncomment with a valid Org/Repo value to enable gitreports (https://gitreports.com)
+# GITREPORTS goonstation/goonstation
+
 banpanel_base http://127.0.0.1:5555
 banpanel_get /usec/bans/get
 banpanel_prev /usec/bans/getPrevious
 
 # Uncomment to enable round experience requirements for the roles that specify them
 REQUIRE_JOB_EXP
+
+# Uncomment to enable server hopping. See alt_servers.txt for a list of destinations.
+ENABLE_SERVERHOP

@@ -80,6 +80,17 @@
 	var/cloudsave_url = null
 	var/weblog_viewer_url = null
 	var/tutorial_url = null
+	var/dectalk_url = null
+	var/youtube_audio_url = null
+
+	var/gitreports = null
+	var/github_repo_url = null
+	var/wiki_url = null
+	var/forums_url = null
+	var/map_webview_url = null
+
+	var/enable_serverhop = null
+	var/list/serverhop_servers = list()
 
 	//banning panel routes.
 	var/banpanel_base = null
@@ -380,6 +391,40 @@
 				config.weblog_viewer_url = trim(value)
 			if("tutorial_url")
 				config.tutorial_url = trim(value)
+			if("dectalk_url")
+				config.dectalk_url = trim(value)
+			if("youtube_audio_url")
+				config.youtube_audio_url = trim(value)
+
+			if("gitreports")
+				config.gitreports = trim(value)
+			if("github_repo_url")
+				config.github_repo_url = trim(value)
+			if("wiki_url")
+				config.wiki_url = trim(value)
+			if("forums_url")
+				config.forums_url = trim(value)
+			if("map_webview_url")
+				config.map_webview_url = trim(value)
+
+			if("enable_serverhop")
+				if(!fexists("config/alt_servers.txt"))
+					logDiary("No 'config/alt_servers.txt' file found")
+					continue
+				config.enable_serverhop = 1
+				var/file = file2text("config/alt_servers.txt")
+				var/list/content = splittext(file, "\n")
+
+				for (var/line in content)
+					if (!line)
+						continue
+					line = trim(line)
+					if (length(line) == 0)
+						continue
+					else if (copytext(line, 1, 2) == "#")
+						continue
+					var/list/entry = splittext(line, "=")
+					serverhop_servers[entry[1]] = entry[2]
 
 			if("banpanel_base")
 				banpanel_base = trim(value)

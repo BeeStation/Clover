@@ -286,7 +286,7 @@ var/global/list/vpn_ip_checks = list() //assoc list of ip = true or ip = false. 
 								<body>
 									<h1>You have been banned.</h1>
 									<span class='banreason'>Reason: [isbanned].</span><br>
-									If you believe you were unjustly banned, head to <a href=\"https://forum.ss13.co\">the forums</a> and post an appeal.
+									If you believe you were unjustly banned, head to <a href=\"[config.forums_url]\">the forums</a> and post an appeal.
 								</body>
 							</html>
 						"}
@@ -450,7 +450,7 @@ var/global/list/vpn_ip_checks = list() //assoc list of ip = true or ip = false. 
 				//preferences.randomizeLook()
 				preferences.ShowChoices(src.mob)
 				src.mob.Browse(grabResource("html/tgControls.html"),"window=tgcontrolsinfo;size=600x400;title=TG Controls Help")
-				boutput(src, "<span class='alert'>Welcome! You don't have a character profile saved yet, so please create one. If you're new, check out the <a target='_blank' href='https://wiki.ss13.co/Getting_Started#Fundamentals'>quick-start guide</a> for how to play!</span>")
+				boutput(src, "<span class='alert'>Welcome! You don't have a character profile saved yet, so please create one. If you're new, check out the <a target='_blank' href='[config.wiki_url]/Getting_Started#Fundamentals'>quick-start guide</a> for how to play!</span>")
 				//hey maybe put some 'new player mini-instructional' prompt here
 				//ok :)
 				is_newbie = 1
@@ -895,28 +895,20 @@ var/global/curr_day = null
 	set name = "Ping"
 	boutput(usr, "Pong")
 
-/client/verb/changeServer(var/server as text)
+/client/verb/changeServer()
 	set name = "Change Server"
 	set hidden = 1
-	var/serverURL
-	var/serverName
-	switch (server)
-		if (1, "main1")
-			serverName = "Goonstation 1 Classic: Heisenbee"
-			serverURL = "byond://goon1.goonhub.com:26100"
-		if (2, "main2")
-			serverName = "Goonstation 2 Classic: Bombini"
-			serverURL = "byond://goon2.goonhub.com:26200"
-		if (3, "main3")
-			serverName = "Goonstation 3 Roleplay: Morty"
-			serverURL = "byond://goon3.goonhub.com:26300"
-		if (4, "main4")
-			serverName = "Goonstation 4 Roleplay: Sylvester"
-			serverURL = "byond://goon4.goonhub.com:26400"
+	if(!config.enable_serverhop)
+		boutput(usr, "Server hopping is disabled!")
+		return
 
-	if (serverURL)
-		boutput(usr, "You are being redirected to [serverName]...")
-		usr << link(serverURL)
+	var/destination = input(usr, "Choose a server", "Change Server") as null|anything in config.serverhop_servers
+	if(!destination)
+		return
+
+	boutput(usr, "You are being redirected to [destination]...")
+	boutput(usr, "If you don't connect within a minute or two, close your game and join manually.")
+	usr << link("[config.serverhop_servers[destination]]")
 
 
 /*
