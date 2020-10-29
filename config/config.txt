@@ -120,5 +120,10 @@ banpanel_base http://127.0.0.1:5555
 banpanel_get /usec/bans/get
 banpanel_prev /usec/bans/getPrevious
 
+
 # Uncomment to enable server hopping. See alt_servers.txt for a list of destinations.
 ENABLE_SERVERHOP
+
+# Uncomment to enable round experience requirements for the roles that specify them
+REQUIRE_JOB_EXP
+

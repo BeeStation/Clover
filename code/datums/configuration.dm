@@ -42,6 +42,7 @@
 	var/list/play_antag_rates = list()  // % of rounds players should get to play as X antag
 	var/allow_ai = 1					// allow ai job
 	var/respawn = 1
+	var/require_job_exp = 0
 
 	// Goonhub Parser
 	var/goonhub_parser_url = "localhost"
@@ -232,6 +233,9 @@
 
 			if ("norespawn")
 				config.respawn = 0
+
+			if ("require_job_exp")
+				config.require_job_exp = 1
 
 			if ("serverkey")
 				config.server_key = text2num(value)
