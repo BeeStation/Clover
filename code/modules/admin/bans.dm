@@ -180,7 +180,7 @@ var/global/list/playersSeen = list()
 		if (targetC)
 			targetC.mob.unlock_medal("Banned", 1)
 			boutput(targetC, "<span class='alert'><BIG><B>You have been banned by [row["akey"]].<br>Reason: [row["reason"]]</B></BIG></span>")
-			boutput(targetC, "<span class='alert'>To try to resolve this matter head to https://forum.ss13.co</span>")
+			boutput(targetC, "<span class='alert'>To try to resolve this matter head to [config.forums_url]</span>")
 		else
 			replacement_text = "[row["ckey"]] (IP: [row["ip"]], CompID: [row["compID"]])"
 

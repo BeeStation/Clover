@@ -1,0 +1,5 @@
+# List of servers that the player can serverhop to
+# One line per server. Use the following format: name=address
+BeeStation Golden (LRP)=byond://golden.beestation13.com:7777
+BeeStation Sage (MRP)=byond://sage.beestation13.com:7878
+NSV13=byond://game.nsv.beestation13.com:1337

@@ -493,7 +493,7 @@
 		boutput(src, "You are not authorized to communicate over these channels.")
 		return
 	if (oocban_isbanned(src))
-		boutput(src, "You are currently banned from using OOC and LOOC, you may appeal at https://forum.ss13.co/index.php")
+		boutput(src, "You are currently banned from using OOC and LOOC, you may appeal at [config.forums_url]")
 		return
 
 	msg = trim(copytext(html_encode(msg), 1, MAX_MESSAGE_LEN))
@@ -579,7 +579,7 @@
 		boutput(src, "You are not authorized to communicate over these channels.")
 		return
 	if (oocban_isbanned(src))
-		boutput(src, "You are currently banned from using OOC and LOOC, you may appeal at https://forum.ss13.co/index.php")
+		boutput(src, "You are currently banned from using OOC and LOOC, you may appeal at [config.forums_url]")
 		return
 
 	msg = trim(copytext(html_encode(sanitize(msg)), 1, MAX_MESSAGE_LEN))
