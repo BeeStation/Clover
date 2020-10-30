@@ -375,15 +375,16 @@
 
 
 	cloudsave_load( client/user, var/name )
+		if(!config.cloudsave_url)
+			logTheThing( "debug", src, null, "no cloudsave url set" )
+			return "Cloudsave Disabled."
+
 		if(isnull( user.player.cloudsaves ))
 			return "Failed to retrieve cloud data, try rejoining."
 
 		if (IsGuestKey(user.key))
 			return 0
 
-		if(!config.cloudsave_url)
-			logTheThing( "debug", src, null, "no cloudsave url set" )
-			return "Cloudsave Disabled."
 
 		// Fetch via HTTP from goonhub
 		var/datum/http_request/request = new()
