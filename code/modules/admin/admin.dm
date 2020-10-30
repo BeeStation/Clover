@@ -568,21 +568,6 @@ var/global/noir = 0
 					alert("You cannot perform this action. You must be of a higher administrative rank!")
 					return
 				if (jobban_isbanned(M, job))
-					if(jobban_keylist.Find(text("[M.ckey] - Everything Except Assistant")) && job != "Everything Except Assistant")
-						alert("This person is banned from Everything Except Assistant. You must lift that ban first.")
-						return
-					if(job in list("Mining Supervisor","Engineer","Atmospheric Technician","Miner","Mechanic"))
-						if(jobban_keylist.Find(text("[M.ckey] - Engineering Department")))
-							alert("This person is banned from Engineering Department. You must lift that ban first.")
-							return
-					if(job in list("Security Officer","Vice Officer","Detective"))
-						if(jobban_keylist.Find(text("[M.ckey] - Security Department")))
-							alert("This person is banned from Security Department. You must lift that ban first.")
-							return
-					if(job in list("Captain","Head of Personnel","Head of Security","Chief Engineer","Research Director"))
-						if(jobban_keylist.Find(text("[M.ckey] - Heads of Staff")))
-							alert("This person is banned from Heads of Staff. You must lift that ban first.")
-							return
 					logTheThing("admin", usr, M, "unbanned [constructTarget(M,"admin")] from [job]")
 					logTheThing("diary", usr, M, "unbanned [constructTarget(M,"diary")] from [job]", "admin")
 					message_admins("<span class='internal'>[key_name(usr)] unbanned [key_name(M)] from [job]</span>")
@@ -624,17 +609,6 @@ var/global/noir = 0
 		if ("boot")
 			var/mob/M = locate(href_list["target"])
 			usr.client.cmd_boot(M)
-
-		if ("removejobban")
-			if (src.level >= LEVEL_SA)
-				var/t = href_list["target"]
-				if(t)
-					logTheThing("admin", usr, null, "removed [t]")
-					logTheThing("diary", usr, null, "removed [t]", "admin")
-					message_admins("<span class='internal'>[key_name(usr)] removed [t]</span>")
-					jobban_remove(t)
-			else
-				alert("You need to be at least a Secondary Administrator to remove job bans.")
 
 		if ("mute")
 			if (src.level >= LEVEL_MOD)
