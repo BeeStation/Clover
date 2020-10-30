@@ -371,7 +371,7 @@
 			logTheThing( "debug", src, null, "no cloudsave url set" )
 			return "Cloudsave Disabled."
 
-		var/http[] = world.Export( "[config.cloudsave_url]get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
+		var/http[] = world.Export( "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
 		if( !http )
 			return "Failed to contact Goonhub!"
 
