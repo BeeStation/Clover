@@ -142,7 +142,6 @@ var/list/admin_verbs = list(
 		/client/proc/banooc,
 		/client/proc/view_cid_list,
 		/client/proc/modify_parts,
-		/client/proc/jobbans,
 
 		// moved down from admin
 		/client/proc/cmd_admin_add_freeform_ai_law,
