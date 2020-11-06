@@ -21,7 +21,7 @@
 			I.appearance_flags = RESET_COLOR
 			if (src.color)
 				I.color = src.color
-			var/md5hasho = "tile_edge_[md5_string("[prob(50) ? rand(1,10000) : rand(10001, 20000)]_[prob(50) ? rand(1,10000) : rand(10001, 20000)]_[prob(50) ? rand(1,10000) : rand(10001, 20000)]")]" // What the fuck?
+			var/md5hasho = "tile_edge_[md5_string("[prob(rand(1,100)) ? rand(1,10000) : rand(10001, 20000)]_[prob(rand(1,100)) ? rand(1,10000) : rand(10001, 20000)]_[prob(rand(1,100)) ? rand(1,10000) : rand(10001, 20000)]")]" // What the fuck? // Y'know what? I'm making this as dumb as possible out of spite.
 			//world.log << md5hasho
 			if (T.UpdateOverlays(I, md5hasho))
 				qdel(src)
