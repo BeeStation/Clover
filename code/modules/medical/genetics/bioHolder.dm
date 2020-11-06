@@ -231,7 +231,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 	New(var/mob/owneri)
 		owner = owneri
 		Uid = CreateUid()
-		uid_hash = md5(Uid)
+		uid_hash = md5_string(Uid)
 		bioUids[Uid] = null
 		mobAppearance = new/datum/appearanceHolder()
 
@@ -465,7 +465,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 			genetic_stability = toCopy.genetic_stability
 			ownerName = toCopy.ownerName
 			Uid = toCopy.Uid
-			uid_hash = md5(Uid)
+			uid_hash = md5_string(Uid)
 
 		if (copyPool)
 			src.RemoveAllPoolEffects()

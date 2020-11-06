@@ -327,7 +327,7 @@ var/global
 
 	if (obj && obj:icon)
 		//Hash the darn dmi path and state
-		var/iconKey = md5("[obj:icon][obj:icon_state]")
+		var/iconKey = md5_string("[obj:icon][obj:icon_state]")
 		var/iconData
 
 		//See if key already exists in savefile

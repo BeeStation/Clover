@@ -8,7 +8,7 @@ proc/debug_color_of(var/thing)
 	if(!thing || thing == "0" || thing == "null" || thing == "\[0x0\]")
 		return "#ffffff"
 	if(!(thing in color_caching))
-		color_caching[thing] = "#[copytext(md5(thing), 1, 7)]"
+		color_caching[thing] = "#[copytext(md5_string(thing), 1, 7)]"
 	return color_caching[thing]
 
 /client/proc

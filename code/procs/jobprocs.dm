@@ -446,7 +446,7 @@
 				var/datum/computer/file/clone/R = new
 				R.fields["ckey"] = ckey(src.key)
 				R.fields["name"] = src.real_name
-				R.fields["id"] = copytext(md5(src.real_name), 2, 6)
+				R.fields["id"] = copytext(md5_string(src.real_name), 2, 6)
 
 				var/datum/bioHolder/B = new/datum/bioHolder(null)
 				B.CopyOther(src.bioHolder)
