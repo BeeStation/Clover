@@ -54,7 +54,7 @@
 			set desc = "Open an interactive map in your browser"
 			set hidden = 1
 			if (map_settings)
-				src << link(map_settings.goonhub_map)
+				src << link(map_settings.webviewer_map)
 			else
 				src << link("[config.map_webview_url]")
 

@@ -386,7 +386,7 @@
 			return 0
 
 
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from Cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]", "", "")
 		request.begin_async()
@@ -394,7 +394,7 @@
 		var/datum/http_response/response = request.into_response()
 
 		if (response.errored || !response.body)
-			logTheThing("debug", null, null, "<b>cloudsave_load:</b> Failed to contact goonhub. u: [user.ckey]")
+			logTheThing("debug", null, null, "<b>cloudsave_load:</b> Failed to contact Cloverfield. u: [user.ckey]")
 			return
 
 		var/list/ret = json_decode(response.body)
@@ -417,7 +417,7 @@
 		var/savefile/save = src.savefile_save( user, 1, 1 )
 		var/exported = save.ExportText()
 
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from Cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]", "", "")
 		request.begin_async()
@@ -425,7 +425,7 @@
 		var/datum/http_response/response = request.into_response()
 
 		if (response.errored || !response.body)
-			logTheThing("debug", null, null, "<b>cloudsave_load:</b> Failed to contact goonhub. u: [user.ckey]")
+			logTheThing("debug", null, null, "<b>cloudsave_load:</b> Failed to contact Cloverfield. u: [user.ckey]")
 			return
 
 		var/list/ret = json_decode(response.body)
@@ -439,7 +439,7 @@
 			logTheThing( "debug", src, null, "no cloudsave url set" )
 			return "Cloudsave Disabled."
 
-		// Request deletion via HTTP from goonhub
+		// Request deletion via HTTP from Cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]", "", "")
 		request.begin_async()
@@ -447,7 +447,7 @@
 		var/datum/http_response/response = request.into_response()
 
 		if (response.errored || !response.body)
-			logTheThing("debug", null, null, "<b>cloudsave_delete:</b> Failed to contact goonhub. u: [user.ckey]")
+			logTheThing("debug", null, null, "<b>cloudsave_delete:</b> Failed to contact Cloverfield. u: [user.ckey]")
 			return
 
 		user.player.cloudsaves.Remove( name )

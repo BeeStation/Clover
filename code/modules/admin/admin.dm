@@ -4741,7 +4741,7 @@ var/global/noir = 0
 
 /datum/admins/proc/show_chatbans(var/client/C)//do not use this as an example of how to write DM please.
 	if( !C.cloud_available() )
-		alert( "Failed to communicate to Goonhub." )
+		alert( "Failed to communicate to Cloverfield." )
 		return
 	var/built = {"<title>Chat Bans (todo: prettify)</title>"}
 	if(C.cloud_get( "adminhelp_banner" ))

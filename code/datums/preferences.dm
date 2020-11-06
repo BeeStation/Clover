@@ -760,7 +760,7 @@ $(updateCharacterPreviewPos);
 		<td colspan="2">
 			<a href="[pref_link]changelog=1" class="toggle">[crap_checkbox(src.view_changelog)] Auto-open changelog</a><span class="info-thing" title="The changelog can be shown at any time by using the 'Changelog' command, under the Commands tab in the top right.">?</span>
 			<br><a href="[pref_link]scores=1" class="toggle">[crap_checkbox(src.view_score)] Auto-open end-of-round score</a><span class="info-thing" title="The end-of-round scoring shows various stats on how the round went. If this option is off, you won't be able to see it.">?</span>
-			<br><a href="[pref_link]tickets=1" class="toggle">[crap_checkbox(src.view_tickets)] Auto-open end-of-round ticket summary</a><span class="info-thing" title="The end-of-round ticketing summary shows the various tickets and fines that were handed out. If this option is off, you can still see them on Goonhub (goonhub.com).">?</span>
+			<br><a href="[pref_link]tickets=1" class="toggle">[crap_checkbox(src.view_tickets)] Auto-open end-of-round ticket summary</a><span class="info-thing" title="The end-of-round ticketing summary shows the various tickets and fines that were handed out. If this option is off, you can still see them on Cloverfield.">?</span>
 		</td>
 	</tr>"}
 			LAGCHECK(80)

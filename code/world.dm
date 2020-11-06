@@ -1172,7 +1172,7 @@ var/f_color_selector_handler/F_Color_Selector
 							return 1
 #endif
 
-		if (addr != config.ircbot_ip && addr != config.goonhub_api_ip && addr != config.goonhub2_hostname)
+		if (addr != config.ircbot_ip && addr != config.cloverfield_api_ip && addr != config.cloverfield2_hostname)
 			return 0 //ip filtering
 
 		var/list/plist = params2list(T)
@@ -1443,9 +1443,9 @@ var/f_color_selector_handler/F_Color_Selector
 					logTheThing("debug", null, null, "<b>API Error (Temp):</b> Didnt get proc.")
 					return 0
 
-				if (addr != config.goonhub_api_ip) return 0 //ip filtering
+				if (addr != config.cloverfield_api_ip) return 0 //ip filtering
 				var/auth = plist["auth"]
-				if (auth != sha256_string(config.goonhub_api_token)) return 0 //really bad md5 token security
+				if (auth != sha256_string(config.cloverfield_api_token)) return 0 //really bad md5 token security
 				var/theDatum = plist["datum"] ? plist["datum"] : null
 				var/theProc = "/proc/[plist["proc"]]"
 
@@ -1528,7 +1528,7 @@ var/f_color_selector_handler/F_Color_Selector
 				var/ircmsg[] = new()
 				ircmsg["major"] = ci_dm_version_major
 				ircmsg["minor"] = ci_dm_version_minor
-				ircmsg["goonhub_api"] = config.goonhub_api_version ? config.goonhub_api_version : 0
+				ircmsg["cloverfield_api"] = config.cloverfield_api_version ? config.cloverfield_api_version : 0
 				return ircbot.response(ircmsg)
 
 			if ("youtube")
