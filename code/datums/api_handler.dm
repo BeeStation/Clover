@@ -60,7 +60,7 @@ var/global/datum/apiHandler/apiHandler
 		req += "data_server=[serverKey]&data_id=[config.server_id]&" //Append server number and ID
 		req += "data_version=[config.goonhub_api_version]&" //Append API version
 		var/safeReq = req //for outputting errors without the auth code
-		req += "auth=[md5(config.goonhub_api_token)]" //Append auth code
+		req += "auth=[sha256_string(config.goonhub_api_token)]" //Append auth code
 
 		var/response[] = world.Export(req)
 		if(!response)
