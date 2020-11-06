@@ -11,7 +11,16 @@
 	message["round_server_number"] = "[serverKey]"
 	message["round_status"] = "start"
 
-	world.Export("[config.goonhub_parser_url][list2params(message)]")
+	var/datum/http_request/request = http_create_post("[config.goonhub_parser_url][list2params(message)]")
+	request.begin_async()
+	AWAIT(request.is_complete())
+	var/datum/http_response/response = request.into_response()
+	if(response.errored)
+		logTheThing( "diary", null, null, "failed to upload roundstart data: [response.errored]" )
+		sleep(100)
+		round_start_data()
+
+
 
 // Called in gameticker.dm at the end of the round.
 /proc/round_end_data(var/reason)
@@ -26,4 +35,11 @@
 	message["end_reason"] = reason
 	message["game_type"] = ticker && ticker.mode ? ticker.mode.name : "pre"
 
-	world.Export("[config.goonhub_parser_url][list2params(message)]")
+	var/datum/http_request/request = http_create_post("[config.goonhub_parser_url][list2params(message)]")
+	request.begin_async()
+	AWAIT(request.is_complete())
+	var/datum/http_response/response = request.into_response()
+	if(response.errored)
+		logTheThing( "diary", null, null, "failed to upload roundend data: [response.errored]" )
+		sleep(100)
+		round_end_data()

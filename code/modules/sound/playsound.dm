@@ -298,29 +298,15 @@ var/global/admin_sound_channel = 1014 //Ranges from 1014 to 1024
 	if (!video)
 		return
 
-	var/url = "[config.youtube_audio_url]?server=[config.server_id]&key=[src.key]&video=[video]&auth=[config.youtube_audio_key]"
-	var/response[] = world.Export(url)
-	if (!response)
-		boutput(src, "<span class='bold' class='notice'>Something went wrong with the youtube thing! Yell at Wire.</span>")
-		logTheThing("debug", null, null, "<b>Youtube Error</b>: No response from server with video: <b>[video]</b>")
-		logTheThing("diary", null, null, "Youtube Error: No response from server with video: [video]", "debug")
-		return
+	var/datum/http_request/request = http_create_post("[config.youtube_audio_url]?server=[config.server_id]&key=[src.key]&video=[video]&auth=[config.youtube_audio_key]")
+	request.begin_async()
+	AWAIT(request.is_complete())
+	var/datum/http_response/response = request.into_response()
 
-	var/key
-	var/contentExists = 0
-	for (key in response)
-		if (key == "CONTENT")
-			contentExists = 1
-
-	if (!contentExists)
-		boutput(src, "<span class='bold' class='notice'>Something went wrong with the youtube thing! Yell at Wire.</span>")
-		logTheThing("debug", null, null, "<b>Youtube Error</b>: Malformed response from server with video: <b>[video]</b>")
-		logTheThing("diary", null, null, "Youtube Error: Malformed response from server with video: [video]", "debug")
-		return
-
-	var/data = json_decode(file2text(response["CONTENT"]))
-	if (data["error"])
-		boutput(src, "<span class='bold' class='notice'>Error returned from youtube server thing: [data["error"]].</span>")
+	if (response.errored)
+		boutput(src, "<span class='bold' class='notice'>Something went wrong with the youtube thing: [response.errored]</span>")
+		logTheThing("debug", null, null, "<b>Youtube Error</b>: No response from server with video: <b>[video]</b>, Error: [response.errored]")
+		logTheThing("diary", null, null, "Youtube Error: No response from server with video: [video], Error: [response.errored]", "debug")
 		return
 
 	boutput(src, "<span class='bold' class='notice'>Youtube audio loading started. This may take some time to play and a second message will be displayed when it finishes.</span>")

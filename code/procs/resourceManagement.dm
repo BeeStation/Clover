@@ -34,11 +34,14 @@
 		if (cdn)
 			Z_LOG_DEBUG("Resource/Grab", "[path] - requesting from CDN")
 			//Actually get the file contents from the CDN
-			var/http[] = world.Export("[cdn]/[path]?serverrev=[vcs_revision]")
-			if (!http || !http["CONTENT"])
-				Z_LOG_ERROR("Resource/Grab", "[path] - failed to get from CDN")
-				CRASH("CDN DEBUG: No file found for path: [path]")
-			file = file2text(http["CONTENT"])
+			var/datum/http_request/request = http_create_get("[cdn]/[path]?serverrev=[vcs_revision]")
+			request.begin_async()
+			AWAIT(request.is_complete())
+			var/datum/http_response/response = request.into_response()
+			if (response.errored)
+				Z_LOG_ERROR("Resource/Grab", "[path] - failed to get from CDN: [response.errored]")
+				CRASH("CDN DEBUG: No file found for path: [path], error: [response.errored]")
+			file = response.body
 		else //No CDN, grab from local directory
 			Z_LOG_DEBUG("Resource/Grab", "[path] - locally loaded, parsing")
 			file = parseAssetLinks(file("browserassets/[path]"))

@@ -371,13 +371,14 @@
 			logTheThing( "debug", src, null, "no cloudsave url set" )
 			return "Cloudsave Disabled."
 
-		var/http[] = world.Export( "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
-		if( !http )
-			return "Failed to contact Goonhub!"
+		var/datum/http_request/request = http_create_get("[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]")
+		request.begin_async()
+		AWAIT(request.is_complete())
+		var/datum/http_response/response = request.into_response()
+		if(response.errored)
+			return "API request errored: [response.errored]"
 
-		var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
-		if( ret["status"] == "error" )
-			return ret["error"]["error"]
+		var/list/ret = json_decode(response.body)
 
 		var/savefile/save = new
 		save.ImportText( "/", ret["savedata"] )
@@ -398,19 +399,23 @@
 		var/savefile/save = src.savefile_save( user, 1, 1 )
 		var/exported = save.ExportText()
 		//world << "Exported: [exported]"
-		var/http[] = world.Export( "[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]" )
-		if( !http )
-			return "Failed to contact Goonhub!"
 
-		var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
-		if( ret["status"] == "error" )
-			return ret["error"]["error"]
+		var/datum/http_request/request = http_create_post("[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]")
+		request.begin_async()
+		AWAIT(request.is_complete())
+		var/datum/http_response/response = request.into_response()
+		if(response.errored)
+			return "API request errored: [response.errored]"
+
 		user.cloudsaves[ name ] = length( exported )
 		return 1
 
 	cloudsave_delete( client/user, var/name )
-		var/http[] = world.Export( "[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
-		if( !http )
-			return "Failed to contact Goonhub!"
+		var/datum/http_request/request = http_create_post("[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]")
+		request.begin_async()
+		AWAIT(request.is_complete())
+		var/datum/http_response/response = request.into_response()
+		if(response.errored)
+			return "API request errored: [response.errored]"
 		user.cloudsaves.Remove( name )
 		return 1

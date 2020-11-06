@@ -419,23 +419,25 @@
 		if (cdn)
 			if(!config.cloudsave_url)
 				logTheThing( "debug", src, null, "no cloudsave url set" )
-			var/http[] = world.Export( "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]" )
-			if( !http )
-				logTheThing( "debug", src, null, "failed to have their cloud data loaded: Couldn't reach Goonhub" )
 
-			var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
-			if( ret["status"] == "error" )
-				logTheThing( "debug", src, null, "failed to have their cloud data loaded: [ret["error"]["error"]]" )
-			else
-				cloudsaves = ret["saves"]
-				clouddata = ret["cdata"]
-				load_antag_tokens()
-				load_persistent_bank()
-				var/decoded = cloud_get("audio_volume")
-				if(decoded)
-					var/cur = volumes.len
-					volumes = json_decode(decoded)
-					volumes.len = cur
+			var/datum/http_request/request = http_create_get("[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]")
+			request.begin_async()
+			AWAIT(request.is_complete())
+			var/datum/http_response/response = request.into_response()
+
+			if(response.errored)
+				logTheThing( "debug", src, null, "failed to have their cloud data loaded: [response.errored]" )
+
+			var/list/ret = json_decode(response.body)
+			cloudsaves = ret["saves"]
+			clouddata = ret["cdata"]
+			load_antag_tokens()
+			load_persistent_bank()
+			var/decoded = cloud_get("audio_volume")
+			if(decoded)
+				var/cur = volumes.len
+				volumes = json_decode(decoded)
+				volumes.len = cur
 
 		if(current_state <= GAME_STATE_PREGAME && src.antag_tokens)
 			boutput(src, "<b>You have [src.antag_tokens] antag tokens!</b>")
@@ -750,11 +752,17 @@ var/global/curr_day = null
 
 /proc/geoip_check(var/addr)
 	set background = 1
-	var/list/vl = world.Export("http://ip-api.com/json/[addr]")
-	if (!("CONTENT" in vl) || vl["STATUS"] != "200 OK")
+
+	var/datum/http_request/request = http_create_get("http://ip-api.com/json/[addr]")
+	request.begin_async()
+	AWAIT(request.is_complete())
+	var/datum/http_response/response = request.into_response()
+
+	if (response.errored)
 		sleep(3000)
 		return geoip_check(addr)
-	var/jd = html_encode(file2text(vl["CONTENT"]))
+
+	var/jd = html_encode(response.body)
 	// hardcoding argentina for now
 	//var/c_text = "Argentina"
 	//var/r_text = "Entre Rios"
@@ -772,15 +780,21 @@ var/global/curr_day = null
 /client/proc/setJoinDate()
 	set background = 1
 	joined_date = ""
-	var/list/text = world.Export("http://byond.com/members/[src.ckey]?format=text")
-	if(text)
-		var/content = file2text(text["CONTENT"])
-		var/savefile/save = new
-		save.ImportText("/", content)
-		save.cd = "general"
-		joined_date = save["joined"]
-		jd_warning(joined_date)
-	return
+
+	var/datum/http_request/request = http_create_get("http://byond.com/members/[src.ckey]?format=text")
+	request.begin_async()
+	AWAIT(request.is_complete())
+	var/datum/http_response/response = request.into_response()
+
+	if(response.errored)
+		return
+
+	var/content = response.body
+	var/savefile/save = new
+	save.ImportText("/", content)
+	save.cd = "general"
+	joined_date = save["joined"]
+	jd_warning(joined_date)
 
 /client/verb/ping()
 	set name = "Ping"
@@ -1013,7 +1027,9 @@ var/global/curr_day = null
 	SPAWN_DBG(0)//I do not advocate this! So basically hide your eyes for one line of code.
 		if(!config.cloudsave_url)
 			logTheThing( "debug", src, null, "no cloudsave url set" )
-		world.Export( "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]" )//If it fails, oh well...
+		var/datum/http_request/request = http_create_put("[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]")
+		request.begin_async()
+
 //Returns some cloud data on the client
 /client/proc/cloud_get( var/key )
 	return clouddata ? clouddata[key] : null

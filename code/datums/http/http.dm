@@ -74,12 +74,12 @@ SOFTWARE.
 
 /datum/http_request/proc/begin_async()
 	if (in_progress)
-		crash_with("Attempted to re-use a request object.")
+		stack_trace("Attempted to re-use a request object.")
 
 	id = rustg_http_request_async(method, url, body, headers)
 
 	if (isnull(text2num(id)))
-		crash_with("Proc error: [id]")
+		stack_trace("Proc error: [id]")
 		_raw_response = "Proc error: [id]"
 	else
 		in_progress = TRUE
