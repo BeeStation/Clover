@@ -1032,7 +1032,7 @@
 				if (!("[setup_auth_access]" in accessList))
 					return ESIG_NOUSR
 
-				var/userhash = md5("[usdat.fields["registered"]]+[usdat.fields["assignment"]]")
+				var/userhash = md5_string("[usdat.fields["registered"]]+[usdat.fields["assignment"]]")
 				if (!userhash)
 					return ESIG_NOUSR
 
