@@ -112,6 +112,9 @@ SOFTWARE.
 		R.errored = TRUE
 		R.error = _raw_response
 
+	if(R.status_code && R.status_code != "200") // ike709 edit: Treat non-200 codes as errors.
+		R.errored = R.status_code
+
 	return R
 
 /datum/http_response
