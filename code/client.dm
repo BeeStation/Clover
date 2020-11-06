@@ -422,7 +422,7 @@
 				logTheThing( "debug", src, null, "no cloudsave url set" )
 			var/http[] = world.Export( "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]" )
 			if( !http )
-				logTheThing( "debug", src, null, "failed to have their cloud data loaded: Couldn't reach Goonhub" )
+				logTheThing( "debug", src, null, "failed to have their cloud data loaded: Couldn't reach Cloverfield" )
 
 			var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
 			if( ret["status"] == "error" )
@@ -1005,11 +1005,11 @@ var/global/curr_day = null
 
 //drsingh, don't read the rest of this comment; BELOW: CLOUD STUFFS
 //Sets and uploads cloud data on the client
-//Try to avoid calling often, as it contacts Goonhub and uses the dreaded spawn.
+//Try to avoid calling often, as it contacts Cloverfield and uses the dreaded spawn.
 //TODO: Pool puts, determine value of doing as such.
 /client/proc/cloud_put( var/key, var/value )
 	if( !clouddata )
-		return "Failed to talk to Goonhub; try rejoining."//oh no
+		return "Failed to talk to Cloverfield; try rejoining."//oh no
 	clouddata[key] = "[value]"
 	SPAWN_DBG(0)//I do not advocate this! So basically hide your eyes for one line of code.
 		if(!config.cloudsave_url)

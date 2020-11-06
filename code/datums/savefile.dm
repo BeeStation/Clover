@@ -373,7 +373,7 @@
 
 		var/http[] = world.Export( "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
 		if( !http )
-			return "Failed to contact Goonhub!"
+			return "Failed to contact Cloverfield!"
 
 		var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
 		if( ret["status"] == "error" )
@@ -400,7 +400,7 @@
 		//world << "Exported: [exported]"
 		var/http[] = world.Export( "[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]" )
 		if( !http )
-			return "Failed to contact Goonhub!"
+			return "Failed to contact Cloverfield!"
 
 		var/list/ret = json_decode(file2text( http[ "CONTENT" ] ))
 		if( ret["status"] == "error" )
@@ -411,6 +411,6 @@
 	cloudsave_delete( client/user, var/name )
 		var/http[] = world.Export( "[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]" )
 		if( !http )
-			return "Failed to contact Goonhub!"
+			return "Failed to contact Cloverfield!"
 		user.cloudsaves.Remove( name )
 		return 1

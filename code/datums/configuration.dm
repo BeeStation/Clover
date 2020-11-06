@@ -44,9 +44,9 @@
 	var/respawn = 1
 	var/require_job_exp = 0
 
-	// Goonhub Parser
-	var/goonhub_parser_url = "localhost"
-	var/goonhub_parser_key = "foo"
+	// cloverfield Parser
+	var/cloverfield_parser_url = "localhost"
+	var/cloverfield_parser_key = "foo"
 
 	// MySQL
 	var/sql_enabled = 0
@@ -57,7 +57,7 @@
 	var/sql_database = null
 
 	// Player notes
-	var/player_notes_baseurl = "http://playernotes.goonhub.com"
+	var/player_notes_baseurl = "http://playernotes.cloverfield.com"
 	var/player_notes_auth = null
 
 	// Server list for cross-bans and other stuff
@@ -71,11 +71,11 @@
 	var/ircbot_ip = null
 
 	//External server configuration (for central bans etc)
-	var/goonhub_api_version = 0
-	var/goonhub_api_endpoint = null
-	var/goonhub_api_ip = null
-	var/goonhub_api_token = null
-	var/goonhub_api_web_token = null
+	var/cloverfield_api_version = 0
+	var/cloverfield_api_endpoint = null
+	var/cloverfield_api_ip = null
+	var/cloverfield_api_token = null
+	var/cloverfield_api_web_token = null
 
 	var/cloudsave_url = null
 	var/weblog_viewer_url = null
@@ -97,8 +97,8 @@
 	var/banpanel_get = null
 	var/banpanel_prev = null
 
-	//Goonhub2 server
-	var/goonhub2_hostname = null
+	//cloverfield2 server
+	var/cloverfield2_hostname = null
 
 	//youtube audio converter
 	var/youtube_audio_key = null
@@ -324,27 +324,27 @@
 			if ("ircbot_ip")
 				config.ircbot_ip = trim(value)
 
-			if ("goonhub_parser_url")
-				config.goonhub_parser_url = trim(value)
-			if ("goonhub_parser_key")
-				config.goonhub_parser_key = trim(value)
+			if ("cloverfield_parser_url")
+				config.cloverfield_parser_url = trim(value)
+			if ("cloverfield_parser_key")
+				config.cloverfield_parser_key = trim(value)
 
 			if ("ticklag")
 				world.tick_lag = text2num(value)
 
-			if ("goonhub_api_version")
-				config.goonhub_api_version = text2num(value)
-			if ("goonhub_api_endpoint")
-				config.goonhub_api_endpoint = trim(value)
-			if ("goonhub_api_ip")
-				config.goonhub_api_ip = trim(value)
-			if ("goonhub_api_token")
-				config.goonhub_api_token = trim(value)
-			if ("goonhub_api_web_token")
-				config.goonhub_api_web_token = trim(value)
+			if ("cloverfield_api_version")
+				config.cloverfield_api_version = text2num(value)
+			if ("cloverfield_api_endpoint")
+				config.cloverfield_api_endpoint = trim(value)
+			if ("cloverfield_api_ip")
+				config.cloverfield_api_ip = trim(value)
+			if ("cloverfield_api_token")
+				config.cloverfield_api_token = trim(value)
+			if ("cloverfield_api_web_token")
+				config.cloverfield_api_web_token = trim(value)
 
-			if ("goonhub2_hostname")
-				config.goonhub2_hostname = trim(value)
+			if ("cloverfield2_hostname")
+				config.cloverfield2_hostname = trim(value)
 
 			if ("youtube_audio_key")
 				config.youtube_audio_key = trim(value)

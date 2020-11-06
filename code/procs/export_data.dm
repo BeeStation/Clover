@@ -5,20 +5,20 @@
 	set background = 1
 
 	var/message[] = new()
-	message["token"] = sha256_string(config.goonhub_parser_key)
+	message["token"] = sha256_string(config.cloverfield_parser_key)
 	message["round_name"] = url_encode(station_name())
 	message["round_server"]  = config.server_id
 	message["round_server_number"] = "[serverKey]"
 	message["round_status"] = "start"
 
-	world.Export("[config.goonhub_parser_url][list2params(message)]")
+	world.Export("[config.cloverfield_parser_url][list2params(message)]")
 
 // Called in gameticker.dm at the end of the round.
 /proc/round_end_data(var/reason)
 	set background = 1
 
 	var/message[] = new()
-	message["token"] = sha256_string(config.goonhub_parser_key)
+	message["token"] = sha256_string(config.cloverfield_parser_key)
 	message["round_name"] = url_encode(station_name())
 	message["round_server"]  = config.server_id
 	message["round_server_number"] = "[serverKey]"
@@ -26,4 +26,4 @@
 	message["end_reason"] = reason
 	message["game_type"] = ticker && ticker.mode ? ticker.mode.name : "pre"
 
-	world.Export("[config.goonhub_parser_url][list2params(message)]")
+	world.Export("[config.cloverfield_parser_url][list2params(message)]")

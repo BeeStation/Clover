@@ -1,5 +1,5 @@
 ///world/Topic
-var/global/goonhub/goonhub
+var/global/cloverfield/cloverfield
 
 /proc/logit(var/where, var/sendToAdmins)
 	var/list/built = list()
@@ -28,9 +28,9 @@ var/global/goonhub/goonhub
 		else if(istype(arg,/list))
 			logdata[++logdata.len] = arg
 	built["log"] = logdata
-	goonhub.StreamSend( "log", built )
+	cloverfield.StreamSend( "log", built )
 
-/goonhub
+/cloverfield
 	New()
 		..()
 		SPAWN_DBG(0)
