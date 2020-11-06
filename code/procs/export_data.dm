@@ -4,7 +4,7 @@
 /proc/round_start_data()
 
 	var/message[] = new()
-	message["token"] = md5(config.goonhub_parser_key)
+	message["token"] = sha256_string(config.goonhub_parser_key)
 	message["round_name"] = url_encode(station_name())
 	message["round_server"]  = config.server_id
 	message["round_server_number"] = "[serverKey]"
@@ -19,7 +19,7 @@
 /proc/round_end_data(var/reason)
 
 	var/message[] = new()
-	message["token"] = md5(config.goonhub_parser_key)
+	message["token"] = sha256_string(config.goonhub_parser_key)
 	message["round_name"] = url_encode(station_name())
 	message["round_server"]  = config.server_id
 	message["round_server_number"] = "[serverKey]"

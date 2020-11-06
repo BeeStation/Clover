@@ -260,7 +260,7 @@ proc/Create_Tommyname()
 					analyze_reagent_list(recipe.required_reagents, output)
 				else
 					for(var/i=0, i<rand(2,7), i++) //If it doesn't have a recipe, just spit out some random data
-						analyze_single(output, md5(rand(100,100000)))
+						analyze_single(output, md5_string(rand(100,100000)))
 
 			return output
 
@@ -280,7 +280,7 @@ proc/Create_Tommyname()
 
 	//This is mainly a helper
 	proc/analyze_single(var/list/base, var/id)
-		var/hash = md5("AReally[id]ShittySalt")
+		var/hash = md5_string("AReally[id]ShittySalt")
 		var/listPos = calc_start_point(hash)
 
 		for(var/i=1, i <= length(hash), i+=2)

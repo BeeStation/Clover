@@ -245,7 +245,7 @@
 	var/datum/data/record/R = new /datum/data/record(  )
 	R.fields["ckey"] = ckey(subjMind.key)
 	R.fields["name"] = subject.real_name
-	R.fields["id"] = copytext(md5(subject.real_name), 2, 6)
+	R.fields["id"] = copytext(md5_string(subject.real_name), 2, 6)
 
 	var/datum/bioHolder/H = new/datum/bioHolder(null)
 	H.CopyOther(subject.bioHolder)
