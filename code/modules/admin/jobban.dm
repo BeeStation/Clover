@@ -4,7 +4,7 @@
 	if (!M || !akey) return
 	if(ismob(M))
 		var/mob/keysource = M
-		M = M.ckey
+		M = keysource.ckey
 	var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
 	var/server = null //heehoo copy pasta
 	switch (server_nice)
