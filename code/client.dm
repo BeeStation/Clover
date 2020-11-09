@@ -1022,11 +1022,10 @@ var/global/curr_day = null
 	if( !clouddata )
 		return "Failed to talk to Goonhub; try rejoining." //oh no
 	clouddata[key] = "[value]"
-		world.Export( "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]" )//If it fails, oh well...
 
 	// Via rust-g HTTP
 	var/datum/http_request/request = new() //If it fails, oh well...
-	request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]", "", "")
+	request.prepare(RUSTG_HTTP_METHOD_POST, "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]", "", "")
 	request.begin_async()
 
 /// Returns some cloud data on the client
