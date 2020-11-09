@@ -1,114 +1,105 @@
-// By @AffectedArc07 on GitHub from paradise/tgstation (tgstation/tgstation/pull/49374). Licensed to us under MIT.
+// http.dm is licensed under the MIT license:
+/*
+MIT License
 
-/**
-  * # HTTP Request
-  *
-  * Holder datum for ingame HTTP requests
-  *
-  * Holds information regarding to methods used, URL, and response,
-  * as well as job IDs and progress tracking for async requests
-  */
+Copyright (c) 2020 Skull132
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+/proc/http_create_request(method, url, body = "", list/headers)
+	var/datum/http_request/R = new()
+	R.prepare(method, url, body, headers)
+
+	return R
+
+/proc/http_create_get(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_GET, url, body, headers)
+
+/proc/http_create_post(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_POST, url, body, headers)
+
+/proc/http_create_put(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_PUT, url, body, headers)
+
+/proc/http_create_delete(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_DELETE, url, body, headers)
+
+/proc/http_create_patch(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_PATCH, url, body, headers)
+
+/proc/http_create_head(url, body = "", list/headers)
+	return http_create_request(RUSTG_HTTP_METHOD_HEAD, url, body, headers)
+
 /datum/http_request
-	/// The ID of the request (Only set if it is an async request)
 	var/id
-	/// Is the request in progress? (Only set if it is an async request)
 	var/in_progress = FALSE
-	/// HTTP method used
+
 	var/method
-	/// Body of the request being sent
 	var/body
-	/// Request headers being sent
 	var/headers
-	/// URL that the request is being sent to
 	var/url
-	/// The raw response, which will be decoeded into a [/datum/http_response]
+
 	var/_raw_response
 
-/**
-  * Preparation handler
-  *
-  * Call this with relevant parameters to form the request you want to make
-  *
-  * Arguments:
-  * * _method - HTTP Method to use, see code/rust_g.dm for a full list
-  * * _url - The URL to send the request to
-  * * _body - The body of the request, if applicable
-  * * _headers - Associative list of HTTP headers to send, if applicable
-  */
-/datum/http_request/proc/prepare(_method, _url, _body = "", list/_headers)
-	if(!length(_headers))
-		_headers = ""
+/datum/http_request/proc/prepare(method, url, body = "", list/headers)
+	if (!length(headers))
+		headers = ""
 	else
-		_headers = json_encode(_headers)
+		headers = json_encode(headers)
 
-	method = _method
-	url = _url
-	body = _body
-	headers = _headers
+	src.method = method
+	src.url = url
+	src.body = body
+	src.headers = headers
 
-/**
-  * Blocking executor
-  *
-  * Remains as a proof of concept to show it works, but should NEVER be used to do FFI halting the entire DD process up
-  * Async rqeuests are much preferred.
-  */
 /datum/http_request/proc/execute_blocking()
-	CRASH("Attempted to execute a blocking HTTP request")
-	// _raw_response = rustg_http_request_blocking(method, url, body, headers)
+	_raw_response = rustg_http_request_blocking(method, url, body, headers)
 
-/**
-  * Async execution starter
-  *
-  * Tells the request to start executing inside its own thread inside RUSTG
-  * Preferred over blocking.
-  */
 /datum/http_request/proc/begin_async()
-	if(in_progress)
-		CRASH("Attempted to re-use a request object.")
+	if (in_progress)
+		stack_trace("Attempted to re-use a request object.")
 
 	id = rustg_http_request_async(method, url, body, headers)
 
-	if(isnull(text2num(id)))
+	if (isnull(text2num(id)))
+		stack_trace("Proc error: [id]")
 		_raw_response = "Proc error: [id]"
-		CRASH("Proc error: [id]")
 	else
 		in_progress = TRUE
 
-/**
-  * Async completion checker
-  *
-  * Checks if an async request has been complete
-  * Has safety checks built in to compensate if you call this on blocking requests,
-  * or async requests which have already finished
-  */
 /datum/http_request/proc/is_complete()
-	// If we dont have an ID, were blocking, so assume complete
-	if(isnull(id))
+	if (isnull(id))
 		return TRUE
 
-	// If we arent in progress, assume complete
-	if(!in_progress)
+	if (!in_progress)
 		return TRUE
 
-	// We got here, so check the status
-	var/result = rustg_http_check_request(id)
+	var/r = rustg_http_check_request(id)
 
-	// If we have no result, were not finished
-	if(result == RUSTG_JOB_NO_RESULTS_YET)
+	if (r == RUSTG_JOB_NO_RESULTS_YET)
 		return FALSE
 	else
-		// If we got here, we have a result to parse
-		_raw_response = result
+		_raw_response = r
 		in_progress = FALSE
 		return TRUE
 
-/**
-  * Response deserializer
-  *
-  * Takes a HTTP request object, and converts it into a [/datum/http_response]
-  * The entire thing is wrapped in try/catch to ensure it doesnt break on invalid requests
-  * Can be called on async and blocking requests
-  */
 /datum/http_request/proc/into_response()
 	var/datum/http_response/R = new()
 
@@ -121,24 +112,15 @@
 		R.errored = TRUE
 		R.error = _raw_response
 
+	if(R.status_code && R.status_code != "200") // ike709 edit: Treat non-200 codes as errors.
+		R.errored = R.status_code
+
 	return R
 
-/**
-  * # HTTP Response
-  *
-  * Holder datum for HTTP responses
-  *
-  * Created from calling [/datum/http_request/proc/into_response()]
-  * Contains vars about the result of the response
-  */
 /datum/http_response
-	/// The HTTP status code of the response
 	var/status_code
-	/// The body of the response from the server
 	var/body
-	/// Associative list of headers sent from the server
 	var/list/headers
-	/// Has the request errored
+
 	var/errored = FALSE
-	/// Raw response if we errored
 	var/error
