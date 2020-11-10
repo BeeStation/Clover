@@ -420,7 +420,7 @@
 		if (cdn)
 			// Fetch via HTTP from goonhub
 			var/datum/http_request/request = new()
-			request.prepare(RUSTG_HTTP_METHOD_GET, "http://spacebee.goonhub.com/api/cloudsave?list&ckey=[ckey]&api_key=[config.ircbot_api]", "", "")
+			request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]", "", "")
 			request.begin_async()
 			UNTIL(request.is_complete())
 			var/datum/http_response/response = request.into_response()
@@ -1024,6 +1024,8 @@ var/global/curr_day = null
 	clouddata[key] = "[value]"
 
 	// Via rust-g HTTP
+	if(!config.cloudsave_url)
+		logTheThing( "debug", src, null, "<b>CloudData/Francinum:</b> no cloudsave url set" )
 	var/datum/http_request/request = new() //If it fails, oh well...
 	request.prepare(RUSTG_HTTP_METHOD_POST, "[config.cloudsave_url]?dataput&api_key=[config.ircbot_api]&ckey=[ckey]&key=[url_encode(key)]&value=[url_encode(clouddata[key])]", "", "")
 	request.begin_async()
