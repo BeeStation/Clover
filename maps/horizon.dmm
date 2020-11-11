@@ -163,7 +163,7 @@
 "adg" = (/turf/simulated/floor/longtile/black,/area/space)
 "adh" = (/obj/map/light/dimreddish,/turf/simulated/floor/industrial,/area/space)
 "adi" = (/obj/map/light/dimreddish,/turf/simulated/floor/plating/airless/asteroid/lighted,/area/space)
-"adj" = (/obj/item/device/audio_log/ht_2,/turf/simulated/floor/industrial,/area/space)
+"adj" = (/turf/simulated/floor/industrial,/area/space)
 "adk" = (/turf/space,/obj/grille/catwalk,/turf/simulated/floor/airless/plating/catwalk,/area/space)
 "adl" = (/turf/simulated/wall/auto/gannets,/area/space)
 "adm" = (/obj/item/storage/toilet/random{dir = 4},/obj/disposalpipe/trunk,/turf/simulated/floor/plating/airless{icon_state = "panelscorched"},/area/space)
