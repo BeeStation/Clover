@@ -298,7 +298,7 @@ var/global/admin_sound_channel = 1014 //Ranges from 1014 to 1024
 	if (!video)
 		return
 
-	// Fetch via HTTP from goonhub
+	// Fetch via HTTP from cloverfield
 	var/datum/http_request/request = new()
 	request.prepare(RUSTG_HTTP_METHOD_POST, "[config.youtube_audio_url]?server=[config.server_id]&key=[src.key]&video=[video]&auth=[config.youtube_audio_key]", "", "")
 	request.begin_async()

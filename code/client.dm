@@ -418,7 +418,7 @@
 #endif
 		//Cloud data
 		if (cdn)
-			// Fetch via HTTP from goonhub
+			// Fetch via HTTP from cloverfield
 			var/datum/http_request/request = new()
 			request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]", "", "")
 			request.begin_async()

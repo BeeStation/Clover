@@ -3217,8 +3217,6 @@ var/global/noir = 0
 						src.owner:debug_variables(data_core)
 					if("miningcontrols")
 						src.owner:debug_variables(mining_controls)
-					if("cloverfield")
-						src.owner:debug_variables(cloverfield)
 					if("mapsettings")
 						src.owner:debug_variables(map_settings)
 					if("ghostnotifications")

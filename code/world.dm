@@ -466,9 +466,6 @@ var/f_color_selector_handler/F_Color_Selector
 
 	sun = new /datum/sun()
 
-	Z_LOG_DEBUG("World/Init", "Cloverfield init")
-	cloverfield = new()
-
 	Z_LOG_DEBUG("World/Init", "Vox init")
 	init_vox()
 	if (load_intra_round_value("solarium_complete") == 1)

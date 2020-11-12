@@ -370,7 +370,7 @@
 		if(!config.cloudsave_url)
 			logTheThing( "debug", src, null, "no cloudsave url set" )
 			return "Cloudsave Disabled."
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]", "", "")
 		request.begin_async()
@@ -401,7 +401,7 @@
 		var/savefile/save = src.savefile_save( user, 1, 1 )
 		var/exported = save.ExportText()
 
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_POST, "[config.cloudsave_url]?put&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]&data=[url_encode(exported)]", "", "")
 		request.begin_async()
@@ -420,7 +420,7 @@
 
 	cloudsave_delete( client/user, var/name )
 
-		// Request deletion via HTTP from goonhub
+		// Request deletion via HTTP from cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_DELETE, "[config.cloudsave_url]?delete&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]", "", "")
 		request.begin_async()
