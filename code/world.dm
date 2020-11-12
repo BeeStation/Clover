@@ -1267,7 +1267,7 @@ var/f_color_selector_handler/F_Color_Selector
 
 				var/server_name = plist["server_name"]
 				if (!server_name)
-					server_name = "GOON-???"
+					server_name = "CLOVER-???"
 				var/nick = plist["nick"]
 				var/msg = plist["msg"]
 				msg = trim(copytext(sanitize(msg), 1, MAX_MESSAGE_LEN))

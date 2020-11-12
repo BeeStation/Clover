@@ -1621,7 +1621,7 @@ $(function() {
 			rebuild_data["skintone"] = 1
 			var/new_tone = "#FEFEFE"
 			if (usr.has_medal("Contributor"))
-				switch(alert(user, "Goonstation contributors get to pick any colour for their skin tone!", "Thanks, pal!", "Paint me like a posh fence!", "Use Standard tone.", "Cancel"))
+				switch(alert(user, "Clover contributors get to pick any colour for their skin tone!", "Thanks, pal!", "Paint me like a posh fence!", "Use Standard tone.", "Cancel"))
 					if("Paint me like a posh fence!")
 						new_tone = input(user, "Please select skin color.", "Character Generation")  as null|color
 					if("Use Standard tone.")
