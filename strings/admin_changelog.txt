@@ -1,3 +1,9 @@
+(t)sat nov 07 20
+(u)Sovexe
+(*)New buildmode mode, Appearance. Allows you to copy the appearance of any mob/obj/turf and apply it to any other mob/obj/turf.
+(t)tue oct 27 20
+(u)Sovexe
+(*)New verb, Spawn-Demonically.
 (t)mon oct 26 20
 (u)Francinum
 (+)Added aghost to the admin verbs, unifying the individual state toggle verbs. The old ones still exist.
