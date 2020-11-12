@@ -43,11 +43,6 @@ jobs:
           echo "LD_LIBRARY_PATH=/home/runner/BYOND/byond/bin:$LD_LIBRARY_PATH" >> $GITHUB_ENV
           echo "MANPATH=/home/runner/BYOND/byond/man:$MANPATH" >> $GITHUB_ENV
 
-      - name: Setup for assjam
-        if: "matrix.compiletype == 'ass'"
-        run: |
-          sed -i 's/BUILD_TIME_DAY 01/BUILD_TIME_DAY 13/' _std/__build.dm
-
       - name: Setup rust-g
         run: |
           tools/ci/install_rust_g.sh
