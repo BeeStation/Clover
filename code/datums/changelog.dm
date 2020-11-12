@@ -166,7 +166,7 @@ ATTENTION: The changelog has moved into its own file: strings/changelog.txt
 								html += "<span class='tooltiptext'>[emoji_parts[2]]</span>"
 							html += "</span>"
 						if(pr_num)
-							html += "<a target='_blank' href='https://github.com/goonstation/goonstation/pull/[pr_num]' class='pr_link'><span class='pr_number'>#[pr_num]</span>&gt;</a>"
+							html += "<a target='_blank' href='https://github.com/BeeStation/Clover/pull/[pr_num]' class='pr_link'><span class='pr_number'>#[pr_num]</span>&gt;</a>"
 						html += "</li>"
 						added_author = 1
 					html += "<li>[copytext(line, 4, 0)]</li>"
@@ -180,7 +180,7 @@ ATTENTION: The changelog has moved into its own file: strings/changelog.txt
 								collapsible_html += "<span class='tooltiptext'>[emoji_parts[2]]</span>"
 							collapsible_html += "</span>"
 						if(pr_num)
-							collapsible_html += "<a target='_blank' href='https://github.com/goonstation/goonstation/pull/[pr_num]' class='pr_link'><span class='pr_number'>#[pr_num]</span>&gt;</a>"
+							collapsible_html += "<a target='_blank' href='https://github.com/BeeStation/Clover/pull/[pr_num]' class='pr_link'><span class='pr_number'>#[pr_num]</span>&gt;</a>"
 						collapsible_html += "</li>"
 						added_collapsible_author = 1
 					collapsible_html += "<li>[copytext(line, 4, 0)]</li>"
@@ -196,7 +196,7 @@ ATTENTION: The changelog has moved into its own file: strings/changelog.txt
 //<img alt="Goonstation 13" src="[resource("images/changelog/postcardsmall.jpg")]" class="postcard" />
 
 	html = {"
-<h1>Goonstation 13 <a href="#license"><img alt="Creative Commons CC-BY-NC-SA License" src="[resource("images/changelog/88x31.png")]" /></a></h1>
+<h1>BeeStation Clover <a href="#license"><img alt="Creative Commons CC-BY-NC-SA License" src="[resource("images/changelog/88x31.png")]" /></a></h1>
 
 <ul class="links cf">
     <li>Official Wiki<br><strong><a target="_blank" href="[config.wiki_url]/">[config.wiki_url]</a></strong><span></span></li>

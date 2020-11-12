@@ -29,7 +29,7 @@
 	set name = "RP Rules"
 	set category = "Commands"
 
-	src.Browse( {"<center><h2>Goonstation RP Server Guidelines and Rules</h2></center><hr>
+	src.Browse( {"<center><h2>Clover Server Guidelines and Rules</h2></center><hr>
 	Welcome to [station_name(1)]! Now, since as this server is intended for roleplay, there are some guidelines, rules and tips to make your time fun for everyone!<hr>
 	<ul style='list-style-type:disc'>
 		<li><b>These are extra rules.</b>
