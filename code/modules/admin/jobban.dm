@@ -2,6 +2,9 @@
 
 /proc/jobban_fullban(M, rank, akey)
 	if (!M || !akey) return
+	if(ismob(M))
+		var/mob/keysource = M
+		M = keysource.ckey
 	var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
 	var/server = null //heehoo copy pasta
 	switch (server_nice)
@@ -31,14 +34,14 @@
 		var/datum/player/player = make_player(M2.ckey) //Get the player so we can use their bancache.
 		if(player.cached_jobbans == null)//Shit they aren't cached.
 			player.cached_jobbans = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M2.ckey), 1)[M2.ckey]
-			cache = player.cached_jobbans
+		cache = player.cached_jobbans
 	else if(islist(M))
 		cache = M
 	else //If we aren't a string this is going to explode.
 		cache = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M), 1)[M]
 
 	var/datum/job/J = find_job_in_controller_by_string(rank)
-	if (J && J.no_jobban_from_this_job)
+	if (J?.no_jobban_from_this_job)
 		return 0
 
 
