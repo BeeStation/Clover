@@ -61,7 +61,7 @@ var/global/datum/apiHandler/apiHandler
 		var/safeReq = req //for outputting errors without the auth code
 		req += "auth=[sha256_string(config.cloverfield_api_token)]" //Append auth code
 
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, req, "", "")
 		request.begin_async()

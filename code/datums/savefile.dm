@@ -385,7 +385,6 @@
 		if (IsGuestKey(user.key))
 			return 0
 
-
 		// Fetch via HTTP from Cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?get&ckey=[user.ckey]&name=[url_encode(name)]&api_key=[config.ircbot_api]", "", "")

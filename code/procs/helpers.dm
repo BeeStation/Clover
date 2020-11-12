@@ -2040,7 +2040,7 @@ var/global/lastDectalkUse = 0
 		lastDectalkUse = world.timeofday
 		msg = copytext(msg, 1, 2000)
 
-		// Fetch via HTTP from goonhub
+		// Fetch via HTTP from cloverfield
 		var/datum/http_request/request = new()
 		request.prepare(RUSTG_HTTP_METHOD_GET, "[config.dectalk_url]?dectalk=[url_encode(msg)]&api_key=[url_encode(ircbot.apikey)]", "", "")
 		request.begin_async()
@@ -2048,7 +2048,7 @@ var/global/lastDectalkUse = 0
 		var/datum/http_response/response = request.into_response()
 
 		if (response.errored || !response.body)
-			logTheThing("debug", null, null, "<b>dectalk:</b> Failed to contact goonhub. msg : [msg]")
+			logTheThing("debug", null, null, "<b>dectalk:</b> Failed to contact cloverfield. msg : [msg]")
 			return
 
 		return list("audio" = response.body, "message" = msg)
