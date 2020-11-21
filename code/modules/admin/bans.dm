@@ -41,7 +41,7 @@ var/global/list/playersSeen = list()
 //A return 0 is a "this guy is ok let him in"
 //Anything that returns as true is a "bad dude kill his connection"
 //(this doesn't use the 'step' var thing because we need the response here and now)
-//"record" tells the goonhub api to make a note of these details
+//"record" tells the cloverfield api to make a note of these details
 /proc/checkBan(ckey, compID, ip, record = 0)
 	set background = 1
 	if (!ckey && !compID && !ip)
@@ -623,7 +623,7 @@ var/global/list/playersSeen = list()
 	var/list/apipayload = list(
 		"servertag" = config.server_id,
 		"administrator" = owner.ckey,
-		"data_version" = config.goonhub_api_version
+		"data_version" = config.cloverfield_api_version
 	)
 	var/response = apiHandler.queryAPI("usec/auth/get", apipayload, TRUE)
 	return response["token"]
@@ -642,7 +642,7 @@ var/global/list/playersSeen = list()
 	bansHtml = replacetext(bansHtml, "null /* window_name */", "'[windowName]'")
 	bansHtml = replacetext(bansHtml, "null /* ref_src */", "'\ref[src]'")
 	bansHtml = replacetext(bansHtml, "null /* cminutes */", "[CMinutes]")
-	bansHtml = replacetext(bansHtml, "null /* api_data_params */", "'data_server=[serverKey]&data_id=[config.server_id]&data_version=[config.goonhub_api_version]'")
+	bansHtml = replacetext(bansHtml, "null /* api_data_params */", "'data_server=[serverKey]&data_id=[config.server_id]&data_version=[config.cloverfield_api_version]'")
 	if (centralConn)
 		bansHtml = replacetext(bansHtml, "null /* api_key */", "'[issue_token()]'")
 		bansHtml = replacetext(bansHtml, "null /* api_baseroute */", "'[config.banpanel_base]'")

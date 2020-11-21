@@ -170,7 +170,7 @@ var/global/datum/mapSwitchHandler/mapSwitcher
 		else
 			mapName = getMapNameFromID(mapID)
 
-		//tell jenkins, via goonhub, to compile with a new map
+		//tell jenkins, via cloverfield, to compile with a new map
 		var/list/params = list(
 			"cause" = "[trigger] within Byond",
 			"map" = mapID,
@@ -179,10 +179,10 @@ var/global/datum/mapSwitchHandler/mapSwitcher
 		var/data[] = apiHandler.queryAPI("map-switcher/switch", params, 1)
 
 		if (!data)
-			throw EXCEPTION("No response from goonhub API route")
+			throw EXCEPTION("No response from cloverfield API route")
 
 		if (data["error"])
-			throw EXCEPTION("Received error from goonhub API: [data["error"]]")
+			throw EXCEPTION("Received error from cloverfield API: [data["error"]]")
 
 		if (!data["response"])
 			throw EXCEPTION("Missing response code from jenkins")

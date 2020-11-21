@@ -418,7 +418,7 @@
 #endif
 		//Cloud data
 		if (cdn)
-			// Fetch via HTTP from goonhub
+			// Fetch via HTTP from cloverfield
 			var/datum/http_request/request = new()
 			request.prepare(RUSTG_HTTP_METHOD_GET, "[config.cloudsave_url]?list&ckey=[ckey]&api_key=[config.ircbot_api]", "", "")
 			request.begin_async()
@@ -426,7 +426,7 @@
 			var/datum/http_response/response = request.into_response()
 
 			if (response.errored || !response.body)
-				logTheThing("debug", src, null, "failed to have their cloud data loaded: Couldn't reach Goonhub")
+				logTheThing("debug", src, null, "failed to have their cloud data loaded: Couldn't reach Cloverfield")
 				return
 
 			var/list/ret = json_decode(response.body)
@@ -1017,10 +1017,11 @@ var/global/curr_day = null
 
 //drsingh, don't read the rest of this comment; BELOW: CLOUD STUFFS
 //Sets and uploads cloud data on the client
+//Try to avoid calling often, as it contacts Cloverfield and uses the dreaded spawn.
 //TODO: Pool puts, determine value of doing as such.
 /client/proc/cloud_put( var/key, var/value )
 	if( !clouddata )
-		return "Failed to talk to Goonhub; try rejoining." //oh no
+		return "Failed to talk to Cloverfield; try rejoining."//oh no
 	clouddata[key] = "[value]"
 
 	// Via rust-g HTTP

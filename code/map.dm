@@ -71,7 +71,7 @@ var/global/list/mapNames = list(
 	var/display_name = MAP_NAME_RANDOM
 	var/style = "station"
 	var/default_gamemode = "secret"
-	var/goonhub_map = "https://goonhub.com/maps/cogmap"
+	var/webviewer_map = "https://goonhub.com/maps/cogmap"
 	var/arrivals_type = MAP_SPAWN_SHUTTLE
 	var/dir_fore = null
 
@@ -132,7 +132,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/donut2
 	name = "DONUT2"
-	goonhub_map = "https://goonhub.com/maps/donut2"
+	webviewer_map = "https://goonhub.com/maps/donut2"
 	escape_centcom = /area/shuttle/escape/centcom/donut2
 	escape_transit = /area/shuttle/escape/transit/donut2
 	escape_station = /area/shuttle/escape/station/donut2
@@ -145,7 +145,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/donut3
 	name = "DONUT3"
-	goonhub_map = "https://cdn.discordapp.com/attachments/469379618168897538/729919886524153916/donut3-30-FINAL4-the-unlucky-number.png"
+	webviewer_map = "https://cdn.discordapp.com/attachments/469379618168897538/729919886524153916/donut3-30-FINAL4-the-unlucky-number.png"
 	airlock_style = "pyro"
 	walls = /turf/simulated/wall/auto/jen
 	rwalls = /turf/simulated/wall/auto/reinforced/jen
@@ -196,7 +196,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/cogmap
 	name = "COGMAP"
-	goonhub_map = "https://goonhub.com/maps/cogmap"
+	webviewer_map = "https://goonhub.com/maps/cogmap"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -226,7 +226,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/cogmap2
 	name = "COGMAP2"
-	goonhub_map = "https://goonhub.com/maps/cogmap2"
+	webviewer_map = "https://goonhub.com/maps/cogmap2"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -271,7 +271,7 @@ var/global/list/mapNames = list(
 	display_name = "NSS Destiny"
 	style = "ship"
 	default_gamemode = "extended"
-	goonhub_map = "https://goonhub.com/maps/destiny"
+	webviewer_map = "https://goonhub.com/maps/destiny"
 	arrivals_type = MAP_SPAWN_CRYO
 	dir_fore = NORTH
 
@@ -304,7 +304,7 @@ var/global/list/mapNames = list(
 /datum/map_settings/destiny/clarion
 	name = "CLARION"
 	display_name = "NSS Clarion"
-	goonhub_map = "https://goonhub.com/maps/clarion"
+	webviewer_map = "https://goonhub.com/maps/clarion"
 
 	valid_nuke_targets = list("the main security room" = list(/area/station/security/main),
 		"the central research sector hub" = list(/area/station/science/lobby),
@@ -321,7 +321,7 @@ var/global/list/mapNames = list(
 	name = "HORIZON"
 	display_name = "NSS Horizon"
 	style = "ship"
-	goonhub_map = "https://goonhub.com/maps/horizon"
+	webviewer_map = "https://goonhub.com/maps/horizon"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -382,7 +382,7 @@ var/global/list/mapNames = list(
 /datum/map_settings/manta
 	name = "MANTA"
 	display_name = "NSS Manta"
-	goonhub_map = "https://goonhub.com/maps/manta"
+	webviewer_map = "https://goonhub.com/maps/manta"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -424,7 +424,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/mushroom
 	name = "MUSHROOM"
-	goonhub_map = "https://goonhub.com/maps/mushroom"
+	webviewer_map = "https://goonhub.com/maps/mushroom"
 
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
@@ -449,7 +449,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/trunkmap
 	name = "TRUNKMAP"
-	goonhub_map = "https://goonhub.com/maps/trunkmap"
+	webviewer_map = "https://goonhub.com/maps/trunkmap"
 	escape_centcom = /area/shuttle/escape/centcom/destiny
 	escape_transit = /area/shuttle/escape/transit/destiny
 	escape_station = /area/shuttle/escape/station/destiny
@@ -464,7 +464,7 @@ var/global/list/mapNames = list(
 	name = "ATLAS"
 	display_name = "NCS Atlas"
 	style = "ship"
-	goonhub_map = "https://goonhub.com/maps/atlas"
+	webviewer_map = "https://goonhub.com/maps/atlas"
 	arrivals_type = MAP_SPAWN_CRYO
 	dir_fore = NORTH
 
@@ -494,7 +494,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/kondaru
 	name = "KONDARU"
-	goonhub_map = "https://goonhub.com/maps/kondaru"
+	webviewer_map = "https://goonhub.com/maps/kondaru"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -537,7 +537,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/ozymandias
 	name = "OZYMANDIAS"
-	goonhub_map = "https://i.imgur.com/COYgNvN.jpg"
+	webviewer_map = "https://i.imgur.com/COYgNvN.jpg"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -589,7 +589,7 @@ var/global/list/mapNames = list(
 	name = "FLEET"
 	display_name = "Bellerophon Fleet"
 	style = "ship"
-	goonhub_map = "https://goonhub.com/maps/bellerophon fleet"
+	webviewer_map = "https://goonhub.com/maps/bellerophon fleet"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -631,7 +631,7 @@ var/global/list/mapNames = list(
 	name = "ICARUS"
 	display_name = "Icarus"
 	style = "ship"
-	goonhub_map = "https://i.imgur.com/SiI3RC9.png"
+	webviewer_map = "https://i.imgur.com/SiI3RC9.png"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -669,7 +669,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/density // I just copied cog2 for now, ok????
 	name = "density"
-	goonhub_map = "https://goonhub.com/maps/density"
+	webviewer_map = "https://goonhub.com/maps/density"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -711,7 +711,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/pamgoc
 	name = "PAMGOC"
-	goonhub_map = "https://goonhub.com/maps/cogmap"
+	webviewer_map = "https://goonhub.com/maps/cogmap"
 	walls = /turf/simulated/wall/auto/supernorn
 	rwalls = /turf/simulated/wall/auto/reinforced/supernorn
 	auto_walls = 1
@@ -745,7 +745,7 @@ var/global/list/mapNames = list(
 
 /datum/map_settings/oshan
 	name = "OSHAN"
-	goonhub_map = "https://goonhub.com/maps/oshan"
+	webviewer_map = "https://goonhub.com/maps/oshan"
 
 	arrivals_type = MAP_SPAWN_MISSILE
 
