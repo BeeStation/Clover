@@ -112,8 +112,9 @@ SOFTWARE.
 		R.errored = TRUE
 		R.error = _raw_response
 
-	if(R.status_code && R.status_code != "200") // ike709 edit: Treat non-200 codes as errors.
+	if(R.status_code && R.status_code != 200) // ike709 edit: Treat non-200 codes as errors.
 		R.errored = R.status_code
+		//world.log << "Response marked as errored with |code [R.status_code]|destination URI [url]|"
 
 	return R
 
