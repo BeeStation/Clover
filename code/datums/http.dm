@@ -75,6 +75,7 @@
 
 	if(R.status_code && R.status_code > 299) // ike709 edit: Treat non-200 codes as errors. // franc: raised to allow any valid 2xx code.
 		R.errored = R.status_code
+		//world.log << "Response marked as errored with |code [R.status_code]|destination URI [url]|"
 
 	return R
 
