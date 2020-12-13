@@ -1054,7 +1054,7 @@ Report Arrests: <A href='?src=\ref[src];operation=report'>[report_arrests ? "On"
 				master.frustration = INFINITY
 				master.mover = null
 				master = null
-				return 1
+				return
 
 			master.moving = 1
 
