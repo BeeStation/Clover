@@ -1184,6 +1184,8 @@ var/f_color_selector_handler/F_Color_Selector
 				var/msg = plist["msg"]
 				msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
 				msg = discord_emojify(msg)
+				if(FILTER_CHECK_OOC(msg))
+					return
 
 				logTheThing("ooc", null, null, "Discord OOC: [nick]: [msg]")
 

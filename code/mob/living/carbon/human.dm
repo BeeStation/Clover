@@ -1485,6 +1485,10 @@
 	if (src.stamina < STAMINA_WINDED_SPEAK_MIN || src.oxyloss > 10)
 		message = lowertext(message)
 
+	if(FILTER_CHECK_IC(message))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
+
 	else if ((length(message) >= 2) && (copytext(message,1,2) == ":"))
 		switch (lowertext( copytext(message,2,4) ))
 			if ("rh")

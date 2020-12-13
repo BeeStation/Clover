@@ -643,6 +643,10 @@
 	if (!message)
 		return
 
+	if(FILTER_CHECK_IC(message))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
+
 	if (reverse_mode) message = reverse_text(message)
 
 	logTheThing("diary", src, null, ": [message]", "say")
