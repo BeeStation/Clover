@@ -128,3 +128,5 @@ REQUIRE_JOB_EXP
 
 # Uncomment to enable server hopping. See alt_servers.txt for a list of destinations.
 ENABLE_SERVERHOP
+# Uncomment to enable the chat filters. See chat_filter_ic.txt and chat_filter_ooc.txt
+#ENABLE_CHAT_FILTER
