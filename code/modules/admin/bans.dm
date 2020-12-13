@@ -293,7 +293,7 @@ var/global/list/playersSeen = list()
 			return
 		data["reason"] = reason
 
-		var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
+		/*var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
 		var/server = null
 		switch (server_nice)
 			if ("Roleplay")
@@ -304,7 +304,8 @@ var/global/list/playersSeen = list()
 				server = "main2"
 			if ("Main Overflow")
 				server = "main3"
-		data["server"] = server
+		data["server"] = server*/
+		data["server"] = "main"
 
 		var/ban_time = input(usr,"How long will the ban be?","Ban") as null|anything in list("Half-hour","One Hour","Six Hours","One Day","Half a Week","One Week","One Month","Permanent","Custom")
 		var/mins = 0
@@ -434,7 +435,7 @@ var/global/list/playersSeen = list()
 			return
 		data["reason"] = reason
 
-		var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main")
+		/*var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main")
 		var/server = null
 		switch (server_nice)
 			if ("Roleplay")
@@ -445,7 +446,8 @@ var/global/list/playersSeen = list()
 				server = "main2"
 			if ("Main Overflow")
 				server = "main3"
-		data["server"] = server
+		data["server"] = server*/
+		data["server"] = "main"
 
 		var/ban_time = input(usr,"How long will the ban be? (select Custom to alter existing duration)","Ban") as null|anything in list("Half-hour","One Hour","Six Hours","One Day","Half a Week","One Week","One Month","Permanent","Custom")
 		var/mins = 0
