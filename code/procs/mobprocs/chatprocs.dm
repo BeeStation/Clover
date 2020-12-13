@@ -14,6 +14,9 @@
 		boutput(src, "<span class='notice'><b>Web/BYOND links are not allowed in ingame chat.</b></span>")
 		boutput(src, "<span class='alert'>&emsp;<b>\"[message]</b>\"</span>")
 		return
+	if(FILTER_CHECK_IC(message))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
 	src.say(message)
 	if (!dd_hasprefix(message, "*")) // if this is an emote it is logged in emote
 		logTheThing("say", src, null, "SAY: [html_encode(message)] [log_loc(src)]")
@@ -160,6 +163,10 @@
 	if (!message)
 		return
 
+	if(FILTER_CHECK_OOC(message))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
+
 	if (ishuman(src) && src.name != src.real_name)
 		if (src:wear_id && src:wear_id:registered && src:wear_id:registered != src.real_name)
 			alt_name = " (as [src:wear_id:registered])"
@@ -218,6 +225,10 @@
 	//i guess this caused some real ugly text huh
 	//message = trim(copytext(html_encode(sanitize(message)), 1, MAX_MESSAGE_LEN))
 	if (!message)
+		return
+
+	if(FILTER_CHECK_IC(message))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
 		return
 
 	if (istype(src, /mob/living/critter/changeling/handspider))
@@ -398,6 +409,10 @@
 	var/first_quote = " \""
 	var/second_quote = "\""
 
+	if(FILTER_CHECK_IC(text))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
+
 	if (ending == "?")
 		speechverb = speechverb_ask
 	else if (ending == "!")
@@ -549,6 +564,9 @@
 	msg = trim(copytext(html_encode(msg), 1, MAX_MESSAGE_LEN))
 	if (!msg)
 		return
+	if(FILTER_CHECK_OOC(msg))
+		boutput(usr, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+		return
 	else if (!src.client.preferences.listen_ooc)
 		return
 	else if (!ooc_allowed && !src.client.holder)
@@ -634,6 +652,9 @@
 
 	msg = trim(copytext(html_encode(sanitize(msg)), 1, MAX_MESSAGE_LEN))
 	if (!msg)
+		return
+	if(FILTER_CHECK_OOC(msg))
+		boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
 		return
 	else if (!src.client.preferences.listen_looc)
 		return

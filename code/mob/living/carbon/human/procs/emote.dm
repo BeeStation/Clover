@@ -2095,6 +2095,9 @@
 							I.bump_up(chat_text.measured_height)
 
 			if (message)
+				if(FILTER_CHECK_IC(message))
+					boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+					return
 				logTheThing("say", src, null, "EMOTE: [message]")
 				act = lowertext(act)
 				if (m_type & 1)
@@ -2112,6 +2115,9 @@
 	else
 
 		if (message)
+			if(FILTER_CHECK_IC(message))
+				boutput(src, "<span class='alert'>Your message has been blocked by the chat filter!</span>")
+				return
 			logTheThing("say", src, null, "EMOTE: [message]")
 			act = lowertext(act)
 			if (m_type & 1)
