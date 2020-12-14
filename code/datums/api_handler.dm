@@ -55,7 +55,7 @@ var/global/datum/apiHandler/apiHandler
 			return
 
 		if ("ckey" in query)
-			query["ckey"] == ckey(query["ckey"]) // Sorry future devs - qwerty
+			query["ckey"] = ckey(query["ckey"]) // Sorry future devs - qwerty
 
 		var/req = "[config.cloverfield_api_endpoint]/[route]/?[query ? "[list2params(query)]&" : ""]" //Necessary
 		req += "[forceResponse ? "bypass=1&" : ""]" //Force a response RIGHT NOW y/n
