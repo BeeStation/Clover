@@ -176,7 +176,7 @@ var/global/awarded_xp = 0
 			return null
 
 		if(debug_messages)
-			message_coders("debug", null, null, "Francinum/JobXP: Request: key=[ckey(key)], type=[field_name]| Response contents:[list2params(response)]")
+			message_coders("Francinum/JobXP: Request: key=[ckey(key)], type=[field_name]| Response contents:[list2params(response)]")
 		xp_cache[key][field_name] = response[key][field_name]
 	if(field_name in xp_cache[key])
 		if(xp_cache[key][field_name] == null)
