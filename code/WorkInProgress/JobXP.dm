@@ -201,7 +201,7 @@ var/global/awarded_xp = 0
 	else if (!config)
 		return null
 	var/list/request = list(
-		"ckey" = key,
+		"ckey" = ckey(key), //Cast this to ckey to prevent things melting.
 		"type" = field_name,
 		"val" = field_value)
 
