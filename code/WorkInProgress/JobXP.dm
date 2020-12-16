@@ -162,6 +162,7 @@ var/global/awarded_xp = 0
 		return null
 	if (!config)
 		return null
+	key = ckey(key) //Okay this is a dirty fucking hack but it makes things so much less painful - Francinum
 	if (!(key in xp_cache))
 		xp_cache[key] = list()
 	if(!(field_name in xp_cache[key]) || force_new)
