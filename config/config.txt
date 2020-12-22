@@ -126,3 +126,5 @@ ENABLE_SERVERHOP
 # Uncomment to enable round experience requirements for the roles that specify them
 REQUIRE_JOB_EXP
 
+# Uncomment to enable the chat filters. See chat_filter_ic.txt and chat_filter_ooc.txt
+#ENABLE_CHAT_FILTER

@@ -1,0 +1,1 @@
+# Words blocked from IC chat. One word per line, case-insensitive.

@@ -122,6 +122,10 @@
 	//Are we limiting connected players to certain ckeys?
 	var/whitelistEnabled = 0
 
+	var/enable_chat_filter = 0
+	var/static/regex/filter_regex_ooc
+	var/static/regex/filter_regex_ic
+
 /datum/configuration/New()
 	..()
 	var/list/L = childrentypesof(/datum/game_mode)
@@ -426,6 +430,10 @@
 					var/list/entry = splittext(line, "=")
 					serverhop_servers[entry[1]] = entry[2]
 
+			if("enable_chat_filter")
+				enable_chat_filter = 1
+				load_filters()
+
 			if("banpanel_base")
 				banpanel_base = trim(value)
 			if("banpanel_get")
@@ -439,6 +447,30 @@
 	if (config.env == "dev")
 		config.cdn = ""
 		config.disableResourceCache = 1
+
+/datum/configuration/proc/load_filters()
+	var/list/filter_ooc = list()
+	var/list/filter_ic = list()
+
+	if(!fexists("config/chat_filter_ooc.txt")) //The IC filter is populated with OOC's words too, so it's fine if it doesn't exist
+		logDiary("chat_filter_ooc.txt doesn't exist")
+		return
+
+	for(var/line in splittext(trim(rustg_file_read("config/chat_filter_ooc.txt")), "\n"))
+		if(!line || findtextEx(line,"#",1,2))
+			continue
+		filter_ooc += REGEX_QUOTE(line)
+		filter_ic += REGEX_QUOTE(line)
+
+	filter_regex_ooc = filter_ooc.len ? regex("\\b([jointext(filter_ooc, "|")])\\b", "i") : null
+
+	if(fexists("config/chat_filter_ic.txt"))
+		for(var/line in splittext(trim(rustg_file_read("config/chat_filter_ic.txt")), "\n"))
+			if(!line || findtextEx(line,"#",1,2))
+				continue
+			filter_ic += REGEX_QUOTE(line)
+
+	filter_regex_ic = filter_ic.len ? regex("\\b([jointext(filter_ic, "|")])\\b", "i") : null
 
 /datum/configuration/proc/pick_mode(mode_name)
 	// I wish I didn't have to instance the game modes in order to look up
