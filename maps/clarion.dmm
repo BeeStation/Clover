@@ -22382,7 +22382,7 @@
 /obj/machinery/power/apc{
 	areastring = "Test Chamber";
 	dir = 1;
-	name = "Research Sector APC";
+	name = "Science Lobby APC";
 	pixel_y = 24
 	},
 /obj/cable{
