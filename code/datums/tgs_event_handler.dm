@@ -16,6 +16,14 @@
 			message_admins("TGS: Deployment started, new game version incoming...")
 		if(TGS_EVENT_COMPILE_CANCELLED)
 			message_admins("TGS: Deployment cancelled!")
+			if(mapSwitcher.locked)
+				var/attemptedMap = mapSwitcher.next ? mapSwitcher.next : mapSwitcher.current
+				var/msg = "Compilation of [attemptedMap] aborted! Falling back to previous setting of [mapSwitcher.nextPrior ? mapSwitcher.nextPrior : mapSwitcher.current]"
+				logTheThing("admin", null, null, msg)
+				logTheThing("diary", null, null, msg, "admin")
+				message_admins(msg)
+				// Fall back!
+				mapSwitcher.unlock("FAILED")
 		if(TGS_EVENT_COMPILE_FAILURE)
 			message_admins("TGS: Deployment failed!")
 			// Map switcher TGS integration
