@@ -15079,7 +15079,6 @@
 /area/station/crew_quarters/kitchen)
 "aAK" = (
 /obj/machinery/power/apc{
-	areastring = "Waste Disposal";
 	dir = 8;
 	name = "Waste Disposal APC";
 	pixel_x = -24
@@ -22382,7 +22381,7 @@
 /obj/machinery/power/apc{
 	areastring = "Test Chamber";
 	dir = 1;
-	name = "Science Lobby APC";
+	name = "Research Sector APC";
 	pixel_y = 24
 	},
 /obj/cable{
