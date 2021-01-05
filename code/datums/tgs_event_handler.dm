@@ -18,9 +18,27 @@
 			message_admins("TGS: Deployment cancelled!")
 		if(TGS_EVENT_COMPILE_FAILURE)
 			message_admins("TGS: Deployment failed!")
+			// Map switcher TGS integration
+			if(mapSwitcher.locked) // we're waiting on the results from a map switch
+				var/attemptedMap = mapSwitcher.next ? mapSwitcher.next : mapSwitcher.current
+				var/msg = "Compilation of [attemptedMap] failed! Falling back to previous setting of [mapSwitcher.nextPrior ? mapSwitcher.nextPrior : mapSwitcher.current]"
+				logTheThing("admin", null, null, msg)
+				logTheThing("diary", null, null, msg, "admin")
+				message_admins(msg)
+				// Fall back!
+				mapSwitcher.unlock("FAILED")
 		if(TGS_EVENT_DEPLOYMENT_COMPLETE)
 			message_admins("TGS: Deployment complete!")
 			boutput(world, "<B>Server updated, changes will be applied on the next round...</B>")
+			// Map switcher TGS integration
+			if(mapSwitcher.locked) // we're waiting on the results from a map switch
+				var/attemptedMap = mapSwitcher.next ? mapSwitcher.next : mapSwitcher.current
+				var/msg = "Compilation of [attemptedMap] succeeded!"
+				logTheThing("admin", null, null, msg)
+				logTheThing("diary", null, null, msg, "admin")
+				message_admins(msg)
+				// Tell the map switcher we're ready
+				mapSwitcher.unlock(mapNames[attemptedMap]["id"])
 		if(TGS_EVENT_WATCHDOG_DETACH)
 			message_admins("TGS restarting...")
 			attached = FALSE
