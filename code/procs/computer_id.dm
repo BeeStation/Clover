@@ -76,9 +76,6 @@ proc/check_compid_list(var/client/C)
 						//If the ID changed within 3 hours and the ID hasn't been seen several times (unlikely to happen with automatically generated IDs
 						hits++
 			if(hits)
-				var/ircmsg[] = new()
-				ircmsg["key"] =  C.key
-				ircmsg["name"] = stripTextMacros(C.mob.real_name)
 				var/msg = "'s compID changed [hits] time[hits>1 ? "s" : null] within the last 180 minutes - [C.compid_info_list.len + 1] IDs on file."
 				if(hits >= 2) //This person used 3 computers within as many hours
 					if(!cid_test) cid_test = list()
@@ -96,8 +93,7 @@ proc/check_compid_list(var/client/C)
 					message_admins("[key_name(C)][msg]")
 					logTheThing("admin", C, null, "[key_name(C)][msg]")
 
-				ircmsg["msg"] = "(IP: [C.address]) [msg]"
-				ircbot.export("admin", ircmsg)
+				discord_send("[stripTextMacros(C.mob.real_name)] ([C.key]) (IP: [C.address]) [msg]", -1)
 
 
 		//Done with the analysis
@@ -122,11 +118,7 @@ proc/do_computerid_test(var/client/C)
 
 	var/msg = " [is_fucker ? "failed" : "passed"] the automatic cid dll test."
 
-	var/ircmsg[] = new()
-	ircmsg["key"] =  C.key
-	ircmsg["name"] = stripTextMacros(C.mob.real_name)
-	ircmsg["msg"] = " [msg]"
-	ircbot.export("admin", ircmsg)
+	discord_send("[stripTextMacros(C.mob.real_name)] ([C.key]) [msg]", -1)
 	message_admins("[key_name(C)][msg]")
 	logTheThing("admin", C, null, msg)
 	if(is_fucker)

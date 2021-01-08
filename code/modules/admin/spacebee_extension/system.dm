@@ -41,6 +41,7 @@ var/global/datum/spacebee_extension_system/spacebee_extension_system = new
 	if(config.env == "dev")
 		message_admins("Spacebee command reply to [user]: [replacetext(msg, "\n", "<br>")]")
 		return 1
+	// Terra's Note: Not changing because this whole system will be stripped out.
 	return ircbot.export("admin", list("msg" = msg))
 
 /// processes and runs a string that's supposed to be a command (with arguments and such)

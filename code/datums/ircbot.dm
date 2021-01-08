@@ -179,6 +179,7 @@ var/global/datum/ircbot/ircbot = new /datum/ircbot()
 
 	if (!discordCode || !src.ckey) return 0
 
+	// Note from Terra: this one is actually basically an API call. I can't replace it easily. Will deal with another time.
 	var/ircmsg[] = new()
 	ircmsg["key"] = src.key
 	ircmsg["ckey"] = src.ckey

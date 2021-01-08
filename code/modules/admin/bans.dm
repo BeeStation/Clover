@@ -208,12 +208,10 @@ var/global/list/playersSeen = list()
 		if (row["ckey"] && row["ckey"] != "N/A")
 			addPlayerNote(row["ckey"], row["akey"], "Banned [serverLogSnippet] by [row["akey"]], reason: [row["reason"]], duration: [(expiry == 0 ? "Permanent": "[expiry]")]")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = row["akey"]
-		ircmsg["key2"] = "[row["ckey"]] (IP: [row["ip"]], CompID: [row["compID"]])"
-		ircmsg["msg"] = row["reason"]
-		ircmsg["time"] = expiry
-		ircbot.export("ban", ircmsg)
+		var/key = row["akey"]
+		var/key2 = "[row["ckey"]] (IP: [row["ip"]], CompID: [row["compID"]])"
+		var/msg = row["reason"]
+		discord_send("Ban applied by [key] against [key2] for reason [msg] with expiry [expiry]", -1)
 
 		if (targetC)
 			if (targetC.mob)
@@ -384,11 +382,10 @@ var/global/list/playersSeen = list()
 		logTheThing("diary", adminC, target, "edited [constructTarget(target,"diary")]'s ban. Reason: [row["reason"]] Duration: [(expiry == 0 ? "Permanent": "[expiry]")] [serverLogSnippet]", "admin")
 		message_admins("<span class='internal'>[key_name(adminC)] edited [target]'s ban. Reason: [row["reason"]] Duration: [(expiry == 0 ? "Permanent": "[expiry]")] [serverLogSnippet]</span>")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = (isclient(adminC) && adminC.key ? adminC.key : adminC)
-		ircmsg["name"] = (isclient(adminC) && adminC.mob && adminC.mob.name ? stripTextMacros(adminC.mob.name) : "N/A")
-		ircmsg["msg"] = "edited [target]'s ban. Reason: [row["reason"]]. Duration: [(expiry == 0 ? "Permanent": "[expiry]")]. [serverLogSnippet]."
-		ircbot.export("admin", ircmsg)
+		var/key = (isclient(adminC) && adminC.key ? adminC.key : adminC)
+		var/name = (isclient(adminC) && adminC.mob && adminC.mob.name ? stripTextMacros(adminC.mob.name) : "N/A")
+		var/msg = "edited [target]'s ban. Reason: [row["reason"]]. Duration: [(expiry == 0 ? "Permanent": "[expiry]")]. [serverLogSnippet]."
+		discord_send("[name] ([key]) [msg]")
 
 		return 0
 
@@ -517,11 +514,10 @@ var/global/list/playersSeen = list()
 			logTheThing("diary", adminC, null, "unbanned [row["ckey"]]", "admin")
 			message_admins("<span class='internal'>[key_name(adminC)] unbanned [target]</span>")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = (isclient(adminC) && adminC.key ? adminC.key : adminC)
-		ircmsg["name"] = (expired ? "\[Expired\]" : "[isclient(adminC) && adminC.mob && adminC.mob.name ? stripTextMacros(adminC.mob.name) : "N/A"]")
-		ircmsg["msg"] = (expired ? "[row["ckey"]]'s ban removed." : "deleted [row["ckey"]]'s ban.")
-		ircbot.export("admin", ircmsg)
+		var/key = (isclient(adminC) && adminC.key ? adminC.key : adminC)
+		var/name = (expired ? "\[Expired\]" : "[isclient(adminC) && adminC.mob && adminC.mob.name ? stripTextMacros(adminC.mob.name) : "N/A"]")
+		var/msg = (expired ? "[row["ckey"]]'s ban removed." : "deleted [row["ckey"]]'s ban.")
+		discord_send("[name] ([key]) [msg]", -1)
 
 		return 0
 
@@ -892,4 +888,3 @@ var/global/list/playersSeen = list()
 		centralConn = 1
 		centralConnTries = 0
 		return "Set centralConn ON"
-

@@ -30,13 +30,13 @@ datum/shuttle_controller
 			settimeleft(SHUTTLEARRIVETIME)
 			online = 1
 
-		INVOKE_ASYNC(ircbot, /datum/ircbot.proc/event, "shuttlecall", src.timeleft())
+		discord_send("Shuttled called on [config.server_name] with [src.timeleft()] seconds until arrival.", "event")
 
 	proc/recall()
 		if (online && direction == 1)
 			world << csound("sound/misc/shuttle_recalled.ogg")
 			setdirection(-1)
-			ircbot.event("shuttlerecall", src.timeleft())
+			discord_send("Shuttle recalled on [config.server_name] with [src.timeleft()] seconds until arrival at CentCom.", "event")
 
 	proc/get_location()
 		switch(location)
@@ -182,7 +182,7 @@ datum/shuttle_controller
 								S.establish_bridge()
 
 						boutput(world, "<B>The Emergency Shuttle has docked with the station! You have [timeleft()/60] minutes to board the Emergency Shuttle.</B>")
-						ircbot.event("shuttledock")
+						discord_send("Shuttle docked with station on [config.server_name].", "event")
 						world << csound("sound/misc/shuttle_arrive1.ogg")
 
 						processScheduler.enableProcess("Fluid_Turfs")
