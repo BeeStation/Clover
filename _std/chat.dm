@@ -26,3 +26,44 @@
 				if(C.custom_tag == channel_tag)
 					channels += C
 			world.TgsChatBroadcast(message, channels)
+
+
+/* CHAT COMMANDS */
+/datum/tgs_chat_command/ping
+	name = "ping"
+	help_text = "Check that the server's alive"
+
+/datum/tgs_chat_command/ping/Run(datum/tgs_chat_user/sender, params)
+	return "Pong, [sender.friendly_name]!"
+
+/datum/tgs_chat_command/check
+	name = "check"
+	help_text = "Get information about the current round"
+
+// Oh god I can feel the jank
+/datum/tgs_chat_command/check/proc/pad_time(num)
+	var/str = "[num]"
+	if(length(str) < 2)
+		// single digits
+		str = "0[str]"
+	return str
+
+/datum/tgs_chat_command/check/Run(datum/tgs_chat_user/sender, params)
+	// Yoink
+	var/elapsed
+	if (current_state < GAME_STATE_FINISHED)
+		if (current_state <= GAME_STATE_PREGAME) elapsed = "STARTING"
+		else if (current_state > GAME_STATE_PREGAME)
+			// Number of elapsed seconds
+			var/temp = round(ticker.round_elapsed_ticks / 10)
+			// Hours
+			var/hours = round(temp / 3600)
+			temp -= hours * 3600
+			// Minutes
+			var/minutes = round(temp / 60)
+			temp -= minutes * 60
+			// Seconds
+			var/seconds = temp
+			elapsed = "[pad_time(hours)]:[pad_time(minutes)]:[pad_time(seconds)] elapsed"
+	else if (current_state == GAME_STATE_FINISHED) elapsed = "ENDING"
+	return "[config.server_name] ([station_name]) [clients.len] players Map: [getMapNameFromID(map_setting)] Mode: [(ticker?.hide_mode) ? "secret" : master_mode]; [elapsed] -- <byond://[world.internet_address]:[world.port]>"
