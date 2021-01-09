@@ -441,6 +441,9 @@
 			if("banpanel_prev")
 				banpanel_prev = trim(value)
 
+			if("hub_visibility")
+				world.visibility = 1 //Set to 0 by default in world/New()
+
 			else
 				logDiary("Unknown setting in configuration: '[name]'")
 
