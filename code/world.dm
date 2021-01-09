@@ -389,6 +389,7 @@ var/f_color_selector_handler/F_Color_Selector
 		..()
 
 /world/New()
+	world.visibility = 0 //This gets set in config
 	Z_LOG_DEBUG("World/New", "World New()")
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 	tick_lag = MIN_TICKLAG//0.4//0.25

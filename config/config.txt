@@ -130,3 +130,6 @@ REQUIRE_JOB_EXP
 ENABLE_SERVERHOP
 # Uncomment to enable the chat filters. See chat_filter_ic.txt and chat_filter_ooc.txt
 #ENABLE_CHAT_FILTER
+
+# Uncomment to be visible on the BYOND hub
+#HUB_VISIBILITY
