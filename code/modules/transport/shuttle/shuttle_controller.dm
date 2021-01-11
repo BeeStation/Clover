@@ -30,7 +30,7 @@ datum/shuttle_controller
 			settimeleft(SHUTTLEARRIVETIME)
 			online = 1
 
-		discord_send("Shuttled called on [config.server_name] with [src.timeleft()] seconds until arrival.", "event")
+		discord_send("Shuttle called on [config.server_name] with [src.timeleft()] seconds until arrival.", "event")
 
 	proc/recall()
 		if (online && direction == 1)

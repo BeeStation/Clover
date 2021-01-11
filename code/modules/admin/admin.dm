@@ -4285,7 +4285,7 @@ var/global/noir = 0
 		logTheThing("admin", usr, null, "removed the restart delay and triggered an immediate restart.")
 		logTheThing("diary", usr, null, "removed the restart delay and triggered an immediate restart.", "admin")
 		message_admins("<span class='internal'>[usr.key] removed the restart delay and triggered an immediate restart.</span>")
-		discord_send("Round just ended on [config.server_name].", "status")
+		discord_send("Round just ended on [config.server_name].", -1)
 		Reboot_server()
 
 	else if (game_end_delayed == 0)

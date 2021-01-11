@@ -221,7 +221,7 @@ var/global/current_state = GAME_STATE_WORLD_INIT
 	round_time_check = world.timeofday
 
 	SPAWN_DBG(0)
-		discord_send("Round has begun on [config.server_name].", "status")
+		discord_send("Round has begun on [config.server_name].", -1)
 		mode.post_setup()
 
 		event_wormhole_buildturflist()
@@ -450,7 +450,7 @@ var/global/current_state = GAME_STATE_WORLD_INIT
 					game_end_delayed = 2
 					discord_send("Server would have restarted now, but the restart has been delayed[game_end_delayer ? " by [game_end_delayer]" : null].", -1)
 				else
-					discord_send("Round just ended on [config.server_name].", "status")
+					discord_send("Round just ended on [config.server_name].", -1)
 					//logTheThing("debug", null, null, "Zamujasa: [world.timeofday] REBOOTING THE SERVER!!!!!!!!!!!!!!!!!")
 					Reboot_server()
 

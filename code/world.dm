@@ -1607,7 +1607,7 @@ var/f_color_selector_handler/F_Color_Selector
 					ircmsg["msg"] = "Removed the restart delay."
 
 					SPAWN_DBG(1 DECI SECOND)
-						discord_send("Round just ended on [config.server_name].", "status")
+						discord_send("Round just ended on [config.server_name].", -1)
 						Reboot_server()
 
 					return ircbot.response(ircmsg)
