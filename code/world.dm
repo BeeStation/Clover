@@ -754,11 +754,11 @@ var/f_color_selector_handler/F_Color_Selector
 	var/s = "<img src=\"http://goonhub.com/bee.gif\"/>"
 
 	if (config?.server_name)
-		s += "<b><a href=\"https://goonhub.com\">[config.server_name]</a></b> &#8212; "
+		s += "<b><a href=\"https://beestation13.com\">[config.server_name]</a></b> &#8212; "
 	else
 		s += "<b>SERVER NAME HERE</b> &#8212; "
 
-	s += "The classic SS13 experience. &#8212; (<a href=\"http://bit.ly/gndscd\">Discord</a>)<br>"
+	s += "The classic SS13 experience. &#8212; (<a href=\"https://discord.gg/Y7RTtkK\">Discord</a>)<br>"
 
 	if (map_settings)
 		var/map_name = istext(map_settings.display_name) ? "[map_settings.display_name]" : "[map_settings.name]"

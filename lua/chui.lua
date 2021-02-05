@@ -30,10 +30,10 @@ local environment = {
 local function newenv(parent, done, environ)
 	parent = parent or environment
 	done = done or {}
-	
+
 	local ret = {}
 	environ = environ or ret
-	for k,v in pairs( parent ) do 
+	for k,v in pairs( parent ) do
 		if not done[v] then
 			if( type(v) == 'table' ) then
 				ret[k] = newenv(v, done, ret)
@@ -54,10 +54,10 @@ function view(path, data)--ergo, view("telesci/main.htm")(client[, data])
 	local luas = environment.readfile( 'popups/' .. path )--[[io.open( 'popups/' .. path, 'rb' )
 	local luas = f:read( '*a' )
 	f:close()]]
-	
+
 	luas = 'local data, client, usr, src= ...; local buffer = ""; buffer = buffer..[[' .. luas:gsub( '<%%=(.-)%%>', ']] buffer = buffer..(%1) buffer = buffer .. [[' ):gsub( '<%%(.-)%%>', ']] %1 buffer = buffer..[[' ) .. ']]; return buffer'
 	local func = assert(loadstring( luas, path ))
-	
+
 	setfenv(func, ACTIVE_WINDOW)
 	templateCache[path] = func
 	return func(data, ACTIVE_WINDOW.USR, ACTIVE_WINDOW.USR.mob, ACTIVE_WINDOW.atom)
@@ -69,7 +69,7 @@ function SendFile( file )
 end
 function CDN(url)
 	if PRODUCTION then
-		return "http://cdn.goonhub.com/" .. path
+		return "http://clover.beestation13.buzz:12345/cdn/" .. path
 	else
 		SendFile("browserassets/" .. path)
 		return path:match(".-([^\\/]-[^%.]+)$")--return filename
@@ -81,7 +81,7 @@ environment.SendFile= SendFile
 
 HookReceive("ChuiNewWindow", function(data)
 	local env = newenv()
-	
+
 	local WIN = {}
 	WIN.name = "This is a name"
 	WIN.atom = data.atom
@@ -99,7 +99,7 @@ HookReceive("ChuiNewWindow", function(data)
 	function WIN:OnRequest(client, path, data)
 		return false
 	end
-	
+
 	function WIN:CallJS( func, exclude, ... )
 		local args = {...}
 		if type(exclude) ~= 'table' then
@@ -108,13 +108,13 @@ HookReceive("ChuiNewWindow", function(data)
 		BYOND.CallProc( "CallJS", self.wind._ref, func, args, exclude)
 		return
 	end
-	
+
 	function WIN:Cleanup() end
-	
+
 	env.WIN = WIN
 	datastores[data.window._ref] = datastores[data.window._ref] or {}
 	env.DATA = datastores[data.window._ref]
-	
+
 	--print("Attempting to load " .. data.luafile)
 	local fnc, err = loadfile( data.luafile )
 	if not fnc then error( err ) end
@@ -122,7 +122,7 @@ HookReceive("ChuiNewWindow", function(data)
 	fnc()
 	--print("P   A   IR S S", env.pairs)
 	windows[ data.window._ref ] = env
-	
+
 	return WIN.name
 end)
 --[[
