@@ -89,6 +89,7 @@ var/global/list/playersSeen = list()
 
 	//Are any of the details...different? This is to catch out ban evading jerks who change their ckey but forget to mask their IP or whatever
 	var/timeAdded = 0
+	logTheThing("debug", null, null, "<b>Ban Debugging</b>: [json_encode(row)]")
 	if (row["server"] != "MIRROR" && (row["ckey"] != ckey || row["ip"] != ip || row["compID"] != compID)) //Insert a new ban for this JERK
 		var/newChain = 0
 		if (text2num(row["previous"]) > 0) //if we matched a previous auto-added ban
