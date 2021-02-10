@@ -895,6 +895,13 @@ var/f_color_selector_handler/F_Color_Selector
 		s["shuttle_mode"] = emergency_shuttle ? emergency_shuttle.get_location() : "Unknown" //Not exact parity but good enough
 		s["round_duration"] = ticker ? round(ticker.round_elapsed_ticks/10) : 0
 		s["gamestate"] = current_state
+		//Beestat specific.
+		s["extreme_popcap"] = player_cap
+		s["popcap"] = player_cap
+		s["round_id"] = 0 //Not going to API call for this
+		s["soft_popcap"] = FALSE
+		s["vote"] = FALSE
+
 		return list2params(s)
 
 	else // Discord bot communication (or callbacks)
