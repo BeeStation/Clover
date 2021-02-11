@@ -88,7 +88,7 @@ var/global/mob/twitch_mob = 0
 			else
 				rules = "<html><head><title>Rules</title><body>There are no rules! Go nuts!</body></html>"
 		else*/
-	rules = {"<meta http-equiv="refresh" content="0; url=[config.wiki_url]/Rules">"}
+	rules = {"<meta http-equiv="refresh" content="0; url=[config.rules_url]">"}
 	//if (!rules)
 	//	rules = "<html><head><title>Rules</title><body>There are no rules! Go nuts!</body></html>"
 
