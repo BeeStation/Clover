@@ -23,7 +23,7 @@ module.exports = function (grunt) {
   };
 
   var rev = grunt.file.read('revision') || '1';
-  var cdn = 'http://cdn.goonhub.com';
+  var cdn = 'http://clover.rsc.beestation13.buzz/cdn';
 
   // Define the configuration for all the tasks
   grunt.initConfig({
