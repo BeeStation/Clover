@@ -110,6 +110,7 @@ TUTORIAL_URL https://mini.xkeeper.net
 GITHUB_REPO_URL https://github.com/BeeStation/Clover
 FORUMS_URL https://forums.beestation13.com/
 WIKI_URL https://wiki.ss13.co/Main_Page
+RULES_URL https://wiki.beestation13.com/view/Rules
 MAP_WEBVIEW_URL http://goonhub.com/maps/cogmap
 
 # Uncomment with a valid Org/Repo value to enable gitreports (https://gitreports.com)

@@ -86,6 +86,7 @@
 	var/gitreports = null
 	var/github_repo_url = null
 	var/wiki_url = null
+	var/rules_url = null
 	var/forums_url = null
 	var/map_webview_url = null
 
@@ -406,6 +407,8 @@
 				config.github_repo_url = trim(value)
 			if("wiki_url")
 				config.wiki_url = trim(value)
+			if("rules_url")
+				config.rules_url = trim(value)
 			if("forums_url")
 				config.forums_url = trim(value)
 			if("map_webview_url")
