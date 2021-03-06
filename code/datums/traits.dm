@@ -1118,3 +1118,20 @@ obj/trait/pilot
 			var/mob/living/carbon/human/H = owner
 			H.set_mutantrace(/datum/mutantrace/roach)
 		return
+
+/obj/trait/cat
+	name = "Feline (-1) \[Species\]"
+	cleanName = "Cat"
+	icon_state = "placeholder"
+	desc = "You are a disgusting freak of nature, half man and half cat."
+	id = "cat"
+	points = -1
+	isPositive = 1
+	category = "species"
+
+	onAdd(var/mob/owner)
+		if(ishuman(owner))
+			var/mob/living/carbon/human/H = owner
+			H.set_mutantrace(/datum/mutantrace/cat)
+		return
+
