@@ -7,7 +7,7 @@ on:
 jobs:
   update-changelog:
     runs-on: ubuntu-latest
-    if: github.repository == 'goonstation/goonstation'
+    if: github.repository == 'BeeStation/Clover'
     steps:
     - name: Get The Script
       run: |
@@ -25,8 +25,8 @@ jobs:
         python update_changelog.py
       env:
         REPO: ${{ github.repository }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TOKEN: ${{ secrets.ROBUDDYBOT_PAT }}
         CHANGELOG_PATH: strings/changelog.txt
         ASS_CHANGELOG_PATH: strings/ass_changelog.txt
-        GIT_EMAIL: "65057909+robuddybot@users.noreply.github.com"
-        GIT_NAME: "robuddybot"
+        GIT_EMAIL: "56381746+ss13-beebot@users.noreply.github.com"
+        GIT_NAME: "ss13-beebot"
