@@ -31,7 +31,7 @@ datum/preferences
 	var/be_gangleader = 0
 	var/be_wraith = 0
 	var/be_blob = 0
-	var/be_flock = 0
+//	var/be_flock = 0
 	var/be_misc = 0
 
 	var/be_random_name = 0
@@ -1178,7 +1178,7 @@ $(function() {
 			src.be_gangleader = 0
 			src.be_wraith = 0
 			src.be_blob = 0
-			src.be_flock = 0
+//			src.be_flock = 0
 		else
 
 			HTML += {"
@@ -1193,7 +1193,7 @@ $(function() {
 			<a href="byond://?src=\ref[src];preferences=1;b_vampire=1" class="[src.be_vampire ? "yup" : "nope"]">[crap_checkbox(src.be_vampire)] Vampire</a>
 			<a href="byond://?src=\ref[src];preferences=1;b_wraith=1" class="[src.be_wraith ? "yup" : "nope"]">[crap_checkbox(src.be_wraith)] Wraith</a>
 			<a href="byond://?src=\ref[src];preferences=1;b_blob=1" class="[src.be_blob ? "yup" : "nope"]">[crap_checkbox(src.be_blob)] Blob</a>
-			<a href="byond://?src=\ref[src];preferences=1;b_flock=1" class="[src.be_flock ? "yup" : "nope"]">[crap_checkbox(src.be_flock)] Flockmind</a>
+//			<a href="byond://?src=\ref[src];preferences=1;b_flock=1" class="[src.be_flock ? "yup" : "nope"]">[crap_checkbox(src.be_flock)] Flockmind</a>
 			<a href="byond://?src=\ref[src];preferences=1;b_misc=1" class="[src.be_misc ? "yup" : "nope"]">[crap_checkbox(src.be_misc)] Other Foes</a>
 		"}
 
@@ -1794,10 +1794,10 @@ $(function() {
 			src.be_blob = !( src.be_blob)
 			src.SetChoices(user)
 			return
-		if (link_tags["b_flock"])
-			src.be_flock = !( src.be_flock)
-			src.SetChoices(user)
-			return
+//		if (link_tags["b_flock"])
+//			src.be_flock = !( src.be_flock)
+//			src.SetChoices(user)
+//			return
 
 		if (link_tags["b_misc"])
 			src.be_misc = !src.be_misc
