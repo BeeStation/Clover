@@ -780,7 +780,6 @@ var/global/noir = 0
 							<A href='?src=\ref[src];action=[cmd];type=spy_theft'>Spy Theft</A><br>
 							<b>Other Modes</b><br>
 							<A href='?src=\ref[src];action=[cmd];type=extended'>Extended</A><br>
-							//<A href='?src=\ref[src];action=[cmd];type=flock'>Flock(probably wont work. Press at own risk)</A><br>
 							<A href='?src=\ref[src];action=[cmd];type=disaster'>Disaster (Beta)</A><br>
 							<A href='?src=\ref[src];action=[cmd];type=spy'>Spy</A><br>
 							<A href='?src=\ref[src];action=[cmd];type=revolution'>Revolution</A><br>
