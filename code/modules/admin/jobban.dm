@@ -5,7 +5,7 @@
 	if(ismob(M))
 		var/mob/keysource = M
 		M = keysource.ckey
-	var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
+	/*var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
 	var/server = null //heehoo copy pasta
 	switch (server_nice)
 		if ("Roleplay")
@@ -15,7 +15,9 @@
 		if ("Roleplay Overflow")
 			server = "main2"
 		if ("Main Overflow")
-			server = "main3"
+			server = "main3"*/
+	var/server = "main"
+
 	if(apiHandler.queryAPI("jobbans/add", list("ckey"=M,"rank"=rank, "akey"=akey, "applicable_server"=server)))
 		var/datum/player/player = make_player(M) //Recache the player.
 		if(player)

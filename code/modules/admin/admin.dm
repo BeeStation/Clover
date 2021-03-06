@@ -561,6 +561,11 @@ var/global/noir = 0
 			else
 				jobs += "<BR><a href='?src=\ref[src];action=[action];type=Ghostdrone;target=[target]'>Ghostdrone</a> "
 
+			if(jobban_isbanned(M, "Miscreant"))
+				jobs += "<a href='?src=\ref[src];action=[action];type=Miscreant;target=[target]'><font color=red>Miscreant</font></a> "
+			else
+				jobs += "<a href='?src=\ref[src];action=[action];type=Miscreant;target=[target]'>Miscreant</a> "
+
 			if(jobban_isbanned(M, "Custom Names"))
 				jobs += "<BR><a href='?src=\ref[src];action=[action];type=Custom Names;target=[target]'><font color=red>[replacetext("Having a Custom Name", " ", "&nbsp")]</font></a> "
 			else

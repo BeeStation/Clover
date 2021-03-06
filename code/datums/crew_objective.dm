@@ -20,6 +20,9 @@
 		if (!crewMind.current || !crewMind.objectives || crewMind.objectives.len || crewMind.special_role || (crewMind.assigned_role == "MODE"))
 			return
 
+		if(jobban_isbanned(crewMind.current, "Miscreant"))
+			return
+
 		var/rolePathString = ckey(crewMind.assigned_role)
 		if (!rolePathString)
 			return
