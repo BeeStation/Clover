@@ -2,24 +2,23 @@
 
 /proc/jobban_fullban(M, rank, akey)
 	if (!M || !akey) return
-	if(ismob(M))
+	if(ismob(M)) //Correct to ckey if provided a mob.
 		var/mob/keysource = M
 		M = keysource.ckey
-	var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "Roleplay", "Main", "Roleplay Overflow", "Main Overflow")
-	var/server = null //heehoo copy pasta
+	var/server_nice = input(usr, "What server does the ban apply to?", "Ban") as null|anything in list("All", "1 Classic: Heisenbee", "2 Classic: Bombini", "3 Roleplay: Morty", "4 Roleplay: Sylvester")
+	var/server = null
 	switch (server_nice)
-		if ("Roleplay")
-			server = "rp"
-		if ("Main")
-			server = "main"
-		if ("Roleplay Overflow")
+		if ("1 Classic: Heisenbee")
+			server = "main1"
+		if ("2 Classic: Bombini")
 			server = "main2"
-		if ("Main Overflow")
+		if ("3 Roleplay: Morty")
 			server = "main3"
+		if ("4 Roleplay: Sylvester")
+			server = "main4"
 	if(apiHandler.queryAPI("jobbans/add", list("ckey"=M,"rank"=rank, "akey"=akey, "applicable_server"=server)))
 		var/datum/player/player = make_player(M) //Recache the player.
-		if(player)
-			player.cached_jobbans = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M), 1)[M]
+		player?.cached_jobbans = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M), 1)[M]
 		return 1
 	return 0 //Errored.
 
@@ -28,12 +27,17 @@
 /proc/jobban_isbanned(M, rank)
 	var/list/cache
 	if(!M)
-		return
+		return FALSE
 	if(ismob(M))
 		var/mob/M2 = M
-		var/datum/player/player = make_player(M2.ckey) //Get the player so we can use their bancache.
-		if(player.cached_jobbans == null)//Shit they aren't cached.
-			player.cached_jobbans = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M2.ckey), 1)[M2.ckey]
+		if(isnull(M2.client))
+			return FALSE
+		var/datum/player/player = make_player(M2.ckey) // Get the player so we can use their bancache.
+		if(player.cached_jobbans == null) // Shit they aren't cached.
+			var/api_response = apiHandler.queryAPI("jobbans/get/player", list("ckey"=M2.ckey), 1)
+			if(!length(api_response)) // API unavailable or something
+				return FALSE
+			player.cached_jobbans = api_response[M2.ckey]
 		cache = player.cached_jobbans
 	else if(islist(M))
 		cache = M
@@ -42,30 +46,30 @@
 
 	var/datum/job/J = find_job_in_controller_by_string(rank)
 	if (J?.no_jobban_from_this_job)
-		return 0
+		return FALSE
 
 
 
 	if(cache.Find("Everything Except Assistant"))
 		if(rank != "Staff Assistant" && rank != "Technical Assistant" && rank != "Medical Assistant")
-			return 1
+			return TRUE
 
 	if(cache.Find("Engineering Department"))
 		if(rank in list("Mining Supervisor","Engineer","Atmospheric Technician","Miner","Mechanic"))
-			return 1
+			return TRUE
 
 	if(cache.Find("Security Department") || cache.Find("Security Officer"))
-		if(rank in list("Security Officer","Vice Officer","Detective"))
-			return 1
+		if(rank in list("Security Officer","Security Assistant","Vice Officer","Part-time Vice Officer","Detective"))
+			return TRUE
 
 	if(cache.Find("Heads of Staff"))
 		if(rank in list("Captain","Head of Personnel","Head of Security","Chief Engineer","Research Director","Medical Director"))
-			return 1
+			return TRUE
 
 	if(cache.Find("[rank]"))
-		return 1
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 /proc/jobban_unban(mob/M, rank)//This is full of faff to try and account for raw ckeys and actual players.
 	var/checkey
@@ -74,7 +78,7 @@
 	if (!ismob(M))
 		checkey = M
 		cache = apiHandler.queryAPI("jobbans/get/player", list("ckey"=checkey), 1)[checkey]
-	if (M.ckey)
+	else if (M.ckey)
 		checkey = M.ckey
 		var/datum/player/player = make_player(checkey) //Get the player so we can use their bancache.
 		cache = player.cached_jobbans

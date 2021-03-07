@@ -57,10 +57,8 @@ var/linenums = 0
 	P = nodes[nodes.len]						// last node in list
 	vnode2 = P.node2							// n2 points to last machine
 
-	if(vnode1)
-		vnode1.buildnodes()
-	if(vnode2)
-		vnode2.buildnodes()
+	vnode1?.buildnodes()
+	vnode2?.buildnodes()
 
 	return
 
@@ -479,7 +477,6 @@ var/linenums = 0
 				makepowernets()
 
 		//src.master = null
-		//SN src = null
 		qdel(src)
 		return
 
@@ -530,8 +527,6 @@ var/linenums = 0
 	//src.master = null
 	defer_powernet_rebuild = 0
 	makepowernets()
-
-	//SN src = null
 	qdel(src)
 	return
 */

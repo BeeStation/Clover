@@ -1,3 +1,4 @@
+// if you're looking for something like find_in_active_hand(), you'll want /mob/proc/equipped()
 /mob/proc/find_in_hand(var/obj/item/I, var/this_hand) // for when you need to find a SPECIFIC THING and not just a type
 	if (!I) // did we not get passed a thing to look for?
 		return // fuck you
@@ -317,7 +318,9 @@
 				D.disrupt(src)
 				src.visible_message("<span class='notice'><b>[src]'s disguiser is disrupted!</b></span>")
 
-	return
+	if (safety)
+		return 0
+	return 1
 
 /mob/proc/hearing_check(var/consciousness_check = 0)
 	return 1
@@ -523,7 +526,7 @@
 	return 0
 
 /mob/living/carbon/human/get_explosion_resistance()
-	return GET_MOB_PROPERTY(src, PROP_EXPLOPROT)/100
+	return min(GET_MOB_PROPERTY(src, PROP_EXPLOPROT), 100) / 100
 
 /mob/proc/spread_blood_clothes(mob/whose)
 	return
@@ -602,7 +605,7 @@
 	if (!old || !newbody || !ishuman(old) || !ishuman(newbody))
 		return
 
-	SPAWN_DBG (20) // OrganHolders etc need time to initialize. Transferring inventory doesn't.
+	SPAWN_DBG(2 SECONDS) // OrganHolders etc need time to initialize. Transferring inventory doesn't.
 		if (copy_organs && old && newbody && old.organHolder && newbody.organHolder)
 			if (old.organHolder.skull && (old.organHolder.skull.type != newbody.organHolder.skull.type))
 				var/obj/item/organ/NO = new old.organHolder.skull.type(newbody)
@@ -760,7 +763,7 @@
 			old.u_equip(CI15)
 			newbody.equip_if_possible(CI15, slot_r_hand)
 
-	SPAWN_DBG (20) // Necessary.
+	SPAWN_DBG(2 SECONDS) // Necessary.
 		if (newbody)
 			newbody.set_face_icon_dirty()
 			newbody.set_body_icon_dirty()

@@ -260,7 +260,7 @@
 	Move(NewLoc,Dir=0,step_x=0,step_y=0)
 		var/preserve_dir = src.dir
 		. = ..(NewLoc,Dir,step_x,step_y)
-		dir = preserve_dir
+		set_dir(preserve_dir)
 		camera.set_loc(locate(src.x + 2, src.y + 2, src.z))
 		shield_obj.set_loc(src.loc)
 		return
@@ -695,7 +695,7 @@
 				walk(src, src.dir, base_speed + stall)
 				flying = src.dir
 		else
-			src.dir = direction
+			src.set_dir(direction)
 		return
 
 	proc/getProjectileOrigins()
@@ -779,7 +779,7 @@
 				unsubscribe_interior(user)
 				user.set_eye(user)
 		else
-			boutput(usr, "<span class='alert'>The exit is blocked.</span>")
+			boutput(user, "<span class='alert'>The exit is blocked.</span>")
 		return
 
 	proc/enterShip(atom/movable/O as obj, mob/user as mob)

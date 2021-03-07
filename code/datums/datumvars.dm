@@ -346,7 +346,7 @@
 */
 	else if (isfile(value))
 		html += "\[[name]\]</th><td>file (<em class='value'>[value]</em>)"
-	
+
 	else if (istype(value, /datum))
 		var/datum/D = value
 		var/dname = null
@@ -378,7 +378,7 @@
 			var/assoc = 0
 			if(name != "contents" && name != "images" && name != "screen" && name != "vis_contents")
 				try
-					assoc = !isnum(L[1]) && L[L[1]]
+					assoc = !isnum(L[1]) && !isnull(L[L[1]])
 				catch
 					DEBUG_MESSAGE("bad assoc list var [name] [L] [1] [L[1]]")
 			for (var/index = 1, index <= min(L.len, max_list_len), index++)
@@ -435,22 +435,22 @@
 		if (istype(A))
 			var/new_dir = href_list["DirectionToSet"]
 			if (new_dir == "L90")
-				A.dir = turn(A.dir, 90)
+				A.set_dir(turn(A.dir, 90))
 				boutput(src, "Turned [A] 90&deg; to the left: direction is now [uppertext(dir2text(A.dir))].")
 			else if (new_dir == "L45")
-				A.dir = turn(A.dir, 45)
+				A.set_dir(turn(A.dir, 45))
 				boutput(src, "Turned [A] 45&deg; to the left: direction is now [uppertext(dir2text(A.dir))].")
 			else if (new_dir == "R90")
-				A.dir = turn(A.dir, -90)
+				A.set_dir(turn(A.dir, -90))
 				boutput(src, "Turned [A] 90&deg; to the right: direction is now [uppertext(dir2text(A.dir))].")
 			else if (new_dir == "R45")
-				A.dir = turn(A.dir, -45)
+				A.set_dir(turn(A.dir, -45))
 				boutput(src, "Turned [A] 45&deg; to the right: direction is now [uppertext(dir2text(A.dir))].")
 			else
 				var/list/english_dirs = list("NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST")
 				new_dir = input(src, "Choose a direction for [A] to face.", "Selection", "NORTH") as null|anything in english_dirs
 				if (new_dir)
-					A.dir = text2dir(new_dir)
+					A.set_dir(text2dir(new_dir))
 					boutput(src, "Set [A]'s direction to [new_dir]")
 		return
 	if (href_list["CallProc"])
@@ -667,7 +667,7 @@
 
 	if (isnull(var_value))
 		boutput(usr, "Unable to determine variable type.")
-	
+
 	else if (istype(var_value, /matrix))
 		boutput(usr, "Variable appears to be <b>MATRIX</b>.")
 		default = "matrix"
@@ -735,7 +735,7 @@
 			boutput(usr, "If a direction, direction is: [dir]")
 
 	var/class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-		"num","type","reference","mob reference","turf by coordinates","reference picker","new instance of a type","icon","file","color","list","edit referenced object","create new list", "matrix","null", "ref", "restore to default")
+		"num","type","reference","mob reference","turf by coordinates","reference picker","new instance of a type","icon","file","color","list","json","edit referenced object","create new list", "matrix","null", "ref", "restore to default")
 
 	if(!class)
 		return
@@ -791,6 +791,22 @@
 			else
 				mod_list(D.vars[variable])
 			//return <- Way to screw up logging
+
+		if("json")
+			var/val = input("Enter json:", "JSON", json_encode(D.vars[variable])) as text|null
+			if(!isnull(val))
+				val = json_decode(val)
+				if(!isnull(val))
+					if(set_global)
+						for(var/x in world)
+							if(!istype(x, D.type)) continue
+							x:vars[variable] = val
+							LAGCHECK(LAG_LOW)
+					else
+						if(D == "GLOB")
+							global.vars[variable] = val
+						else
+							D.vars[variable] = val
 
 		if("restore to default")
 			if(set_global)
@@ -859,7 +875,7 @@
 			boutput(usr, "<span class='hint'>Type part of the path of the type.</span>")
 			var/typename = input("Part of type path.", "Part of type path.", "/obj") as null|text
 			if (typename)
-				var/match = get_one_match(typename, /datum)
+				var/match = get_one_match(typename, /datum, use_concrete_types = FALSE)
 				if (match)
 					if (set_global)
 						for (var/datum/x in world)
@@ -1027,7 +1043,7 @@
 				var/basetype = /obj
 				if (src.holder.rank in list("Host", "Coder", "Administrator"))
 					basetype = /datum
-				var/match = get_one_match(typename, basetype)
+				var/match = get_one_match(typename, basetype, use_concrete_types = FALSE)
 				if (match)
 					if (set_global)
 						for (var/datum/x in world)

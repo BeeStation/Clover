@@ -122,6 +122,7 @@
 
 	//Are we limiting connected players to certain ckeys?
 	var/whitelistEnabled = 0
+	var/whitelist_path = "config/whitelist.txt"
 
 	var/enable_chat_filter = 0
 	var/static/regex/filter_regex_ooc
@@ -446,6 +447,9 @@
 
 			if("hub_visibility")
 				world.visibility = 1 //Set to 0 by default in world/New()
+
+			if ("whitelist_path")
+				config.whitelist_path = trim(value)
 
 			else
 				logDiary("Unknown setting in configuration: '[name]'")

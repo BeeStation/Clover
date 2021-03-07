@@ -542,29 +542,7 @@ datum
 			instant = 1
 			mix_phrase = "The mixture explodes with a big bang."
 			on_reaction(var/datum/reagents/holder, var/created_volume)
-				var/atom/source = get_turf(holder.my_atom)
-				new/obj/decal/shockwave(source)
-				playsound(source, 'sound/weapons/flashbang.ogg', 25, 1)
-				if (holder?.my_atom)
-					for(var/atom/movable/M in view(2+ (created_volume > 30 ? 1:0), source))
-						if(M.anchored || M == source || M.throwing) continue
-						M.throw_at(get_edge_cheap(source, get_dir(source, M)),  20 + round(created_volume * 2), 1 + round(created_volume / 10))
-						LAGCHECK(LAG_MED)
-				else
-					var/limit_count = 0
-					var/turf/location = 0
-					var/amt = max(1, (holder.covered_cache.len * (created_volume / holder.covered_cache_volume)))
-					for (var/i = 0, i < amt && holder.covered_cache.len, i++)
-						location = pick(holder.covered_cache)
-						holder.covered_cache -= location
-						limit_count = 0
-						for(var/atom/movable/M in location)
-							if(M.anchored || M == source || M.throwing) continue
-							limit_count++
-							M.throw_at(get_edge_cheap(location, pick(cardinal)),  (20 + round(created_volume * 2)/holder.covered_cache.len), (1 + round(created_volume / 10))/holder.covered_cache.len)
-							if (limit_count > 5) break
-							LAGCHECK(LAG_MED)
-
+				sorium_reaction(holder, created_volume, id)
 				return
 
 		ldmatter
@@ -2392,33 +2370,12 @@ datum
 			mix_sound = 'sound/weapons/flashbang.ogg'
 
 			on_reaction(var/datum/reagents/holder, var/created_volume)
-				var/turf/location = 0
 				if (holder?.my_atom)
-					location = get_turf(holder.my_atom)
-					elecflash(location)
-
-					for (var/mob/living/M in all_viewers(5, location))
-						if (isintangible(M))
-							continue
-
-						var/dist = get_dist(M, location)
-						if (issilicon(M))
-							M.apply_flash(30, max(2 * (3 - dist), 0), max(2 * (5 - dist), 0))
-						else
-							M.apply_flash(60, 0, (3 - dist), 0, ((5 - dist) * 2), (2 - dist))
+					flashpowder_reaction(get_turf(holder.my_atom), created_volume)
 				else
 					var/amt = max(1, (holder.covered_cache.len * (created_volume / holder.covered_cache_volume)))
 					for (var/i = 0, i < amt && holder.covered_cache.len, i++)
-						location = pick(holder.covered_cache)
-						holder.covered_cache -= location
-						for (var/mob/living/M in location)
-							if (isintangible(M))
-								continue
-							var/dist = get_dist(M, location)
-							if (issilicon(M))
-								M.apply_flash(30, max(2 * (3 - dist), 0), max(2 * (5 - dist), 0))
-							else
-								M.apply_flash(60, 0, (3 - dist), 0, ((5 - dist) * 2), (2 - dist))
+						flashpowder_reaction(get_turf(pick(holder.covered_cache)), created_volume)
 
 
 
@@ -2463,14 +2420,15 @@ datum
 
 						var/checkdist = get_dist(M, location)
 						var/weak = max(0, 2 * (3 - checkdist))
-						var/misstep = 40
+						var/misstep = clamp(10 + 6 * (5 - checkdist), 0, 40)
 						var/ear_damage = max(0, 2 * (3 - checkdist))
 						var/ear_tempdeaf = max(0, 2 * (5 - checkdist)) //annoying and unfun so reduced dramatically
+						var/stamina = clamp(50 + 10 * (7 - checkdist), 0, 120)
 
 						if (issilicon(M))
 							M.apply_sonic_stun(weak, 0)
 						else
-							M.apply_sonic_stun(weak, 0, misstep, 0, 0, ear_damage, ear_tempdeaf)
+							M.apply_sonic_stun(weak, 0, misstep, 0, 0, ear_damage, ear_tempdeaf, stamina)
 				else
 					var/amt = max(1, (holder.covered_cache.len * (created_volume / holder.covered_cache_volume)))
 					var/sound_plays = 4
@@ -2493,14 +2451,15 @@ datum
 
 							var/checkdist = get_dist(M, location)
 							var/weak = max(0, 2 * (3 - checkdist))
-							var/misstep = 40
+							var/misstep = clamp(10 + 6 * (5 - checkdist), 0, 40)
 							var/ear_damage = max(0, 2 * (3 - checkdist))
 							var/ear_tempdeaf = max(0, 2 * (5 - checkdist)) //annoying and unfun so reduced dramatically
+							var/stamina = clamp(50 + 10 * (7 - checkdist), 0, 120)
 
 							if (issilicon(M))
 								M.apply_sonic_stun(weak, 0)
 							else
-								M.apply_sonic_stun(weak, 0, misstep, 0, 0, ear_damage, ear_tempdeaf)
+								M.apply_sonic_stun(weak, 0, misstep, 0, 0, ear_damage, ear_tempdeaf, stamina)
 
 		chlorine_azide  // death 2 chemists
 			name = "Chlorine Azide"
@@ -3019,8 +2978,8 @@ datum
 			name = "Foam surfactant"
 			id = "foam surfactant"
 			result = "fluorosurfactant"
-			required_reagents = list("fluorine" = 2, "carbon" = 2, "acid" = 1)
-			result_amount = 5
+			required_reagents = list("fluorine" = 1, "oil" = 1, "acid" = 1)
+			result_amount = 3
 			mix_phrase = "A head of foam results from the mixture's constant fizzing."
 			mix_sound = 'sound/misc/drinkfizz.ogg'
 
@@ -3915,8 +3874,8 @@ datum
 			result_amount = 3
 			mix_phrase = "Irregardless and for all intense and purposes, the coffee becomes stupider."
 
-		king_readsterium
-			name = "King Readsterium"
+		mimicillium
+			name = "Mimicillium"
 			id = "badmanjuice"
 			result = "badmanjuice"
 			required_reagents = list("transparium" = 1, "glitter" = 1, "port" = 1, "cholesterol" = 1 )

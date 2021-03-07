@@ -47,7 +47,7 @@
 
 	New()
 		..()
-		SPAWN_DBG (5)
+		SPAWN_DBG(0.5 SECONDS)
 			if (src)
 				src.update_icon()
 		BLOCK_SETUP(BLOCK_ROD)
@@ -55,7 +55,7 @@
 
 	proc/check_health()
 		if (src.health <= 0 && src.takes_damage)
-			SPAWN_DBG (2)
+			SPAWN_DBG(0.2 SECONDS)
 				if (src)
 					usr.u_equip(src)
 					usr.update_inhands()
@@ -209,6 +209,9 @@
 /obj/item/saw/syndie/attack(mob/living/carbon/human/target as mob, mob/user as mob)
 	var/mob/living/carbon/human/H = target
 
+	if(prob(35))
+		gibs(target.loc, blood_DNA=H.bioHolder.Uid, blood_type=H.bioHolder.bloodType, headbits=FALSE, source=H)
+
 	if (H.organHolder && active == 1)
 		if (H.organHolder.appendix)
 			H.organHolder.drop_organ("appendix")
@@ -355,8 +358,8 @@
 /obj/item/seedplanter
 	name = "Portable Seed Fabricator"
 	desc = "A tool for cyborgs used to create plant seeds."
-	icon = 'icons/obj/items/device.dmi'
-	icon_state = "forensic0"
+	icon = 'icons/obj/hydroponics/items_hydroponics.dmi'
+	icon_state = "portable_seed_fab"
 	var/datum/plant/selected = null
 
 
@@ -368,7 +371,10 @@
 				continue
 			usable += A
 
+		var/holder = src.loc
 		var/datum/plant/pick = input(usr, "Which seed do you want?", "Portable Seed Fabricator", null) in usable
+		if (src.loc != holder)
+			return
 		src.selected = pick
 
 	afterattack(atom/target as obj|mob|turf, mob/user as mob, flag)
@@ -448,7 +454,7 @@
 	desc = "Used to water things. Obviously."
 	icon = 'icons/obj/hydroponics/items_hydroponics.dmi'
 	icon_state = "wateringcan"
-	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'	
+	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
 	item_state = "wateringcan"
 	amount_per_transfer_from_this = 60
 	w_class = 3.0
@@ -588,3 +594,8 @@
 	rc_flags = RC_SCALE
 	initial_volume = 250
 	initial_reagents = list("saltpetre"=50, "ammonia"=50, "potash"=50, "poo"=50, "space_fungus"=50)
+
+/obj/item/reagent_containers/glass/water_pipe
+	name = "water pipe"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bong"

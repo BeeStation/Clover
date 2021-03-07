@@ -17,17 +17,20 @@
 
 This is the codebase for BeeStation's fork of [Goonstation](https://github.com/goonstation/goonstation).
 
-Space Station 13 is a community developed, multiplayer round-based role playing game, where players assume the role of a crewmember on a space station. Together they must keep the station running smoothly, whilst dealing with antagonistic forces who threaten to sabotage the mission.
+[<img src=".github/assets/goonhub.png" alt="Goonhub" width="150" align="left">](https://goonhub.com)
+Goonhub is the premier place for locating statistics, data about rounds, detailed game maps, and all other links pertaining to Goonstation!
 
-## Downloading
+## CONTRIBUTING
 
 [Development Guide](https://hackmd.io/@ZeWaka/goondev)
 
-## Contributing
+[<img src=".github/assets/docs.png" alt="Code Documentation" width="150" align="left">](https://docs.goonhub.com/)
+For our auto-generated code documentation, visit our code docs! There's some good guides for portions of our codebase, and you can familiarize yourself with our various helpers.
 
 [Code Guide](https://hackmd.io/@ZeWaka/gooncode)
 
-[Code Documentation](https://docs.goonhub.com/)
+[<img src=".github/assets/maps.png" alt="Mapping Guidelines" width="150" align="left">](https://hackmd.io/@ZeWaka/goonmap)
+To contribute maps to the game, please follow our mapping guidelines! This details the **required** pieces for a map submission.
 
 ## LICENSE
 [![license-badge](https://forthebadge.com/images/badges/cc-nc-sa.svg)](https://creativecommons.org/licenses/by-nc-sa/3.0/)

@@ -16803,7 +16803,7 @@
 /obj/disposalpipe/segment/mail/vertical,
 /obj/disposalpipe/segment/horizontal,
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /turf/simulated/floor/carpet/grime,
 /area/station/crew_quarters/baroffice)
@@ -17349,10 +17349,7 @@
 	opacity = 0;
 	p_open = 1
 	},
-/obj/item/reagent_containers/food/snacks/cake/chocolate{
-	desc = "Holy shit! This cake probably costs more than the gross domestic product of Bulgaria!";
-	name = "Extravagant Chocolate Gateau"
-	},
+/obj/item/reagent_containers/food/snacks/cake/chocolate/gateau,
 /obj/disposalpipe/segment/vertical,
 /turf/simulated/floor/specialroom/cafeteria{
 	dir = 1
@@ -19891,7 +19888,7 @@
 "aRW" = (
 /obj/stool,
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /turf/simulated/floor/wood/two,
 /area/station/crew_quarters/bar)
@@ -22929,7 +22926,7 @@
 "aYE" = (
 /obj/stool,
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /obj/disposalpipe/segment/horizontal,
 /turf/simulated/floor/black,
@@ -26929,7 +26926,7 @@
 "bgX" = (
 /obj/stool,
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /turf/simulated/floor/black,
 /area/station/hallway/primary/east)
@@ -38502,7 +38499,7 @@
 "bHm" = (
 /obj/stool,
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /turf/simulated/floor/white,
 /area/station/hallway/primary/south)

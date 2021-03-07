@@ -391,15 +391,11 @@
 					message_user("[formatted]", "multiline")
 
 				if ("field")	//Single value from a peeked field. fieldname-fieldvalue
-					var/separatorPosition = findtext(data["data"],"-")
-					if (!separatorPosition)
+					var/list/splitData = splittext(data["data"], "-")
+					if (length(splitData) < 2)
 						return ESIG_GENERIC
 
-					var/fieldValue = copytext(data["data"], separatorPosition+1, separatorPosition+65)
-					if (!fieldValue)
-						return ESIG_GENERIC
-
-					message_user("Value: \[[fieldValue]]")
+					message_user("[splitData[1]]: \[[splitData[2]]]")
 
 
 				if ("info")
@@ -473,7 +469,7 @@
 		if (..())
 			return 1
 
-		SPAWN_DBG (10)
+		SPAWN_DBG(1 SECOND)
 			update_known_devices()
 
 

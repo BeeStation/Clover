@@ -47,6 +47,16 @@ SOFTWARE.
 /proc/http_create_head(url, body = "", list/headers)
 	return http_create_request(RUSTG_HTTP_METHOD_HEAD, url, body, headers)
 
+// By @skull132/<@84559773487353856> on GitHub/Discord from paradise/aurora (tgstation/tgstation/pull/49374). Licensed to us under MIT(https://opensource.org/licenses/MIT).
+
+/**
+  * # HTTP Request
+  *
+  * Holder datum for ingame HTTP requests
+  *
+  * Holds information regarding to methods used, URL, and response,
+  * as well as job IDs and progress tracking for async requests
+  */
 /datum/http_request
 	var/id
 	var/in_progress = FALSE

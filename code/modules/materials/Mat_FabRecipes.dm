@@ -273,7 +273,7 @@
 	category = "Components"
 
 	New()
-		required_parts.Add(new/datum/matfab_part/metalorcrystal {part_name = "Arrowhead"; required_amount = 1} ())
+		required_parts.Add(new/datum/matfab_part/metalorcrystalororganic {part_name = "Arrowhead"; required_amount = 1} ())
 		..()
 
 	build(amount, var/obj/machinery/nanofab/owner)
@@ -291,7 +291,7 @@
 	category = "Weapons"
 
 	New()
-		required_parts.Add(new/datum/matfab_part/metal {part_name = "Shaft"; required_amount = 3} ())
+		required_parts.Add(new/datum/matfab_part/metalororganic {part_name = "Shaft"; required_amount = 3} ())
 		required_parts.Add(new/datum/matfab_part/arrowhead {part_name = "Head"; required_amount = 1} ())
 		..()
 
@@ -315,7 +315,7 @@
 
 	New()
 		required_parts.Add(new/datum/matfab_part/arrowhead {part_name = "Arrowhead"; required_amount = 1} ())
-		required_parts.Add(new/datum/matfab_part/metal {part_name = "Shaft"; required_amount = 1} ())
+		required_parts.Add(new/datum/matfab_part/metalororganic {part_name = "Shaft"; required_amount = 1} ())
 		..()
 
 	build(amount, var/obj/machinery/nanofab/owner)
@@ -521,6 +521,33 @@
 			var/obj/item/source = getObjectByPartName("Gloves")
 			if(source?.material)
 				newObj.setMaterial(source.material)
+
+			newObj.set_loc(getOutputLocation(owner))
+		return
+
+/datum/matfab_recipe/shoes
+	name = "Shoes"
+	desc = "A custom pair of shoes."
+	category = "Clothing"
+
+	New()
+		required_parts.Add(new/datum/matfab_part/clothororganicorrubber {part_name = "Upper"; required_amount = 2} ())
+		required_parts.Add(new/datum/matfab_part/anymat {part_name = "Sole"; required_amount = 2} ())
+		required_parts.Add(new/datum/matfab_part/optionalanymat {part_name = "Optional Toe Tip"; required_amount = 2} ())
+		..()
+
+	build(amount, var/obj/machinery/nanofab/owner)
+		for(var/i=0, i<amount, i++)
+			var/obj/item/clothing/shoes/crafted/newObj = new()
+			var/obj/item/upper = getObjectByPartName("Upper")
+			var/obj/item/sole = getObjectByPartName("Sole")
+			var/obj/item/toe = getObjectByPartName("Optional Toe Tip")
+			if(toe && toe.material)
+				newObj.setMaterial(toe.material)
+				newObj.desc = "[toe.material.name]-toed [upper.material.name] shoes. The soles are made of [sole.material.name]."
+			else if(upper && upper.material)
+				newObj.setMaterial(upper.material)
+				newObj.desc = newObj.desc + " The soles are made of [sole.material.name]."
 
 			newObj.set_loc(getOutputLocation(owner))
 		return

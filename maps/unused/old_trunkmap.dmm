@@ -13588,7 +13588,7 @@
 /area/station/crew_quarters/bar)
 "aFG" = (
 /obj/landmark/start{
-	name = "Barman"
+	name = "Bartender"
 	},
 /turf/simulated/floor/specialroom/bar,
 /area/station/crew_quarters/bar)
@@ -19122,10 +19122,7 @@
 	name = "Cookomatic Multi-Oven Owner's Manual"
 	},
 /obj/window/reinforced/south,
-/obj/item/reagent_containers/food/snacks/cake/chocolate{
-	desc = "Holy shit! This cake probably costs more than the gross domestic product of Bulgaria!";
-	name = "Extravagant Chocolate Gateau"
-	},
+/obj/item/reagent_containers/food/snacks/cake/chocolate/gateau,
 /turf/simulated/floor/white,
 /area/station/crew_quarters/kitchen)
 "aSV" = (

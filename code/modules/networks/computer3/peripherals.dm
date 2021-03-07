@@ -41,8 +41,7 @@
 
 	/* new disposing() pattern should handle this. -singh
 	disposing()
-		if(host)
-			host.peripherals.Remove(src)
+		host?.peripherals.Remove(src)
 		..()
 	*/
 
@@ -104,7 +103,7 @@
 		if(usr.stat || usr.restrained())
 			return 1
 
-		if ((!usr.contents.Find(src.host) && (!in_range(src.host, usr) || !istype(src.host.loc, /turf))) && (!issilicon(usr)))
+		if ((!usr.contents.Find(src.host) && (!in_interact_range(src.host, usr) || !istype(src.host.loc, /turf))) && (!issilicon(usr)))
 			return 1
 
 		if(src.host.status & (NOPOWER|BROKEN))
@@ -139,6 +138,7 @@
 
 		pda
 			frequency = 1149 //Standard PDA comm frequency.
+			range = 0
 			/*net_mode = 1
 			func_tag = "NET_ADAPTER"*/
 
@@ -927,7 +927,7 @@
 
 	proc/vend_prize()
 		var/obj/item/prize
-		var/prizeselect = rand(1,4)
+		var/prizeselect = rand(1,7)
 		var/turf/prize_location = null
 
 		if(src.host)
@@ -1155,8 +1155,7 @@
 			boutput(usr, "<span class='alert'>You cannot press the ejection button.</span>")
 			return
 
-		if(src.host)
-			src.host.add_dialog(usr)
+		src.host?.add_dialog(usr)
 
 		if(href_list["card"])
 			if(!isnull(src.authid))
@@ -1242,8 +1241,7 @@
 		return dat
 
 	uninstalled()
-		if(src.disk)
-			src.disk.set_loc(src)
+		src.disk?.set_loc(src)
 
 		return 0
 
@@ -1275,8 +1273,7 @@
 			boutput(usr, "<span class='alert'>You cannot press the ejection button.</span>")
 			return
 
-		if(src.host)
-			src.host.add_dialog(usr)
+		src.host?.add_dialog(usr)
 
 		if(href_list["disk"])
 			if(!isnull(src.disk))

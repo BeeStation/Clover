@@ -29,6 +29,7 @@ var/fartcount = 0
 	on = 1
 	put_out(var/mob/user as mob, var/message as text)
 		// how about we do literally nothing instead?
+		// please stop doing the thing you keep doing.
 
 /obj/item/clothing/shoes/thong
 	name = "garbage flip-flops"
@@ -103,6 +104,7 @@ var/fartcount = 0
 /area/adventure/urs_dungeon/john_talk = list("This place smells like my bro.","Huh, Always wondered what those goggles did.","Huh, Always wondered what those goggles did.","Your hubris will be punished. Will you kill your fellow man to save yourself? Who harvests the harvestmen? What did it feel like when you lost your mind?")
 /area/grillnasium/grill_chamber/john_talk = list("You better know what you've started.","This is where it happens.")
 
+/mob/living/carbon/human/pariah
 
 // bus driver
 /mob/living/carbon/human/john
@@ -113,40 +115,42 @@ var/fartcount = 0
 	var/greeted_murray = 0
 	var/list/snacks = null
 	var/gotsmokes = 0
+	var/nude = 0
 
-
+	nude
+		nude = 1
 
 	New()
 		..()
 		START_TRACKING_CAT(TR_CAT_JOHNBILLS)
-		SPAWN_DBG(0)
-			bioHolder.mobAppearance.customization_first = "Tramp"
-			bioHolder.mobAppearance.customization_first_color = "#281400"
-			bioHolder.mobAppearance.customization_second = "Pompadour"
-			bioHolder.mobAppearance.customization_second_color = "#241200"
-			bioHolder.mobAppearance.customization_third = "Tramp: Beard Stains"
-			bioHolder.mobAppearance.customization_third_color = "#663300"
-			bioHolder.age = 63
-			bioHolder.bloodType = "A+"
-			bioHolder.mobAppearance.gender = "male"
-			bioHolder.mobAppearance.underwear = "briefs"
-			bioHolder.mobAppearance.u_color = "#996633"
+		if(nude)
+			return
+		src.equip_new_if_possible(/obj/item/clothing/shoes/thong, slot_shoes)
+		src.equip_new_if_possible(/obj/item/clothing/under/color/orange, slot_w_uniform)
+		src.equip_new_if_possible(/obj/item/clothing/mask/cigarette/john, slot_wear_mask)
+		src.equip_new_if_possible(/obj/item/clothing/suit/labcoat, slot_wear_suit)
+		src.equip_new_if_possible(/obj/item/clothing/head/paper_hat/john, slot_head)
 
-			SPAWN_DBG(1 SECOND)
-				bioHolder.mobAppearance.UpdateMob()
-
-			src.equip_new_if_possible(/obj/item/clothing/shoes/thong, slot_shoes)
-			src.equip_new_if_possible(/obj/item/clothing/under/color/orange, slot_w_uniform)
-			src.equip_new_if_possible(/obj/item/clothing/mask/cigarette/john, slot_wear_mask)
-			src.equip_new_if_possible(/obj/item/clothing/suit/labcoat, slot_wear_suit)
-			src.equip_new_if_possible(/obj/item/clothing/head/paper_hat/john, slot_head)
-
-			var/obj/item/implant/access/infinite/shittybill/implant = new /obj/item/implant/access/infinite/shittybill(src)
-			implant.implanted(src, src)
+		var/obj/item/implant/access/infinite/shittybill/implant = new /obj/item/implant/access/infinite/shittybill(src)
+		implant.implanted(src, src)
 
 	disposing()
 		STOP_TRACKING_CAT(TR_CAT_JOHNBILLS)
 		..()
+
+	initializeBioholder()
+		bioHolder.mobAppearance.customization_first = "Tramp"
+		bioHolder.mobAppearance.customization_first_color = "#281400"
+		bioHolder.mobAppearance.customization_second = "Pompadour"
+		bioHolder.mobAppearance.customization_second_color = "#241200"
+		bioHolder.mobAppearance.customization_third = "Tramp: Beard Stains"
+		bioHolder.mobAppearance.customization_third_color = "#663300"
+		bioHolder.age = 63
+		bioHolder.bloodType = "A+"
+		bioHolder.mobAppearance.gender = "male"
+		bioHolder.mobAppearance.underwear = "briefs"
+		bioHolder.mobAppearance.u_color = "#996633"
+		. = ..()
 
 	// John Bill always goes to the afterlife bar.
 	death(gibbed)
@@ -235,7 +239,7 @@ var/fartcount = 0
 			var/area/A = get_area(src)
 			var/list/alive_mobs = list()
 			var/list/dead_mobs = list()
-			if (A.population && A.population.len)
+			if (A && A.population && A.population.len)
 				for(var/mob/living/M in oview(5,src))
 					if(!isdead(M))
 						alive_mobs += M
@@ -420,10 +424,11 @@ var/fartcount = 0
 			return
 		..()
 
-	was_harmed(var/mob/M as mob, var/obj/item/weapon = 0, var/special = 0)
+	was_harmed(var/mob/M as mob, var/obj/item/weapon = 0, var/special = 0, var/intent = null)
+		. = ..()
 		if (special) //vamp or ling
 			src.target = M
-			src.ai_state = 2
+			src.ai_state = AI_ATTACKING
 			src.ai_threatened = world.timeofday
 			src.ai_target = M
 			src.a_intent = INTENT_HARM
@@ -524,7 +529,7 @@ var/bombini_saved = 0
 /obj/machinery/computer/shuttle_bus/Topic(href, href_list)
 	if(..())
 		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (issilicon(usr)))
+	if ((usr.contents.Find(src) || (in_interact_range(src, usr) && istype(src.loc, /turf))) || (issilicon(usr)))
 		src.add_dialog(usr)
 
 		if (href_list["send"])
@@ -773,6 +778,8 @@ Urs' Hauntdog critter
 		if (H.reagents)
 			H.reagents.add_reagent("ectoplasm", 10)
 		H.update_icon()
+		H.AddComponent(/datum/component/consume/foodheal, H.heal_amt)
+
 
 		qdel(src)
 
@@ -792,7 +799,7 @@ Urs' Hauntdog critter
 		if(act == "scream" && src.emote_check(voluntary, 50))
 			var/turf/T = get_turf(src)
 			var/hogg = pick("sound/voice/hagg_vorbis.ogg","sound/voice/hogg_vorbis.ogg","sound/voice/hogg_vorbis_the.ogg","sound/voice/hogg_vorbis_screams.ogg","sound/voice/hogg_with_scream.ogg","sound/voice/hoooagh2.ogg","sound/voice/hoooagh.ogg",)
-			playsound(T, hogg, 60, 1)
+			playsound(T, hogg, 60, 1, channel=VOLUME_CHANNEL_EMOTE)
 			return "<span class='emote'><b>[src]</b> screeeams!</span>"
 		return null
 

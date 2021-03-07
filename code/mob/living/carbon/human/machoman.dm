@@ -12,34 +12,37 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 'sound/voice/macho/macho_idle_breath_01.ogg', 'sound/voice/macho/macho_mumbling04.ogg', 'sound/voice/macho/macho_moan03.ogg',\
 'sound/voice/macho/macho_mumbling05.ogg', 'sound/voice/macho/macho_mumbling07.ogg', 'sound/voice/macho/macho_shout08.ogg')
 
+/datum/targetable/macho
+
 /mob/living/carbon/human/machoman
 	var/list/macho_arena_turfs
 	New()
 		..()
-		SPAWN_DBG(0)
-			if(src.bioHolder && src.bioHolder.mobAppearance)
-				src.bioHolder.mobAppearance.customization_first = "Dreadlocks"
-				src.bioHolder.mobAppearance.customization_second = "Full Beard"
+		//src.mind = new
+		src.gender = "male"
+		src.real_name = pick("M", "m") + pick("a", "ah", "ae") + pick("ch", "tch", "tz") + pick("o", "oh", "oe") + " " + pick("M","m") + pick("a","ae","e") + pick("n","nn")
 
-				SPAWN_DBG(1 SECOND)
-					src.bioHolder.mobAppearance.UpdateMob()
+		if (!src.reagents)
+			src.create_reagents(1000)
 
-			//src.mind = new
-			src.gender = "male"
-			src.real_name = pick("M", "m") + pick("a", "ah", "ae") + pick("ch", "tch", "tz") + pick("o", "oh", "oe") + " " + pick("M","m") + pick("a","ae","e") + pick("n","nn")
+		src.changeStatus("stimulants", 15 MINUTES)
 
-			if (!src.reagents)
-				src.create_reagents(1000)
+		src.equip_new_if_possible(/obj/item/clothing/shoes/macho, slot_shoes)
+		src.equip_new_if_possible(/obj/item/clothing/under/gimmick/macho, slot_w_uniform)
+		src.equip_new_if_possible(/obj/item/clothing/suit/armor/vest/macho, slot_wear_suit)
+		src.equip_new_if_possible(/obj/item/clothing/glasses/macho, slot_glasses)
+		src.equip_new_if_possible(/obj/item/clothing/head/helmet/macho, slot_head)
+		src.equip_new_if_possible(/obj/item/storage/belt/macho_belt, slot_belt)
+		src.equip_new_if_possible(/obj/item/device/radio/headset, slot_ears)
 
-			src.reagents.add_reagent("stimulants", 200)
+		for (var/datum/targetable/macho/A as() in concrete_typesof(/datum/targetable/macho))
+			src.abilityHolder.addAbility(A)
+		src.abilityHolder.updateButtons()
 
-			src.equip_new_if_possible(/obj/item/clothing/shoes/macho, slot_shoes)
-			src.equip_new_if_possible(/obj/item/clothing/under/gimmick/macho, slot_w_uniform)
-			src.equip_new_if_possible(/obj/item/clothing/suit/armor/vest/macho, slot_wear_suit)
-			src.equip_new_if_possible(/obj/item/clothing/glasses/macho, slot_glasses)
-			src.equip_new_if_possible(/obj/item/clothing/head/helmet/macho, slot_head)
-			src.equip_new_if_possible(/obj/item/storage/belt/macho_belt, slot_belt)
-			src.equip_new_if_possible(/obj/item/device/radio/headset, slot_ears)
+	initializeBioholder()
+		src.bioHolder.mobAppearance.customization_first = "Dreadlocks"
+		src.bioHolder.mobAppearance.customization_second = "Full Beard"
+		. = ..()
 
 	Life(datum/controller/process/mobs/parent)
 		if (..(parent))
@@ -62,8 +65,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 		if (src.stance == "defensive")
 			src.visible_message("<span class='alert'><B>[user] attempts to attack [src]!</B></span>")
 			playsound(src.loc, "sound/impact_sounds/Generic_Swing_1.ogg", 50, 1)
-			sleep(0.2 SECONDS)
-			macho_parry(user)
+			SPAWN_DBG(0.2 SECONDS)
+				macho_parry(user)
 			return
 		..()
 		return
@@ -129,7 +132,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 
 	proc/macho_parry(mob/M, obj/item/W)
 		if (M)
-			src.dir = get_dir(src, M)
+			src.set_dir(get_dir(src, M))
 			if (W)
 				W.cant_self_remove = 0
 				W.set_loc(src)
@@ -181,7 +184,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			M.changeStatus("stunned", 10 SECONDS)
 			G.state = 2
 			G.update_icon()
-			src.dir = get_dir(src, M)
+			src.set_dir(get_dir(src, M))
 			playsound(src.loc, "sound/impact_sounds/Generic_Shove_1.ogg", 65, 1)
 
 	verb/macho_headcrunch()
@@ -272,8 +275,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 				sleep(4 SECONDS)
 			src.set_density(0)
 			if (H)
-				src.dir = get_dir(src, H)
-				H.dir = get_dir(H, src)
+				src.set_dir(get_dir(src, H))
+				H.set_dir(get_dir(H, src))
 				animate_flip(H, 3)
 				/*
 				var/icon/composite = icon(H.icon, H.icon_state, null, 1)
@@ -293,10 +296,10 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			playsound(src.loc, "sound/voice/macho/macho_become_enraged01.ogg", 50, 0, 0, src.get_age_pitch())
 			for (var/i = 0, i < 20, i++)
 				src.pixel_y += 15
-				src.dir = turn(src.dir, 90)
+				src.set_dir(turn(src.dir, 90))
 				if (H)
 					H.pixel_y += 15
-					H.dir = turn(H.dir, 90)
+					H.set_dir(turn(H.dir, 90))
 					switch(src.dir)
 						if (NORTH)
 							H.pixel_x = src.pixel_x
@@ -320,10 +323,10 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			playsound(src.loc, "sound/effects/bionic_sound.ogg", 50)
 			for (var/i = 0, i < 20, i++)
 				src.pixel_y -= 15
-				src.dir = turn(src.dir, 90)
+				src.set_dir(turn(src.dir, 90))
 				if (H)
 					H.pixel_y -= 15
-					H.dir = turn(H.dir, 90)
+					H.set_dir(turn(H.dir, 90))
 					switch(src.dir)
 						if (NORTH)
 							H.pixel_x = src.pixel_x
@@ -389,8 +392,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						H.set_clothing_icon_dirty()
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] menacingly grabs [H] by the chest!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -480,7 +483,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					/*   // too many issues with canpass and/or lights breaking, maybe sometime in the future?
 					if(isfloor(T))
 						animate_buff_out(T)
-						SPAWN_DBG(10)
+						SPAWN_DBG(1 SECOND)
 							var/floor_type = T.type
 							var/turf/unsimulated/floor/specialroom/gym/macho_arena/new_turf = T.ReplaceWith("/turf/unsimulated/floor/specialroom/gym/macho_arena/new_turf", 1)
 							new_turf.previous_turf_type = floor_type
@@ -493,14 +496,14 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 							FF.alpha = 0
 							if(T.x < Aloc.x) // to the west
 								if(T.y > Aloc.y) // north-west corner
-									FF.dir = NORTHWEST
+									FF.set_dir(NORTHWEST)
 								else
-									FF.dir = SOUTHWEST
+									FF.set_dir(SOUTHWEST)
 							else // to the east
 								if(T.y > Aloc.y) // north-east
-									FF.dir = NORTHEAST
+									FF.set_dir(NORTHEAST)
 								else
-									FF.dir = SOUTHEAST
+									FF.set_dir(SOUTHEAST)
 							arenaropes += FF
 							var/random_deviation = rand(0, 5)
 							SPAWN_DBG(random_deviation)
@@ -515,14 +518,14 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 							arenaropes += FF
 							if(abs(Aloc.x - T.x) == ring_radius) // side ropes
 								if(T.x - Aloc.x < 0)  // west rope
-									FF.dir = WEST
+									FF.set_dir(WEST)
 								else // east rope
-									FF.dir = EAST
+									FF.set_dir(EAST)
 							else // top/bottom ropes
 								if(T.y - Aloc.y > 0) // north ropes
-									FF.dir = NORTH
+									FF.set_dir(NORTH)
 								else
-									FF.dir = SOUTH
+									FF.set_dir(SOUTH)
 							FF.alpha = 0
 				sleep(1.4 SECONDS)
 				macho_arena_turfs = arenaropes
@@ -571,8 +574,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						H.set_clothing_icon_dirty()
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] menacingly grabs [H] by the chest!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -646,8 +649,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						H.set_clothing_icon_dirty()
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] picks up [H] by the throat!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -686,8 +689,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					src.verbs += /mob/living/carbon/human/machoman/verb/macho_touch
 					SPAWN_DBG(0)
 						if (H)
-							H.desc = "A really dumb looking statue. Very shiny, though."
-							H.become_gold_statue()
+							H.become_statue(getMaterial("gold"), "A really dumb looking statue. Very shiny, though.")
 							H.transforming = 0
 
 /*	verb/macho_minions()
@@ -713,7 +715,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 				var/obj/critter/microman/micro = new(T)
 				made_minions ++
 				micro.friends += src
-				micro.dir = src.dir
+				micro.set_dir(src.dir)
 				if (made_minions >= MAX_MINIONS_PER_SPAWN)
 					break
 			src.transforming = 0
@@ -741,8 +743,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					src.set_density(0)
 					H.set_density(0)
 					H.set_loc(src.loc)
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					animate_flip(H, 3)
 					/*
 					var/icon/composite = icon(H.icon, H.icon_state, null, 1)
@@ -760,8 +762,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					for (var/i = 0, i < 15, i++)
 						src.pixel_y += 6
 						H.pixel_y += 6
-						src.dir = turn(src.dir, 90)
-						H.dir = turn(H.dir, 90)
+						src.set_dir(turn(src.dir, 90))
+						H.set_dir(turn(H.dir, 90))
 						switch(src.dir)
 							if (NORTH)
 								H.pixel_x = src.pixel_x
@@ -820,7 +822,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					H.set_density(0)
 					H.set_loc(src.loc)
 					step(H, src.dir)
-					H.dir = get_dir(H, src)
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] starts spinning around [H]!</B></span>")
 					playsound(src.loc, "sound/effects/bionic_sound.ogg", 50)
 					for (var/i = 0, i < 80, i++)
@@ -836,9 +838,9 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 								delay = 2
 							if (0 to 10)
 								delay = 3
-						src.dir = turn(src.dir, 90)
+						src.set_dir(turn(src.dir, 90))
 						H.set_loc(get_step(src, src.dir))
-						H.dir = get_dir(H, src)
+						H.set_dir(get_dir(H, src))
 						sleep(delay)
 					src.pixel_x = 0
 					src.pixel_y = 0
@@ -885,8 +887,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						H.set_clothing_icon_dirty()
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] picks up [H] by the throat!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -965,8 +967,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						H.set_clothing_icon_dirty()
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] gently picks up [H]!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -1028,8 +1030,8 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 					H.jitteriness = 0
 					H.transforming = 1
 					src.transforming = 1
-					src.dir = get_dir(src, H)
-					H.dir = get_dir(H, src)
+					src.set_dir(get_dir(src, H))
+					H.set_dir(get_dir(H, src))
 					src.visible_message("<span class='alert'><B>[src] picks up [H] by the throat!</B></span>")
 					playsound(src.loc, pick(snd_macho_rage), 50, 0, 0, src.get_age_pitch())
 					var/dir_offset = get_dir(src, H)
@@ -1142,13 +1144,13 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 
 			else //Uh?
 				src.show_text("Man, this poor sucker ain't even got a chest to punch, whatta chump.", "blue")
-				SPAWN_DBG (20)
+				SPAWN_DBG(2 SECONDS)
 					if (!src.stat)
 						src.emote("sigh")
 
 		else
 			src.show_text("You're not entirely sure where the heart is on this thing. Better leave it alone.", "blue")
-			SPAWN_DBG (20)
+			SPAWN_DBG(2 SECONDS)
 				if (!src.stat)
 					src.emote("sigh")
 
@@ -1178,9 +1180,9 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			src.set_density(0)
 			for (var/i = 0, i < 20, i++)
 				src.pixel_y += 1
-				src.dir = turn(src.dir, 90)
+				src.set_dir(turn(src.dir, 90))
 				sleep(0.1 SECONDS)
-			src.dir = SOUTH
+			src.set_dir(SOUTH)
 			var/sound/siren = sound('sound/misc/airraid_loop.ogg')
 			var/list/masters = new()
 			for (var/area/subs in world)
@@ -1201,7 +1203,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			src.visible_message("<span class='alert'>[src] falls back to the ground!</span>")
 			for (var/i = 0, i < 20, i++)
 				src.pixel_y -= 1
-				src.dir = turn(src.dir, -90)
+				src.set_dir(turn(src.dir, -90))
 				sleep(0.1 SECONDS)
 			if (istype(src.loc, /turf/simulated/floor))
 				src.loc:break_tile()
@@ -1320,7 +1322,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 		playsound(src.loc, "sound/impact_sounds/Slimy_Splat_1.ogg", 75, 1)
 		var/obj/decal/cleanable/blood/gibs/gib = null
 		gib = make_cleanable(/obj/decal/cleanable/blood/gibs,src.loc)
-		gib.streak(list(NORTH, NORTHEAST, NORTHWEST))
+		gib.streak_cleanable(NORTH)
 		qdel(src)
 
 
@@ -1337,6 +1339,9 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 	wear_image_icon = 'icons/mob/overcoats/worn_suit_gimmick.dmi'
 	icon_state = "machovest"
 	item_state = "machovest"
+
+	attack_self(mob/user as mob)
+		return
 
 /obj/item/clothing/glasses/macho
 	name = "Yellow Shades"
@@ -1377,8 +1382,7 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 			sleep(2.5 SECONDS)
 			playsound(target.loc, "sound/voice/macho/macho_freakout.ogg", 50, 1)
 			target.visible_message("<span class='alert'>[target] appears visibly stronger!</span>")
-			if (target.reagents)
-				target.reagents.add_reagent("stimulants", 100)
+			target.changeStatus("stimulants", 7.5 MINUTES)
 			if (ishuman(target))
 				var/mob/living/carbon/human/machoman/H = target
 				for (var/A in H.organs)
@@ -1445,28 +1449,5 @@ var/list/snd_macho_idle = list('sound/voice/macho/macho_alert16.ogg', 'sound/voi
 						A.ex_act(3)
 		else
 			..()
-
-/mob/living/proc/become_gold_statue()
-	var/obj/overlay/goldman = new /obj/overlay(get_turf(src))
-	src.pixel_x = 0
-	src.pixel_y = 0
-	src.set_loc(goldman)
-	goldman.name = "golden statue of [src.name]"
-	goldman.desc = src.desc
-	goldman.anchored = 0
-	goldman.set_density(1)
-	goldman.layer = MOB_LAYER
-	goldman.dir = src.dir
-
-	var/ist = "body_f"
-	if (src.gender == "male")
-		ist = "body_m"
-	var/icon/composite = icon('icons/mob/human.dmi', ist, null, 1)
-	for (var/O in src.overlays)
-		var/image/I = O
-		composite.Blend(icon(I.icon, I.icon_state, null, 1), ICON_OVERLAY)
-	composite.ColorTone( rgb(255,215,0) ) // gold
-	goldman.icon = composite
-	src.remove()
 
 //#undef MAX_MINIONS_PER_SPAWN

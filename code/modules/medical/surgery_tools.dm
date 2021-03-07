@@ -317,9 +317,7 @@ CONTAINS:
 
 	attackby(obj/item/W, mob/user)
 		..()
-		#if ASS_JAM
-			//DISABLE ZIPGUN DURING ASSJAM
-		#else
+
 		if (istype(W,/obj/item/pipebomb/frame))
 			var/obj/item/pipebomb/frame/F = W
 			if (F.state < 2)
@@ -337,7 +335,7 @@ CONTAINS:
 			else
 				user.show_text("You can't seem to combine these two items this way.")
 		return
-		#endif
+
 
 // a mostly decorative thing from z2 areas I want to add to office closets
 /obj/item/staple_gun/red
@@ -990,7 +988,7 @@ CONTAINS:
 		if (ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if (H.blood_volume < 500)
-				H.tri_message("<span class='notice'><b>[user]</b> attaches [src]'s needle to [H == user ? </span>"[H.gender == "male" ? "his" : "her"]" : "[H]'s"] arm and begins transferring blood.",\
+				H.tri_message("<span class='notice'><b>[user]</b> attaches [src]'s needle to [H == user ? </span>"[his_or_her(H)]" : "[H]'s"] arm and begins transferring blood.",\
 				user, "<span class='notice'>You attach [src]'s needle to [H == user ? </span>"your" : "[H]'s"] arm and begin transferring blood.",\
 				H, "<span class='notice'>[H == user ? </span>"You attach" : "<b>[user]</b> attaches"] [src]'s needle to your arm and begin transferring blood.")
 				src.in_use = 1
@@ -1159,7 +1157,7 @@ CONTAINS:
 		if(isturf(over_object))
 			..() //Lets it do the turf-to-turf slide
 			return
-		else if (istype(over_object, /obj/screen/hud))
+		else if (istype(over_object, /atom/movable/screen/hud))
 			over_object = usr //Try to fold & pick up the bag with your mob instead
 		else if (!(over_object == usr))
 			return
@@ -1614,6 +1612,13 @@ keeping this here because I want to make something else with it eventually
 		src.attached_objs.Remove(I)
 		UnregisterSignal(I, list(COMSIG_ITEM_PICKUP, COMSIG_MOVABLE_MOVED, COMSIG_PARENT_PRE_DISPOSING))
 
+	attack_hand(mob/user as mob)
+		if (!anchored)
+			boutput(user, "You apply \the [name]'s brake.")
+		else
+			boutput(user, "You release \the [name]'s brake.")
+		anchored = !anchored
+
 /* ---------- Surgery Tray Parts ---------- */
 /obj/item/furniture_parts/surgery_tray
 	name = "tray parts"
@@ -1679,3 +1684,9 @@ keeping this here because I want to make something else with it eventually
 	move_trigger(var/mob/M, kindof)
 		if (..() && reagents)
 			reagents.move_trigger(M, kindof)
+
+	bloody
+		New()
+			. = ..()
+			SPAWN_DBG(1 DECI SECOND) //sync with the organs spawn
+				make_cleanable(/obj/decal/cleanable/blood/gibs, src.loc)
