@@ -8,7 +8,11 @@ on: push
 jobs:
   lint:
     name: Run Linters
+<<<<<<< HEAD
     runs-on: ubuntu-latest
+=======
+    runs-on: ubuntu-20.04
+>>>>>>> ee81ef816... CI Update to latest Ubuntu (#3939)
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - uses: actions/checkout@v2
@@ -50,7 +54,11 @@ jobs:
 
   compile:
     name: Compile
+<<<<<<< HEAD
     runs-on: ubuntu-latest
+=======
+    runs-on: ubuntu-20.04
+>>>>>>> ee81ef816... CI Update to latest Ubuntu (#3939)
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - uses: actions/checkout@v2
@@ -97,7 +105,11 @@ jobs:
 
   compile_ass:
     name: "Compile for Ass Day"
+<<<<<<< HEAD
     runs-on: ubuntu-latest
+=======
+    runs-on: ubuntu-20.04
+>>>>>>> ee81ef816... CI Update to latest Ubuntu (#3939)
     if: "${{ false }}" # "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - uses: actions/checkout@v2
@@ -130,3 +142,79 @@ jobs:
       - name: Compile
         run: |
           tools/ci/dm.sh -DCIBUILD -DTRAVIS_ASSJAM goonstation.dme
+<<<<<<< HEAD
+=======
+
+  compile_full:
+    name: "Compile and Lint with Secret Submodule"
+    runs-on: ubuntu-18.04
+    if: |
+      ((github.event_name == 'push' && github.repository == 'goonstation/goonstation') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'goonstation/goonstation')) && !contains(github.event.head_commit.message, 'skip ci')
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          token: '${{ secrets.ROBUDDYBOT_PAT }}'
+
+      - name: Install Dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt install libstdc++6:i386
+
+      - name: Cache BYOND
+        uses: actions/cache@v2
+        with:
+          path: $HOME/BYOND
+          key: ${{ runner.os }}-byond
+
+      - name: Setup BYOND
+        run: |
+          tools/ci/install_byond.sh
+          cd $GITHUB_WORKSPACE
+          printenv
+          echo "BYOND_SYSTEM=/home/runner/BYOND/byond" >> $GITHUB_ENV
+          echo "/home/runner/BYOND/byond/bin" >> $GITHUB_PATH
+          echo "LD_LIBRARY_PATH=/home/runner/BYOND/byond/bin:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "MANPATH=/home/runner/BYOND/byond/man:$MANPATH" >> $GITHUB_ENV
+
+      - name: Cache SpacemanDMM
+        uses: actions/cache@v2
+        with:
+          path: $HOME/SpacemanDMM
+          key: ${{ runner.os }}-spacemandmm
+
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v1.3.3
+
+      - name: Install Dependencies
+        run: |
+          pip3 install setuptools
+          tools/ci/install_build_tools.sh
+          tools/ci/install_spaceman_dmm.sh dreamchecker
+          tools/bootstrap/python -c ''
+          touch +secret/__secret.dme
+
+      - name: Misc Checks
+        run: |
+          tools/ci/check_filedirs.sh goonstation.dme
+          tools/ci/build_tgui.sh
+          tools/ci/check_grep.sh
+          tools/bootstrap/python -m dmi.test
+          tools/bootstrap/python -m mapmerge2.dmm_test
+
+      - name: Run Linter
+        id: linter
+        run: |
+          ~/dreamchecker > ${GITHUB_WORKSPACE}/output-annotations.txt 2>&1
+
+      - name: Compile
+        run: |
+          tools/ci/dm.sh -DCIBUILD -DTRAVIS_SUB goonstation.dme
+
+      - name: Annotate Linter
+        uses: yogstation13/DreamAnnotate@9f2dbe51421affdecc6973c47d34b7f1009d77d3 # v1 - security concerns and all that shit
+        if: always()
+        with:
+          outputFile: output-annotations.txt
+>>>>>>> ee81ef816... CI Update to latest Ubuntu (#3939)
