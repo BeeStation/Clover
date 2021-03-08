@@ -38,11 +38,10 @@
 
 /turf/simulated/floor/feather/special_desc(dist, mob/user)
   if(isflock(user))
-    var/special_desc = "<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received."
-    special_desc += "<br><span class='bold'>ID:</span> Conduit"
-    special_desc += "<br><span class='bold'>System Integrity:</span> [round((src.health/50)*100)]%"
-    special_desc += "<br><span class='bold'>###=-</span></span>"
-    return special_desc
+    return {"<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received.
+    <br><span class='bold'>ID:</span> Conduit
+    <br><span class='bold'>System Integrity:</span> [round((src.health/50)*100)]%
+    <br><span class='bold'>###=-</span></span>"}
   else
     return null // give the standard description
 
@@ -81,7 +80,7 @@
 	splitgroup()
 	for(var/obj/flock_structure/f in src)
 		if(f.usesgroups)
-			f.group.removestructure(f)
+			f.group?.removestructure(f)
 			f.group = null
 
 
@@ -194,8 +193,11 @@
 	for(var/turf/simulated/floor/feather/F in getneighbours(get_turf(src)))
 		count++ //enumerate nearby tiles
 //TODO: fail safe for if there are more then 1 group.
+	if(!src) return
 	src.group.removetile(src)
 	src.group = null
+	for(var/obj/flock_structure/s in src)
+		s.group = null
 
 	if(count <= 1) //if theres only one tile nearby or it by itself dont bother splitting
 		if(count <=0) qdel(oldgroup)
@@ -259,11 +261,11 @@ turf/simulated/floor/feather/proc/bfs(turf/start)//breadth first search, made by
 
 /turf/simulated/wall/auto/feather/special_desc(dist, mob/user)
   if(isflock(user))
-    var/special_desc = "<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received."
-    special_desc += "<br><span class='bold'>ID:</span> Nanite Block"
-    special_desc += "<br><span class='bold'>System Integrity:</span> 100%" // todo: damageable walls
-    special_desc += "<br><span class='bold'>###=-</span></span>"
-    return special_desc
+    return {"<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received.
+    <br><span class='bold'>ID:</span> Nanite Block
+    <br><span class='bold'>System Integrity:</span> 100%
+    <br><span class='bold'>###=-</span></span>"}
+    // todo: damageable walls
   else
     return null // give the standard description
 

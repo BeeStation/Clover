@@ -101,7 +101,7 @@
 					popUp()
 				else
 					var/atom/target = pick(target_list)
-					src.dir = get_dir(src, target)
+					src.set_dir(get_dir(src, target))
 					lastfired = world.time //Setting this here to prevent immediate firing when enabled
 					if (src.enabled)
 						//if (isliving(target))
@@ -127,6 +127,8 @@
 			continue
 		if (!istype(C.loc.loc,A))
 			continue
+		if ((src.req_access || src.req_access_txt) && src.allowed(C))
+			continue //optional access whitelist
 		. += C
 
 	if (istype(A, /area/station/turret_protected))
@@ -363,7 +365,7 @@
 	if (issilicon(user) || isAI(user))
 		return src.attack_hand(user)
 	else // trying to unlock the interface
-		if (src.allowed(usr))
+		if (src.allowed(user))
 			locked = !locked
 			boutput(user, "You [ locked ? "lock" : "unlock"] the panel.")
 			if (locked)
@@ -372,7 +374,7 @@
 					user.Browse(null, "window=turretid")
 			else
 				if (user.using_dialog_of(src))
-					src.attack_hand(usr)
+					src.attack_hand(user)
 		else
 			boutput(user, "<span class='alert'>Access denied.</span>")
 
@@ -383,12 +385,11 @@
 	if (user.getStatusDuration("stunned") || user.getStatusDuration("weakened") || user.stat)
 		return
 
-	if ( (get_dist(src, user) > 1 ))
-		if (!issilicon(user) && !isAI(user) && !isAIeye(user))
-			boutput(user, text("Too far away."))
-			src.remove_dialog(user)
-			user.Browse(null, "window=turretid")
-			return
+	if(!in_interact_range(src, user))
+		boutput(user, text("Too far away."))
+		src.remove_dialog(user)
+		user.Browse(null, "window=turretid")
+		return
 
 	src.add_dialog(user)
 	var/area/area = get_area(src)
@@ -459,18 +460,18 @@
 		. = 1
 		src.enabled = !src.enabled
 		boutput(user, "You have <B>[src.enabled ? "en" : "dis"]abled</B> the turrets.")
-		logTheThing("combat", usr, null, "turned [enabled ? "ON" : "OFF"] turrets from control \[[showCoords(src.x, src.y, src.z)]].")
+		logTheThing("combat", user, null, "turned [enabled ? "ON" : "OFF"] turrets from control \[[showCoords(src.x, src.y, src.z)]].")
 		src.updateTurrets()
 	else if(user.client.check_key(KEY_BOLT))
 		. = 1
 		src.lethal = !src.lethal
 		boutput(user, "You have set the turrets to <B>[src.lethal ? "laser" : "stun"]</B> mode.")
 		if(src.lethal)
-			logTheThing("combat", usr, null, "set turrets to LETHAL from control \[[showCoords(src.x, src.y, src.z)]].")
-			message_admins("[key_name(usr)] set turrets to LETHAL from control \[[showCoords(src.x, src.y, src.z)]].")
+			logTheThing("combat", user, null, "set turrets to LETHAL from control \[[showCoords(src.x, src.y, src.z)]].")
+			message_admins("[key_name(user)] set turrets to LETHAL from control \[[showCoords(src.x, src.y, src.z)]].")
 		else
-			logTheThing("combat", usr, null, "set turrets to STUN from control \[[showCoords(src.x, src.y, src.z)]].")
-			message_admins("[key_name(usr)] set turrets to STUN from control \[[showCoords(src.x, src.y, src.z)]].")
+			logTheThing("combat", user, null, "set turrets to STUN from control \[[showCoords(src.x, src.y, src.z)]].")
+			message_admins("[key_name(user)] set turrets to STUN from control \[[showCoords(src.x, src.y, src.z)]].")
 		src.updateTurrets()
 
 

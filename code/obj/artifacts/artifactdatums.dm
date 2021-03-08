@@ -3,13 +3,13 @@
 ABSTRACT_TYPE(/datum/artifact/)
 /datum/artifact/
 	var/associated_object = null
-	var/rarity_class = 0
-	// Bigger rarity means its less likely to show up. Thanks for documenting this, guys. - Azungar
-	// Also note that rarity 0 means the artifact does not randomly spawn.
-	// Tweaked rarity 1 to contain all the uninteresting garbage artifacts. Explosion artifacts still appear at 3/4 because explodey is not boring - Phyvo
+	var/rarity_weight = 0
+	var/type_name = "buggy artifact code"
+	// weighted commonness, so a higher number will make it more likely
+	// 0 should not make it spawn at all, naturally
 
 	var/datum/artifact_origin/artitype = null
-	var/list/validtypes = list("ancient","martian","wizard","eldritch","precursor",/*"reliquary"*/)
+	var/list/validtypes = list("ancient","martian","wizard","eldritch","precursor")
 	// During setup, artitype will be set from a pick() from within the validtypes list.
 	// Keep it to only the five here or shit will probably get a bit weird. This allows us to exclude things that don't make
 	// any sense such as martian robot builders or ancient robot plant seeds.
@@ -31,6 +31,8 @@ ABSTRACT_TYPE(/datum/artifact/)
 
 	var/list/faults = list()      // Automatically handled
 	var/list/fault_types = list() // this is set up based on the artifact's origin type
+	// faults that are not allowed on this type of artifact (usually due to not working properly/making sense)
+	var/list/datum/artifact_fault/fault_blacklist = list()
 
 	var/list/triggers = list()
 	var/validtriggers = list(/datum/artifact_trigger/force,/datum/artifact_trigger/electric,/datum/artifact_trigger/heat,
@@ -64,7 +66,8 @@ ABSTRACT_TYPE(/datum/artifact/)
 	var/list/touch_descriptors = list()
 
 	proc/post_setup()
-		return
+		SHOULD_CALL_PARENT(TRUE)
+		src.artitype.post_setup(holder)
 
 	proc/may_activate(var/obj/O)
 		if (!O)
@@ -132,11 +135,14 @@ ABSTRACT_TYPE(/datum/artifact/)
 				return AT
 		return null
 
+	proc/get_rarity_modifier()
+		return src.rarity_weight ? 0.995**src.rarity_weight : 0.2 // ~0.63 for tier 5, ~0.1 for tier 1
+
 // SPECIFIC DATUMS
 
 ABSTRACT_TYPE(/datum/artifact/art)
 /datum/artifact/art
-	validtypes = list("ancient","martian","wizard","eldritch","precursor",/*"reliquary"*/)
+	validtypes = list("ancient","martian","wizard","eldritch","precursor")
 	activated = 0
 	min_triggers = 0
 	max_triggers = 0
@@ -159,8 +165,11 @@ ABSTRACT_TYPE(/datum/artifact/art)
 	damage_type = D_PIERCING
 	hit_ground_chance = 90
 	window_pass = 0
+	var/obj/machinery/artifact/turret/turretArt = null
 
 	on_hit(atom/hit)
+		if(turretArt && istype(hit, /mob/living/))
+			turretArt.ArtifactFaultUsed(hit, src)
 		return
 
 	proc/randomise()

@@ -48,7 +48,7 @@ obj/structure/ex_act(severity)
 			playsound(user.loc, "sound/impact_sounds/Generic_Hit_Heavy_1.ogg", 50, 1)
 			if (src.material)
 				src.material.triggerOnAttacked(src, user, user, src)
-			for (var/mob/N in AIviewers(usr, null))
+			for (var/mob/N in AIviewers(user, null))
 				if (N.client)
 					shake_camera(N, 4, 1, 8)
 		if (prob(80))
@@ -236,13 +236,7 @@ obj/structure/ex_act(severity)
 					var/datum/material/M = getMaterial("steel")
 					WALL.setMaterial(M)
 				WALL.inherit_area()
-				// drsingh attempted fix for Cannot read null.amount
-				if (!isnull(S))
-					S.amount -= 2
-					if (S.amount <= 0)
-						qdel(the_tool)
-					else
-						S.inventory_counter.update_number(S.amount)
+				S?.consume_sheets(2)
 
 				qdel(the_girder)
 		owner.visible_message("<span class='notice'>[owner] [verbens] [the_girder].</span>")
@@ -253,7 +247,7 @@ obj/structure/ex_act(severity)
 			playsound(user.loc, "sound/impact_sounds/Generic_Hit_Heavy_1.ogg", 50, 1)
 			if (src.material)
 				src.material.triggerOnAttacked(src, user, user, src)
-			for (var/mob/N in AIviewers(usr, null))
+			for (var/mob/N in AIviewers(user, null))
 				if (N.client)
 					shake_camera(N, 4, 1, 8)
 		if (prob(70))
@@ -282,7 +276,10 @@ obj/structure/ex_act(severity)
 		var/FloorName = T.name
 		var/oldmat = src.material
 
-		var/atom/A = new /turf/simulated/wall/false_wall(src.loc)
+		var/target_type = S.reinforcement ? /turf/simulated/wall/false_wall/reinforced : /turf/simulated/wall/false_wall
+
+		T.ReplaceWith(target_type, FALSE, FALSE, FALSE)
+		var/atom/A = src.loc
 		if(oldmat)
 			A.setMaterial(oldmat)
 		else
@@ -294,11 +291,7 @@ obj/structure/ex_act(severity)
 
 		FW.setFloorUnderlay(FloorIcon, FloorState, FloorIntact, 0, FloorBurnt, FloorName)
 		FW.known_by += user
-		if (S.reinforcement)
-			FW.icon_state = "rdoor1"
-		S.amount--
-		if (S.amount < 1)
-			qdel(S)
+		S.consume_sheets(1)
 		boutput(user, "You finish building the false wall.")
 		logTheThing("station", user, null, "builds a False Wall in [user.loc.loc] ([showCoords(user.x, user.y, user.z)])")
 		qdel(src)
@@ -327,12 +320,14 @@ obj/structure/ex_act(severity)
 	opacity = 1
 	var/health = 30
 	var/builtby = null
+	var/anti_z = 0
 
 	virtual
 		icon = 'icons/effects/VR.dmi'
 
 	anti_zombie
 		name = "anti-zombie wooden barricade"
+		anti_z = 1
 		get_desc()
 			..()
 			. += "Looks like normal spacemen can easily pull themselves over it."
@@ -357,7 +352,7 @@ obj/structure/ex_act(severity)
 	attack_hand(mob/user as mob)
 		if (ishuman(user) && !user.is_zombie)
 			var/mob/living/carbon/human/H = user
-			if (H.a_intent != INTENT_HARM && isfloor(get_turf(src)))
+			if (src.anti_z && H.a_intent != INTENT_HARM && isfloor(get_turf(src)))
 				H.set_loc(get_turf(src))
 				H.visible_message("<span class='notice'><b>[H]</b> [pick("rolls under", "jaunts over", "barrels through")] [src] slightly damaging it!</span>")
 				boutput(H, "<span class='alert'><b>OWW! You bruise yourself slightly!</span>")

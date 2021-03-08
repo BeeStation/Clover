@@ -64,7 +64,7 @@ TRAYS
 	proc/rotate()
 		if(rotatable)
 			//set src in oview(1)
-			src.dir = turn(src.dir, -90)
+			src.set_dir(turn(src.dir, -90))
 		return
 
 	proc/break_utensil(mob/living/carbon/user as mob, var/spawnatloc = 0)
@@ -343,7 +343,7 @@ TRAYS
 	icon_state = "chop_open"
 	item_state = "chop"
 	rotatable = 0
-	tool_flags = null
+	tool_flags = 0
 
 	attack_self(mob/user as mob)
 		var/obj/item/kitchen/chopsticks_package/chop = new /obj/item/kitchen/chopsticks_package
@@ -424,6 +424,13 @@ TRAYS
 		user.TakeDamage("head", 150, 0)
 		return 1
 
+/obj/item/kitchen/utensil/knife/pizza_cutter/traitor
+	var/sharpener_mode = FALSE
+
+	attack_self(mob/user as mob)
+		sharpener_mode = !sharpener_mode
+		boutput(user, "You flip a hidden switch in the pizza cutter to the [sharpener_mode ? "ON" : "OFF"] position.")
+
 /obj/item/kitchen/food_box // I came in here just to make donut/egg boxes put the things in your hand when you take one out and I end up doing this instead, kill me. -haine
 	name = "food box"
 	desc = "A box that can hold food! Well, not this one, I mean. You shouldn't be able to see this one."
@@ -433,7 +440,7 @@ TRAYS
 	amount = 6
 	var/max_amount = 6
 	var/box_type = "donutbox"
-	var/contained_food = /obj/item/reagent_containers/food/snacks/donut/random
+	var/contained_food = /obj/item/reagent_containers/food/snacks/donut/custom/random
 	var/contained_food_name = "donut"
 	tooltip_flags = REBUILD_DIST
 
@@ -489,7 +496,7 @@ TRAYS
 
 	MouseDrop(mob/user as mob) // no I ain't even touchin this mess it can keep doin whatever it's doin
 		// I finally came back and touched that mess because it was broke - Haine
-		if(user == usr && !usr.restrained() && !usr.stat && (usr.contents.Find(src) || in_range(src, usr)))
+		if(user == usr && !user.restrained() && !user.stat && (user.contents.Find(src) || in_interact_range(src, user)))
 			if(!user.put_in_hand(src))
 				return ..()
 
@@ -672,6 +679,9 @@ TRAYS
 			return
 		if(ordered_contents.len == max_food)
 			boutput(user, "That won't fit, \the [src] is too full!")
+			return
+		if(W.w_class > 3)
+			boutput(user, "You try to think of a way to put [W] on \the [src] but it's not possible! It's too large!")
 			return
 		user.drop_item()
 		W.set_loc(src)
@@ -880,62 +890,6 @@ TRAYS
 	unique_tap_garbage_fluck(mob/M as mob, mob/user as mob)
 		playsound(src, "step_lattice", 50, 1)
 
-/obj/item/fish
-	throwforce = 3
-	force = 5
-	icon = 'icons/obj/foodNdrink/food_related.dmi'
-	inhand_image_icon = 'icons/mob/inhand/hand_food.dmi'
-	w_class = 3
-	flags = ONBELT
-	var/fillet_type = /obj/item/reagent_containers/food/snacks/ingredient/meat/fish
-
-	New()
-		..()
-		src.setItemSpecial(/datum/item_special/swipe)
-
-	salmon
-		name = "salmon"
-		desc = "A commercial saltwater fish prized for its flavor."
-		icon_state = "salmon"
-		fillet_type = /obj/item/reagent_containers/food/snacks/ingredient/meat/fish/salmon
-
-	carp
-		name = "carp"
-		desc = "A common run-of-the-mill carp."
-		icon_state = "carp"
-
-	bass
-		name = "largemouth bass"
-		desc = "A freshwater fish native to North America."
-		icon_state = "bass"
-		fillet_type = /obj/item/reagent_containers/food/snacks/ingredient/meat/fish/white
-
-	red_herring
-		name = "peculiarly coloured clupea pallasi"
-		desc = "What is this? Why is this here? WHAT IS THE PURPOSE OF THIS?"
-		icon_state = "red_herring"
-
-/obj/item/fish/attack(mob/M as mob, mob/user as mob)
-	if(user?.bioHolder.HasEffect("clumsy") && prob(50))
-		user.visible_message("<span class='alert'><b>[user]</b> swings [src] and hits \himself in the face!.</span>")
-		user.changeStatus("weakened", 20 * src.force)
-		JOB_XP(user, "Clown", 1)
-		return
-	else
-		playsound(src.loc, pick('sound/impact_sounds/Slimy_Hit_1.ogg', 'sound/impact_sounds/Slimy_Hit_2.ogg'), 50, 1, -1)
-		user.visible_message("<span class='alert'><b>[user] slaps [M] with [src]!</b>.</span>")
-
-/obj/item/fish/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/kitchen/utensil/knife))
-		if(fillet_type)
-			var/obj/fillet = new fillet_type(src.loc)
-			user.put_in_hand_or_drop(fillet)
-			boutput(user, "<span class='notice'>You skin and gut [src] using your knife.</span>")
-			qdel(src)
-			return
-	..()
-	return
-
 //sushiiiiiii
 /obj/item/kitchen/sushi_roller
 	name = "rolling mat"
@@ -1006,8 +960,7 @@ TRAYS
 				foodoverlay.color = FOOD.food_color
 				foodoverlay.layer = (src.layer+3)
 				toppingdata.Add(FOOD.food_color)
-				if(FOOD.reagents)
-					FOOD.reagents.trans_to(roll,FOOD.reagents.total_volume)
+				FOOD.reagents?.trans_to(roll,FOOD.reagents.total_volume)
 				for(var/food_effect in FOOD.food_effects)
 					if(food_effect in roll.food_effects)
 						continue
@@ -1122,11 +1075,9 @@ TRAYS
 	item_state = "platestack1"
 	w_class = 4 // why the fuck would you put a stack of plates in your backpack, also prevents shenanigans
 	var/platenum = 1 // used for targeting icon_states
-#if ASS_JAM
-	var/platemax = 13
-#else
+
 	var/platemax = 8
-#endif
+
 
 	proc/update_icon(mob/user as mob)
 		src.icon_state = "platestack[src.platenum]"
@@ -1211,7 +1162,7 @@ TRAYS
 			if(src.platenum >= platemax)
 				boutput(user,"<span class='alert'><b>The plates are piled too high!</b></span>")
 				return
-			SPAWN_DBG(2)
+			SPAWN_DBG(0.2 SECONDS)
 				var/message = 1
 				for (var/obj/item/plate/p in range(1, user))
 					if(p == src)
@@ -1239,7 +1190,7 @@ TRAYS
 		if(src.platenum >= platemax)
 			boutput(user,"<span class='alert'><b>The plates are piled too high!</b></span>")
 			return
-		SPAWN_DBG(2)
+		SPAWN_DBG(0.2 SECONDS)
 			var/message = 1
 			var/first = 1
 			for (var/obj/item/plate/p in range(1, user))

@@ -298,9 +298,7 @@
 				src.uses_left = 0
 				src.icon_state= "dye-e"
 
-		M.set_face_icon_dirty()
-		M.set_body_icon_dirty()
-		M.update_clothing()
+		M.update_colorful_parts()
 	return 1
 
 //////////////////////////////
@@ -325,12 +323,10 @@
 	ex_act(severity)
 		switch(severity)
 			if(1.0)
-				//SN src = null
 				qdel(src)
 				return
 			if(2.0)
 				if (prob(50))
-					//SN src = null
 					qdel(src)
 					return
 			else

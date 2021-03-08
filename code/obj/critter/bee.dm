@@ -79,14 +79,13 @@
 			src.update_icon()
 			if (src.alive && !src.sleeping)
 				animate_bumble(src)
-
-#if ASS_JAM
+/*
 		if(src.icon_body == "petbee" && prob(5))
 			src.icon_body = "sonicbee"
 			src.icon_state = "[src.icon_body]-wings"
 			src.sleeping_icon_state = "[src.icon_body]-sleep"
 			src.desc = "OH GOD IT IS BACK, WE WERE SURE WE REMOVED IT FROM THE CODEBASE BUT IT KEEPS COMING BACK OH GOD"
-#endif
+*/
 
 	process()
 		if(shorn && (world.time - shorn_time) >= 1800)
@@ -845,6 +844,8 @@
 				var/matrix/trans = new
 				trans.Scale((ubertier - 4) / 3) // mmm, large hat
 				hat.transform = trans
+				trans.Translate(0, -7 * ((ubertier - 4) / 3 - 1))
+				hat.wear_image.transform = trans
 		hat.name = "[src]'s [hat.name]"
 		src.original_hat = hat
 		src.hat_that_bee(hat)
@@ -971,7 +972,7 @@
 
 	New()
 		..()
-		SPAWN_DBG (20)
+		SPAWN_DBG(2 SECONDS)
 			if (time2text(world.realtime, "MM DD") == "10 31")
 				name = "Beezlebubs"
 				desc = "Oh no, a terrifying demon!!  Oh, wait, no, nevermind, it's just the fat and sassy space-bee.  Wow, really had me fooled for a moment...guess that's a Halloween trick...."
@@ -1449,7 +1450,7 @@
 		if (src.reagents)
 			src.reagents.maximum_volume = 50; // semi-arbitrarily chosen, the parent ..() creates a reagent holder with a max volume of 100, most bees only have 50 so I set it as such, special bees will raise the max if necessary
 		growth_timer += rand(-10,15)
-		SPAWN_DBG (20)
+		SPAWN_DBG(2 SECONDS)
 			if (!beeMom)
 				for (var/mob/living/M in range(2, src))
 					if (!isdead(M) && M.ckey)
@@ -1534,7 +1535,7 @@
 			if (!src.attacking)
 				src.attacking = 1
 				src.visible_message("<b>[src]</b> [pick("nibbles on", "nips at", "chews on", "gnaws")] [target]!")
-				SPAWN_DBG (100)
+				SPAWN_DBG(10 SECONDS)
 					src.attacking = 0
 		else
 			return ..()
@@ -1631,11 +1632,12 @@
 			logTheThing("debug", user, null, "names a bee egg \"[t]\"")
 			if (!t)
 				return
+			phrase_log.log_phrase("name-bee", t, no_duplicates=TRUE)
 			t = strip_html(replacetext(t, "'",""))
 			t = copytext(t, 1, 65)
 			if (!t)
 				return
-			if (!in_range(src, usr) && src.loc != usr)
+			if (!in_interact_range(src, user) && src.loc != user)
 				return
 
 			src.bee_name = t
@@ -1722,14 +1724,14 @@
 
 		New()
 			..()
-			SPAWN_DBG (20)
+			SPAWN_DBG(2 SECONDS)
 				if (derelict_mode)
 					name = "sun egg"
 					desc = "DUMU UTU AK"
 					icon_state = "sunbee_egg"
 					bee_name = "sun larva"
 
-		heal(var/mob/M)
+		on_bite(obj/item/I, mob/M, mob/user)
 			boutput(M, "<span class='alert'>You feel as if you have made a grave mistake.  Perhaps a doorway has closed forever.</span>")
 
 		attack_self(mob/user as mob)

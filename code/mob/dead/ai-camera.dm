@@ -71,7 +71,7 @@
 			var/sleep_counter = 0
 			for(var/key in aiImagesLowPriority)
 				var/image/I = aiImagesLowPriority[key]
-				cl.images -= I
+				cl?.images -= I
 				if(sleep_counter++ % (300 * 10) == 0)
 					LAGCHECK(LAG_LOW)
 
@@ -95,6 +95,10 @@
 	Move(NewLoc, direct)//Ewww!
 		last_loc = src.loc
 
+		src.closeContextActions()
+		// contextbuttons can also exist on our mainframe and the eye shares the same hud, fun stuff.
+		src.mainframe.closeContextActions()
+
 		if (src.mainframe)
 			src.mainframe.tracker.cease_track()
 
@@ -102,11 +106,11 @@
 			src.cancel_camera()
 
 		if (NewLoc)
-			dir = get_dir(loc, NewLoc)
+			src.set_dir(get_dir(loc, NewLoc))
 			src.set_loc(NewLoc) //src.set_loc(NewLoc) we don't wanna refresh last_range here and as fas as i can tell there's no reason we Need set_loc
 		else
 
-			dir = direct
+			src.set_dir(direct)
 			if((direct & NORTH) && src.y < world.maxy)
 				src.y++
 			if((direct & SOUTH) && src.y > 1)
@@ -140,10 +144,10 @@
 				O.receive_silicon_hotkey(src)
 				return
 
-		//var/inrange = in_range(target, src)
+		//var/inrange = in_interact_range(target, src)
 		//var/obj/item/equipped = src.equipped()
 
-		if (!src.client.check_any_key(KEY_EXAMINE | KEY_OPEN | KEY_BOLT | KEY_SHOCK) ) // ugh
+		if (!src.client.check_any_key(KEY_EXAMINE | KEY_OPEN | KEY_BOLT | KEY_SHOCK | KEY_POINT) ) // ugh
 			//only allow Click-to-track on mobs. Some of the 'trackable' atoms are also machines that can open a dialog and we don't wanna mess with that!
 			if (src.mainframe && ismob(target) && is_mob_trackable_by_AI(target))
 				mainframe.ai_actual_track(target)
@@ -156,10 +160,15 @@
 				set_loc(src, target)
 
 			if (get_dist(src, target) > 0)
-				dir = get_dir(src, target)
+				src.set_dir(get_dir(src, target))
 
 
 			target.attack_ai(src, params, location, control)
+
+		if (src.client.check_any_key(KEY_POINT))
+			var/turf/T = get_turf(target)
+			mainframe.show_hologram_context(T)
+			return
 
 		if (src.client.check_any_key(KEY_EXAMINE))
 			. = ..()
@@ -169,11 +178,14 @@
 			if (src.client.check_key(KEY_OPEN))
 				src.set_cursor('icons/cursors/open.dmi')
 				return
-			if (src.client.check_key(KEY_BOLT))
+			else if (src.client.check_key(KEY_BOLT))
 				src.set_cursor('icons/cursors/bolt.dmi')
 				return
-			if(src.client.check_key(KEY_SHOCK))
+			else if(src.client.check_key(KEY_SHOCK))
 				src.set_cursor('icons/cursors/shock.dmi')
+				return
+			else if(src.client.check_key(KEY_POINT))
+				src.set_cursor('icons/cursors/point.dmi')
 				return
 		return ..()
 
@@ -387,8 +399,7 @@
 		set name = "Cancel Camera View"
 
 		..()
-		if(mainframe)
-			mainframe.cancel_camera()
+		mainframe?.cancel_camera()
 		SPAWN_DBG(1 DECI SECOND)
 			src.return_mainframe()
 
@@ -502,15 +513,10 @@
 
 	if (prev_tiles)
 		for(var/turf/O as() in (prev_tiles - new_tiles))
-			//O.removeCameraCoverage(src)
-			//removeCameraCoverage copy+paste begin!
+			//copy+paste begin!
 			if(O.cameras == null) continue
 
-			//if(O.cameras.Find(src))
-			//	O.cameras.Remove(src)
 			O.cameras -= src
-			//if(src.coveredTiles.Find(O))
-			//	src.coveredTiles.Remove(O)
 			src.coveredTiles -= O
 
 			if(!O.cameras.len)
@@ -523,27 +529,19 @@
 			//copy paste end!
 
 	for(var/turf/t as() in (new_tiles - prev_tiles))
-
-		//t.addCameraCoverage(src)
-		//add camera coverage copy+paste begin!
+		//copy+paste begin!
 		var/cam_amount = t.cameras ? t.cameras.len : 0
 		if(t.cameras == null)
 			t.cameras = list(src)
 			if(src.coveredTiles == null)
 				src.coveredTiles = list(t)
 			else
-				//if(!src.coveredTiles.Find(t))
-				//	src.coveredTiles.Add(t)
 				src.coveredTiles += t
 		else
-			//if(!t.cameras.Find(src))
-			//	t.cameras.Add(src)
 			t.cameras += src
 			if(src.coveredTiles == null)
 				src.coveredTiles = list(t)
 			else
-				//if(!src.coveredTiles.Find(t))
-				//	src.coveredTiles.Add(t)
 				src.coveredTiles += t
 
 		if (cam_amount < t.cameras.len)
@@ -551,9 +549,7 @@
 				t.aiImage.loc = null
 		//copy paste end!
 
-
-		//t.adjustCameraImage()
-		//adjustCameraImage copy+paste begin!
+		//copy+paste begin!
 		if(!istype(t.aiImage)) continue
 
 		if( t.cameras.len >= 1 )
@@ -642,7 +638,8 @@ world/proc/updateCameraVisibility()
 			t.aiImage.loc = t
 	aiDirty = 1
 
-	world.updateCameraVisibility()
+	if(!global.explosions.exploding)
+		world.updateCameraVisibility()
 
 /obj/machinery/camera/proc/add_to_turfs() //chck if turf cameras is 1
 	aiDirty = 1

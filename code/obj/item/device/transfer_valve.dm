@@ -25,6 +25,12 @@
 		if (user.mind && user.mind.gang)
 			boutput(user, "<span class='alert'>You think working with explosives would bring a lot of much heat onto your gang to mess with this. But you do it anyway.</span>")
 		if(istype(item, /obj/item/tank) || istype(item, /obj/item/clothing/head/butt))
+			if(istype(item, /obj/item/tank))
+				var/obj/item/tank/myTank = item
+				if(!myTank.compatible_with_TTV)
+					boutput(user, "<span class='alert'>There's no way that will fit!</span>")
+					return
+
 			if(tank_one && tank_two)
 				boutput(user, "<span class='alert'>There are already two tanks attached, remove one first!</span>")
 				return
@@ -261,7 +267,7 @@
 					return
 				else if (power < 0.50)
 					visible_message("<span class='combat'>\The [src] farts [pick_string("descriptors.txt", "mopey")]</span>")
-					playsound(get_turf(src), 'sound/voice/farts/poo2.ogg', 30, 2)
+					playsound(get_turf(src), 'sound/voice/farts/poo2.ogg', 30, 2, channel=VOLUME_CHANNEL_EMOTE)
 					return
 
 				var/stun_time = 6 * power
@@ -270,7 +276,7 @@
 				var/throw_repeat = 6 * power
 				var/sound_volume = 100 * power
 
-				playsound(get_turf(src), 'sound/voice/farts/superfart.ogg', sound_volume, 2)
+				playsound(get_turf(src), 'sound/voice/farts/superfart.ogg', sound_volume, 2, channel=VOLUME_CHANNEL_EMOTE)
 				visible_message("<span class='combat bold' style='font-size:[100 + (100*(power-0.5))]%;'>\The [src] farts loudly!</span>")
 
 				for(var/mob/living/L in hearers(get_turf(src), fart_range))
@@ -316,7 +322,7 @@
 //Prox sensor handling.
 
 	Move()
-		..()
+		. = ..()
 		if(istype(attached_device,/obj/item/device/prox_sensor))
 			var/obj/item/device/prox_sensor/A = attached_device
 			A.sense()
@@ -353,6 +359,8 @@
 /obj/item/device/transfer_valve/briefcase
 	name = "briefcase"
 	icon_state = "briefcase"
+	inhand_image_icon = 'icons/mob/inhand/hand_general.dmi'
+	item_state = "briefcase"
 	var/obj/item/storage/briefcase/B = null
 	mats = 8
 
@@ -380,8 +388,7 @@
 		..()
 
 	toggle_valve()
-		if(tester)
-			tester.update_bomb_log("Valve Opened.")
+		tester?.update_bomb_log("Valve Opened.")
 
 		processing_items |= src
 		..()

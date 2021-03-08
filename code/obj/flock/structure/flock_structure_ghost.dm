@@ -7,12 +7,12 @@
 	var/building = null //thing thats being built
 	var/currentmats = 0 //mats currently in the thing.
 	flock_id = "Construction Tealprint"
+	density = 0
 
 
 /obj/flock_structure/ghost/building_specific_info()
-	var/custominfo = "<span class='bold'>Construction Percentage:</span> [!src.goal == 0 ? round((src.currentmats/src.goal)*100) : 0]%"
-	custominfo += "<br><span class='bold'>Construction Progress:</span> [currentmats] materials added, [goal] needed"
-	return custominfo
+	return {"<span class='bold'>Construction Percentage:</span> [!src.goal == 0 ? round((src.currentmats/src.goal)*100) : 0]%
+	<br><span class='bold'>Construction Progress:</span> [currentmats] materials added, [goal] needed"}
 
 /obj/flock_structure/ghost/New(var/atom/location, building = null, var/datum/flock/F = null, goal = 0)
 	..(location, F)
@@ -20,7 +20,7 @@
 		var/atom/b = building
 		icon = initial(b.icon)
 		icon_state = initial(b.icon_state)
-		src.color = flockVisionColorMatrix
+		src.color = COLOR_MATRIX_FLOCKMIND
 		src.alpha = 104
 		src.goal = goal //???? wuh
 		src.building = building

@@ -34,14 +34,12 @@
 		var/rounded_vol = reagents ? round(reagents.total_volume,5) : 0;
 		icon_state = "[rounded_vol]"
 		item_state = "syringe_[rounded_vol]"
-		//src.overlays = null
 		src.underlays = null
 		if (ismob(loc))
 			if (!src.image_inj_dr)
 				src.image_inj_dr = image(src.icon)
 			src.image_inj_dr.icon_state = src.mode ? "inject" : "draw"
 			src.UpdateOverlays(src.image_inj_dr, "inj_dr")
-			//src.overlays += mode == S_INJECT ? "inject" : "draw"
 		else
 			src.UpdateOverlays(null, "inj_dr")
 		if (!src.fluid_image)
@@ -188,7 +186,7 @@
 						boutput(user, "<span class='alert'>You break [P]'s tamper-proof seal!</span>")
 						P.medical = 0
 
-				SPAWN_DBG (5)
+				SPAWN_DBG(0.5 SECONDS)
 					if (src?.reagents && target?.reagents)
 						logTheThing("combat", user, target, "injects [constructTarget(target,"combat")] with a syringe [log_reagents(src)] at [log_loc(user)].")
 						// Convair880: Seems more efficient than separate calls. I believe this shouldn't clutter up the logs, as the number of targets you can inject is limited.

@@ -79,10 +79,10 @@
 		set_density(0) //mbc : icky but useful for fluids
 		update_nearby_tiles(need_rebuild=1, selfnotify = 1) //only selfnotify when density is 0, because i dont want windows to displace fluids every single move() step. would be slow probably
 		set_density(1)
-		..()
+		. = ..()
 
 
-		src.dir = src.ini_dir
+		src.set_dir(src.ini_dir)
 		update_nearby_tiles(need_rebuild=1)
 
 		return
@@ -305,7 +305,7 @@
 			var/obj/projectile/P = O
 			if(P.proj_data.window_pass)
 				return 1
-		if (get_dir(O.loc, target) == src.dir)
+		if (get_dir(loc, target) == src.dir)
 			return 0
 		return 1
 
@@ -340,8 +340,8 @@
 				playsound(src.loc, src.hitsound, 100, 1)
 				return
 		else
-			if (ishuman(usr))
-				src.visible_message("<span class='alert'><b>[usr]</b> knocks on [src].</span>")
+			if (ishuman(user))
+				src.visible_message("<span class='alert'><b>[user]</b> knocks on [src].</span>")
 				playsound(src.loc, src.hitsound, 100, 1)
 				SPAWN_DBG(-1) //uhhh maybe let's not sleep() an attack_hand. fucky effects up the chain?
 					sleep(0.3 SECONDS)
@@ -391,14 +391,14 @@
 				if (!(src.dir in cardinal))
 					return
 				update_nearby_tiles(need_rebuild=1) //Compel updates before
-				src.dir = turn(src.dir, -90)
-				/*var/action = input(usr,"Rotate it which way?","Window Rotation",null) in list("Clockwise ->","Anticlockwise <-","180 Degrees")
+				src.set_dir(turn(src.dir, -90))
+				/*var/action = input(user,"Rotate it which way?","Window Rotation",null) in list("Clockwise ->","Anticlockwise <-","180 Degrees")
 				if (!action) return*/
 
 				/*switch(action)
-					if ("Clockwise ->") src.dir = turn(src.dir, -90)
-					if ("Anticlockwise <-") src.dir = turn(src.dir, 90)
-					if ("180 Degrees") src.dir = turn(src.dir, 180)*/
+					if ("Clockwise ->") src.set_dir(turn(src.dir, -90))
+					if ("Anticlockwise <-") src.set_dir(turn(src.dir, 90))
+					if ("180 Degrees") src.set_dir(turn(src.dir, 180))*/
 				update_nearby_tiles(need_rebuild=1)
 				src.ini_dir = src.dir
 				src.set_layer_from_settings()
@@ -421,7 +421,7 @@
 				src.visible_message("<span class='alert'><B>[user] slams [G.affecting]'s head into [src]!</B></span>")
 				logTheThing("combat", user, G.affecting, "slams [constructTarget(user,"combat")]'s head into [src]")
 				playsound(src.loc, src.hitsound , 100, 1)
-				G.affecting:TakeDamage("head", 0, 5)
+				G.affecting.TakeDamage("head", 5, 0)
 				src.damage_blunt(G.affecting.throwforce)
 				qdel(W)
 		else
@@ -765,7 +765,7 @@
 		..()
 		SPAWN_DBG(1 DECI SECOND)
 			ini_dir = 5//gurgle
-			dir = 5//grumble
+			set_dir(5)//grumble
 
 	smash(var/actuallysmash)
 		if(actuallysmash)
@@ -1020,11 +1020,11 @@
 
 /obj/window/feather/special_desc(dist, mob/user)
   if(isflock(user))
-    var/special_desc = "<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received."
-    special_desc += "<br><span class='bold'>ID:</span> Fibrewoven Window"
-    special_desc += "<br><span class='bold'>System Integrity:</span> [round((src.health/src.health_max)*100)]%" // todo: damageable walls
-    special_desc += "<br><span class='bold'>###=-</span></span>"
-    return special_desc
+    return {"<span class='flocksay'><span class='bold'>###=-</span> Ident confirmed, data packet received.
+    <br><span class='bold'>ID:</span> Fibrewoven Window
+    <br><span class='bold'>System Integrity:</span> [round((src.health/src.health_max)*100)]%
+    <br><span class='bold'>###=-</span></span>"}
+    // todo: damageable walls
   else
     return null // give the standard description
 

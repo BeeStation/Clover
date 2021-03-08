@@ -101,7 +101,7 @@
 			var/datum/computer/file/electronics_scan/theScan = new
 			theScan.scannedName = initial(O.name)
 			theScan.scannedPath = O.mechanics_type_override ? O.mechanics_type_override : O.type
-			theScan.scannedMats = initial(O.mats)
+			theScan.scannedMats = O.mats
 
 			var/datum/signal/signal = get_free_signal()
 			signal.source = src.master
@@ -128,7 +128,7 @@
 	extension = "GSCN"
 	var/subject_name = null
 	var/subject_uID = null
-	var/list/dna_pool = list()
+	var/list/datum/bioEffect/dna_pool = list()
 
 	disposing()
 		if (dna_pool)

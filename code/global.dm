@@ -25,14 +25,13 @@ var/global
 
 	lagcheck_enabled = 0
 
-	datum/datacore/data_core = null
+	vpn_blacklist_enabled = TRUE
 
-	obj/overlay/plmaster = null
-	obj/overlay/slmaster = null
+	datum/datacore/data_core = null
 
 	turf/buzztile = null
 
-	obj/screen/renderSourceHolder
+	atom/movable/screen/renderSourceHolder
 	obj/overlay/zamujasa/round_start_countdown/game_start_countdown	// Countdown clock for round start
 	list/globalImages = list() //List of images that are always shown to all players. Management procs at the bottom of the file.
 	list/image/globalRenderSources = list() //List of images that are always attached invisibly to all player screens. This makes sure they can be used as rendersources.
@@ -84,6 +83,10 @@ var/global
 	list/random_pod_codes = list() // if /obj/random_pod_spawner exists on the map, this will be filled with refs to the pods they make, and people joining up will have a chance to start with the unlock code in their memory
 
 	list/spacePushList = list()
+	/// All the accessible areas on the station in one convenient place
+	list/station_areas = list()
+	/// The station_areas list is up to date. If something changes an area, make sure to set this to 0
+	area_list_is_up_to_date = 0
 
 	already_a_dominic = 0 // no just shut up right now, I don't care
 
@@ -226,6 +229,7 @@ var/global
 	"Goatee" = "gt",
 	"Hipster" = "hip",
 	"Long Beard" = "longbeard",
+	"Motley" = "motley",
 	"Neckbeard" = "neckbeard",
 	"Puffy Beard" = "puffbeard",
 	"Tramp" = "tramp",
@@ -376,6 +380,8 @@ var/global
 	"Yesteryear",
 	"Zeyada")
 
+	list/selectable_ringtones = list()
+
 	//april fools
 	manualbreathing = 0
 	manualblinking = 0
@@ -436,7 +442,7 @@ var/global
 	farty_party = 0
 	deep_farting = 0
 
-	turf/unsimulated/wall/titlecard/lobby_titlecard
+	datum/titlecard/lobby_titlecard
 
 	total_souls_sold = 0
 	total_souls_value = 0
@@ -449,6 +455,11 @@ var/global
 	netpass_banking = null
 	netpass_cargo = null
 	netpass_syndicate = null //Detomatix
+
+	///////////////
+	//cyberorgan damage thresholds for emagging without emag
+	list/cyberorgan_brute_threshold = list("heart" = 0, "left_lung" = 0, "right_lung" = 0, "left_kidney" = 0, "right_kidney" = 0, "liver" = 0, "stomach" = 0, "intestines" = 0, "spleen" = 0, "pancreas" = 0, "appendix" = 0)
+	list/cyberorgan_burn_threshold = list("heart" = 0, "left_lung" = 0, "right_lung" = 0, "left_kidney" = 0, "right_kidney" = 0, "liver" = 0, "stomach" = 0, "intestines" = 0, "spleen" = 0, "pancreas" = 0, "appendix" = 0)
 
 	///////////////
 	list/logs = list ( //Loooooooooogs

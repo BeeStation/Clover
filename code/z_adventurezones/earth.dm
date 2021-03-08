@@ -256,6 +256,12 @@ var/global/Z4_ACTIVE = 0 //Used for mob processing purposes
 	urs
 		ckey = "ursulamajor"
 		name = "Office of UrsulaMajor"
+	virvatuli
+		ckey = "virvatuli"
+		name = "Office of Virvatuli"
+		New()
+			..()
+			overlays += image(icon = 'icons/turf/areas.dmi', icon_state = "snowverlay", layer = EFFECTS_LAYER_BASE)
 	wire
 		ckey = "wirewraith"
 		name = "Office of Wire"
@@ -287,6 +293,26 @@ var/global/Z4_ACTIVE = 0 //Used for mob processing purposes
 	name = "NT Data Center"
 	icon_state = "pink"
 
+/area/retentioncenter
+	name = "NT Retention Center"
+	icon_state = "dk_yellow"
+
+/area/retentioncenter/depot
+	name = "NT Retention Center (depot)"
+	icon_state = "green"
+
+/area/retentioncenter/disposals
+	name = "NT Retention Center (disposals)"
+	icon_state = "red"
+
+/area/retentioncenter/substation
+	name = "NT Retention Center (substation)"
+	icon_state = "pink"
+
+/area/retentioncenter/office
+	name = "NT Retention Center (office)"
+	icon_state = "orange"
+
 ////////////////////////////
 
 /turf/unsimulated/outdoors
@@ -296,13 +322,13 @@ var/global/Z4_ACTIVE = 0 //Used for mob processing purposes
 		name = "snow"
 		New()
 			..()
-			dir = pick(cardinal)
+			set_dir(pick(cardinal))
 		icon_state = "grass_snow"
 	grass
 		name = "grass"
 		New()
 			..()
-			dir = pick(cardinal)
+			set_dir(pick(cardinal))
 		icon_state = "grass"
 		dense
 			name = "dense grass"

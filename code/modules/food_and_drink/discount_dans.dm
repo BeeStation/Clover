@@ -241,7 +241,7 @@
 				src.desc = "A self-heating burrito that purports to contain elm-smoked meat. Of some sort. Probably from an animal."
 				src.initial_reagents["beff"] = 3
 				src.initial_reagents["synthflesh"] = 2
-				src.initial_reagents["tongueofdog"] = 5
+				src.initial_reagents["eyeofnewt"] = 5
 
 			if (8)
 				src.real_name = "Sconto Danilo's Burritos - 50% Real Mozzarella Pepperoni Pizza Party Flavor"
@@ -289,7 +289,7 @@
 		else
 			..()
 
-	heal(var/mob/M)
+	on_bite(obj/item/I, mob/M, mob/user)
 		if (prob(5))
 			if (M.mind && M.mind.ckey)
 				boutput(M, "<span class='notice'>You find a shiny golden ticket in this bite!</span>")
@@ -550,7 +550,7 @@
 		boutput(user, "You twist the tray, activating the heater mechanism.")
 		return
 
-	heal(var/mob/M)
+	on_bite(obj/item/I, mob/M, mob/user)
 		if (prob(8))
 			if (M.mind && M.mind.ckey)
 				boutput(M, "<span class='notice'>You find a shiny golden ticket in this bite!</span>")
@@ -578,7 +578,7 @@
 			reagents.add_reagent(pick("beff","sugar","eggnog","chocolate","cleaner","luminol","poo","urine","nicotine","mint","tea","juice_lemon","juice_lime","juice_apple","juice_cherry","guacamole","egg","sewage","uranium"), 3)
 
 
-	heal(var/mob/M)
+	on_bite(obj/item/I, mob/M, mob/user)
 		if (prob(5))
 			if (M.mind && M.mind.ckey)
 				boutput(M, "<span class='notice'>You find a shiny golden ticket in this bite!</span>")

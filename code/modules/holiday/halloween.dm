@@ -41,8 +41,9 @@
  */
 
 /obj/tombstone
-	name = "Tombstone"
-	desc = "Here lies Tango N. Vectif, killed by a circus bear.  RIP."
+	name = "tombstone"
+	//desc = "Here lies Tango N. Vectif, killed by a circus bear.  RIP." // changing for spawnability
+	desc = "Rest in peace."
 	icon = 'icons/misc/halloween.dmi'
 	icon_state = "tombstone"
 	anchored = 1
@@ -421,8 +422,8 @@
 			if(!(src.client && src.client.holder))
 				src.emote_allowed = 0
 
-			if(src.gender == MALE) playsound(get_turf(src), "sound/voice/screams/male_scream.ogg", 100, 0, 0, 0.91)
-			else playsound(get_turf(src), "sound/voice/screams/female_scream.ogg", 100, 0, 0, 0.9)
+			if(src.gender == MALE) playsound(get_turf(src), "sound/voice/screams/male_scream.ogg", 100, 0, 0, 0.91, channel=VOLUME_CHANNEL_EMOTE)
+			else playsound(get_turf(src), "sound/voice/screams/female_scream.ogg", 100, 0, 0, 0.9, channel=VOLUME_CHANNEL_EMOTE)
 			SPAWN_DBG(5 SECONDS)
 				src.emote_allowed = 1
 			return "screams!"
@@ -501,7 +502,7 @@
 			stoneman.icon = composite
 
 			holder.set_loc(stoneman)
-			stoneman.dir = get_dir(stoneman, src)
+			stoneman.set_dir(get_dir(stoneman, src))
 
 		else
 			. += desc
@@ -526,7 +527,7 @@
 				for (var/atom/A in range(4,user))
 					if (isarea(A))
 						continue
-					if (istype(A,/obj/particle/) || istype(A,/obj/screen))
+					if (istype(A,/obj/particle/) || istype(A,/atom/movable/screen))
 						continue
 					if (ismob(A))
 						var/mob/M = A
@@ -670,6 +671,6 @@
 	proc/spooky_shake()
 		set waitfor = 0
 		for (var/i=src.trigger_duration, i>0, i--)
-			src.dir = pick(cardinal)
+			src.set_dir(pick(cardinal))
 			src.pixel_x = rand(-3,3)
 			sleep(0.1 SECONDS)

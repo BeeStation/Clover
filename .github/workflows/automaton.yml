@@ -12,7 +12,7 @@ jobs:
 
   runtime:
     name: Runtime Checker
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       fail-fast: false
@@ -24,7 +24,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          curl https://raw.githubusercontent.com/goonstation/goonstation/master/tools/ci/sources.list | sudo tee /etc/apt/sources.list
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt install libstdc++6:i386 libssl1.1:i386
@@ -46,6 +45,11 @@ jobs:
           echo "LD_LIBRARY_PATH=/home/runner/BYOND/byond/bin:$LD_LIBRARY_PATH" >> $GITHUB_ENV
           echo "MANPATH=/home/runner/BYOND/byond/man:$MANPATH" >> $GITHUB_ENV
 
+      - name: Setup for assjam
+        if: "matrix.compiletype == 'ass'"
+        run: |
+          sed -i 's/BUILD_TIME_DAY 01/BUILD_TIME_DAY 13/' _std/__build.dm
+
       - name: Setup rust-g
         run: |
           tools/ci/install_rust_g.sh
@@ -53,25 +57,23 @@ jobs:
       - name: Compile map
         if: "matrix.map != 'SPACE_PREFAB' && matrix.map != 'UNDERWATER_PREFAB' && matrix.map != 'FULL'"
         run: |
-          tools/ci/dm.sh -DTRAVISBUILDING -DMAP_OVERRIDE_${{ matrix.map}} -DRUNTIME_CHECKING -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
+          tools/ci/dm.sh -DCIBUILD -DMAP_OVERRIDE_${{ matrix.map}} -DRUNTIME_CHECKING -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
 
       - name: Compile space prefabs
         if: "matrix.map == 'SPACE_PREFAB'"
         run: |
-          tools/ci/dm.sh -DTRAVISBUILDING -DSPACE_PREFAB_RUNTIME_CHECKING  -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
+          tools/ci/dm.sh -DCIBUILD -DSPACE_PREFAB_RUNTIME_CHECKING  -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
 
       - name: Compile underwater prefabs
         if: "matrix.map == 'UNDERWATER_PREFAB'"
         run: |
-          tools/ci/dm.sh -DTRAVISBUILDING -DUNDERWATER_PREFAB_RUNTIME_CHECKING  -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
+          tools/ci/dm.sh -DCIBUILD -DUNDERWATER_PREFAB_RUNTIME_CHECKING  -DIM_REALLY_IN_A_FUCKING_HURRY_HERE goonstation.dme
 
       - name: Compile with full pre-round setup
         if: "matrix.map == 'FULL'"
         run: |
-          tools/ci/dm.sh -DTRAVISBUILDING -DRUNTIME_CHECKING goonstation.dme
+          tools/ci/dm.sh -DCIBUILD -DRUNTIME_CHECKING goonstation.dme
 
       - name: Run map and check for runtime errors
         run: |
           tools/ci/run_server.sh
-
-
