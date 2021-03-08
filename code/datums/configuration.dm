@@ -446,7 +446,7 @@
 				banpanel_prev = trim(value)
 
 			if("hub_visibility")
-				world.visibility = 1 //Set to 0 by default in world/New()
+				world.set_hub_visibility(TRUE) //Set to 0 by default in world/New()
 
 			if ("whitelist_path")
 				config.whitelist_path = trim(value)

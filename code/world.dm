@@ -24,7 +24,7 @@
 
 	hub = "Exadv1.SpaceStation13"
 	hub_password = "kMZy3U5jJHSiBQjr"
-	name = "Goonstation 13"
+	name = "Beestation Clover"
 
 
 //Let's clarify something. I don't know if it needs clarifying, but here I go anyways.
@@ -391,7 +391,7 @@ var/f_color_selector_handler/F_Color_Selector
 		..()
 
 /world/New()
-	world.visibility = 0 //This gets set in config
+	set_hub_visibility(FALSE)
 	Z_LOG_DEBUG("World/New", "World New()")
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 	tick_lag = MIN_TICKLAG//0.4//0.25
@@ -1687,6 +1687,9 @@ var/f_color_selector_handler/F_Color_Selector
 
 /world/proc/setupZLevel(new_zlevel)
 	init_spatial_map(new_zlevel)
+
+/world/proc/set_hub_visibility(visibility)
+	hub_password = visibility ? "kMZy3U5jJHSiBQjr" : "INVALIDPASSWORD"
 
 /// EXPERIMENTAL STUFF
 var/opt_inactive = null
