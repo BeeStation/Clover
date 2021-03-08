@@ -398,9 +398,11 @@ var/f_color_selector_handler/F_Color_Selector
 //	loop_checks = 0
 
 	// Load in the current commit SHA from TGS...
+	/* MCterra: How could the chief engineer do this!
 	if(TgsAvailable())
 		var/datum/tgs_revision_information/rev = TgsRevision()
 		vcs_revision = rev.commit
+	*/
 
 	if(world.load_intra_round_value("heisenbee_tier") >= 15 && prob(50) || prob(3))
 		lobby_titlecard = new /datum/titlecard/heisenbee()
