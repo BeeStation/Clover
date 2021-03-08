@@ -2311,7 +2311,9 @@ var/global/list/feminine_ustyles = list("No Underwear" = "none",\
 	"Bra and Boyshorts" = "braboy",\
 	"Tanktop and Boyshorts" = "tankboy",\
 	"Panties" = "panties",\
-	"Boyshorts" = "boyshort")
+	"Boyshorts" = "boyshort",\
+	"Neko Black" = "female_neko_black",\
+	"Neko White" = "female_neko_white")
 var/global/list/masculine_ustyles = list("No Underwear" = "none",\
 	"Briefs" = "briefs",\
 	"Boxers" = "boxers",\
