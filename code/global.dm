@@ -268,7 +268,9 @@ var/global
 	"Bra and Boyshorts" = "braboy",
 	"Tanktop and Boyshorts" = "tankboy",
 	"Panties" = "panties",
-	"Boyshorts" = "boyshort")
+	"Boyshorts" = "boyshort",
+	"Neko Black" = "female_neko_black",
+	"Neko White" = "female_neko_white")
 
 	list/standard_skintones = list("Albino" = "#FAD7D0",
 	"White" = "#FFCC99",
