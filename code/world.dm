@@ -26,6 +26,8 @@
 	hub_password = "kMZy3U5jJHSiBQjr"
 	name = "Beestation Clover"
 
+	visibility = 1
+
 
 //Let's clarify something. I don't know if it needs clarifying, but here I go anyways.
 
@@ -1688,8 +1690,11 @@ var/f_color_selector_handler/F_Color_Selector
 /world/proc/setupZLevel(new_zlevel)
 	init_spatial_map(new_zlevel)
 
-/world/proc/set_hub_visibility(visibility)
-	hub_password = visibility ? "kMZy3U5jJHSiBQjr" : "INVALIDPASSWORD"
+/world/proc/set_hub_visibility(new_vis)
+	hub_password = new_vis ? "kMZy3U5jJHSiBQjr" : "INVALIDPASSWORD"
+
+/proc/debug_visibility()
+	message_admins("\nBYOND Visibility: [world.visibility]\nHub Password Hash: [world.hub_password]\nHub Name: [world.hub]")
 
 /// EXPERIMENTAL STUFF
 var/opt_inactive = null
