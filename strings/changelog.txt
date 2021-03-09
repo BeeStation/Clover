@@ -1,5 +1,9 @@
 
 (t)tue mar 09 21
+(u)zjdtmkhzt
+(p)116
+(e)|
+(+)Artifact Guns can now sometimes have multiple different firing modes.
 (u)Sidewinder7
 (p)115
 (e)|
