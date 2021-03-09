@@ -9,7 +9,7 @@ var/global/list/hellbans = null
 
 	New()
 		if (!hellbans)
-			hellbans = dd_file2list("strings/hellbans.txt")
+			hellbans = dd_file2list("config/hellbans.txt")
 		if (hellbans && (src.ckey in hellbans))
 			hellbanned = 1
 		..()
