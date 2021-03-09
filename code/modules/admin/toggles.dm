@@ -924,3 +924,18 @@ var/global/IP_alerts = 1
 #endif
 	else
 		boutput(src, "You cannot perform this action. You must be of a higher administrative rank!")
+
+/client/proc/toggle_hub_visibility()
+	SET_ADMIN_CAT(ADMIN_CAT_SERVER_TOGGLES)
+	set name = "Toggle Hub Visibility"
+	set desc = "Toggle whether or not the server shows up on the BYOND hub"
+	admin_only
+
+	if(rank_to_level(src.holder.rank) => LEVEL_SA)
+		world.set_hub_visibility(!hub_visibility)
+
+		logTheThing("admin", src, null, "toggled the server hub visibility [hub_visibility ? "on" : "off"]")
+		logTheThing("diary", src, null, "toggled the server hub visibility [hub_visibility ? "on" : "off"]", "admin")
+		message_admins("[key_name(src)] toggled the server hub visibility [hub_visibility ? "on" : "off"]")
+	else
+		boutput(src, "You cannot toggle server visibility. You must be at least Secondary Administrator or higher.")

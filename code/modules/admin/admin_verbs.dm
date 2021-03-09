@@ -122,6 +122,7 @@ var/list/admin_verbs = list(
 		/client/proc/cmd_admin_unhandcuff,
 		/client/proc/admin_toggle_lighting,
 		/client/proc/cmd_admin_managebioeffect,
+		/client/proc/toggle_hub_visibility,
 
 		/client/proc/debug_deletions,
 
