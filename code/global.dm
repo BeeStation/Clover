@@ -27,6 +27,8 @@ var/global
 
 	vpn_blacklist_enabled = TRUE
 
+	hub_visibility = TRUE
+
 	datum/datacore/data_core = null
 
 	turf/buzztile = null
