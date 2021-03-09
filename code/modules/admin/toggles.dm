@@ -931,7 +931,7 @@ var/global/IP_alerts = 1
 	set desc = "Toggle whether or not the server shows up on the BYOND hub"
 	admin_only
 
-	if(rank_to_level(src.holder.rank) => LEVEL_SA)
+	if(rank_to_level(src.holder.rank) >= LEVEL_SA)
 		world.set_hub_visibility(!hub_visibility)
 
 		logTheThing("admin", src, null, "toggled the server hub visibility [hub_visibility ? "on" : "off"]")
