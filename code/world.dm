@@ -1695,6 +1695,9 @@ var/f_color_selector_handler/F_Color_Selector
 /proc/debug_visibility()
 	message_admins("\nBYOND Visibility: [world.visibility]\nHub Password Hash: [world.hub_password]\nHub Name: [world.hub]")
 
+/proc/debug_set_visibility(vis)
+	world.set_hub_visibility(vis)
+
 /// EXPERIMENTAL STUFF
 var/opt_inactive = null
 /world/proc/Optimize()
