@@ -1,5 +1,9 @@
 
 (t)fri mar 12 21
+(u)Comradef191
+(p)139
+(e)|
+(*)Re-Added AI Displays to all currenty in-rotation maps.
 (u)Chickenish
 (p)137
 (e)|
