@@ -1,5 +1,9 @@
 
 (t)fri mar 12 21
+(u)TTerc
+(p)124
+(e)|
+(+)Removed opossums from wizard polymorph list.
 (u)Flaborized
 (p)122
 (e)|
