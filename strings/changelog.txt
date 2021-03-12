@@ -1,6 +1,10 @@
 
 (t)fri mar 12 21
 (u)Camryn Buttes
+(p)127
+(e)|
+(+)Claw machines are now scannable by mechanics.
+(u)Camryn Buttes
 (p)125
 (e)|
 (*)Added a cargo teleporter and recharger to the artifact lab on donut 3
