@@ -58,7 +58,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo dpkg --add-architecture i386
-          sudo apt-get update
+          sudo apt-get update || true
           sudo apt install libstdc++6:i386
 
       - name: Cache BYOND
