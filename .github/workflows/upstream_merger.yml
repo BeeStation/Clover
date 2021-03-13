@@ -28,8 +28,9 @@ jobs:
     - name: Overwrite Unwanted Changes
       # it's so bad
       run: |
-        git checkout origin/master -- .github/workflows/*
+        git checkout origin/master -- .github/workflows
         git rm +secret
+        git stage .
         git commit -m "Overwrite Unwanted Changes"
 
     - name: Push Changes
