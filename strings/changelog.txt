@@ -1,11 +1,13 @@
 
 (t)sat mar 13 21
-(u)Gannets
-(p)3978
-(e)⚖🆕🔄🎨|balance, feature, rework, sprites
-(*)Splits the Infiltrator nuclear operative class crate in to two kits. Infiltrator & Scout, details in minor changes.
-(+)Infiltrator kit now comes with: tranq pistol + ammo pouch, pod beacon deployer, dna scrambler, voice changer, emag, chameleon jumpsuit, chameleon projector
-(+)Scout kit comes with: burst fire smg + ammo pouch, light breaker, cloaking device, emag, nvg
+(u)Nefarious6th
+(p)141
+(e)|
+(*)Destiny has received some significant remapping; highlights include layout changes to Security and Medical and the addition of a Ranch. See PR for extended details.
+(u)BatElite
+(p)138
+(e)|
+(+)The floor and wall planner now has a mode for reverting changes to turfs, so you can undo the avant-garde redecorating of any construction worker you manage to catch!
 (t)fri mar 12 21
 (u)AwkwardDryad
 (p)3740
