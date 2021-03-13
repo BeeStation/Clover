@@ -31,6 +31,8 @@ jobs:
         git checkout origin/master -- .github/workflows
         git rm +secret
         git stage .
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
         git commit -m "Overwrite Unwanted Changes"
 
     - name: Push Changes
