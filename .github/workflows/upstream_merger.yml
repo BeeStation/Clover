@@ -3,7 +3,7 @@ name: Batch Upstream Merge
 on:
   schedule:
     - cron: "0 0 * * 0"
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   upstream-merge:
