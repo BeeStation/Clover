@@ -1,0 +1,35 @@
+name: Batch Upstream Merge
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow-dispatch:
+
+jobs:
+  upstream-merge:
+    runs-on: ubuntu-latest
+    name: Create Update PR
+
+    steps:
+    - name: Clone
+      uses: actions/checkout@v2
+
+    - name: Add and Fetch Remote
+      run: |
+        git remote add goonstation https://github.com/goonstation/goonstation
+        git fetch goonstation
+
+    - name: Update Head Branch
+      run: |
+        git branch -f upstream-bulk-merge goonstation/master
+        git checkout upstream-bulk-merge
+        git reset --hard goonstation/master
+        git push -f -u origin
+
+    - name: Open PR
+      run: |
+        export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        export GITHUB_USER=GitHub Actions
+        git remote set-url origin https://github.com/BeeStation/Clover
+        git fetch origin
+        hub pull-request -b Clover:master -h Clover:upstream-bulk-merge -m "Bulk Upstream Update" -m "This pull request contains all unmerged goonstation master commits. Please review code carefully before merging." || true
