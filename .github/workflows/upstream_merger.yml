@@ -28,7 +28,7 @@ jobs:
     - name: Overwrite Unwanted Changes
       # it's so bad
       run: |
-        git checkout origin/master -- .github/workflows
+        git reset origin/master -- .github/workflows
         git rm +secret
         git stage .
         git config user.name "GitHub Actions"
