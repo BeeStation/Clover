@@ -1,6 +1,6 @@
 /proc/most_applicable_trade(var/list/datum/commodity/goods_buy, var/obj/item/sell_item)
 	var/list/goods_buy_types = new /list(0)
-	for(var/datum/commodity/N as() in goods_buy)
+	for(var/datum/commodity/N as anything in goods_buy)
 		if (istype(sell_item, N.comtype))
 			goods_buy_types[N.comtype] = N
 	return goods_buy_types[maximal_subtype(goods_buy_types)]
@@ -757,7 +757,7 @@
 				src.goods_sell += new /datum/commodity/drugs/morphine(src)
 				src.goods_sell += new /datum/commodity/drugs/krokodil(src)
 				src.goods_sell += new /datum/commodity/drugs/lsd(src)
-				src.goods_sell += new /datum/commodity/drugs/lsd_bee(src)
+				src.goods_sell += new /datum/commodity/drug/lsd_bee(src)
 				src.goods_sell += new /datum/commodity/relics/bootlegfirework(src)
 				src.goods_sell += new /datum/commodity/pills/uranium(src)
 
@@ -1237,7 +1237,7 @@
 		src.goods_sell += new /datum/commodity/drugs/krokodil(src)
 		src.goods_sell += new /datum/commodity/drugs/jenkem(src)
 		src.goods_sell += new /datum/commodity/drugs/lsd(src)
-		src.goods_sell += new /datum/commodity/drugs/lsd_bee(src)
+		src.goods_sell += new /datum/commodity/drug/lsd_bee(src)
 		src.goods_sell += new /datum/commodity/medical/ether(src)
 		src.goods_sell += new /datum/commodity/medical/toxin(src)
 		src.goods_sell += new /datum/commodity/medical/cyanide(src)
