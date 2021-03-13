@@ -24,6 +24,16 @@ jobs:
         git branch -f upstream-bulk-merge goonstation/master
         git checkout upstream-bulk-merge
         git reset --hard goonstation/master
+
+    - name: Overwrite Unwanted Changes
+      # it's so bad
+      run: |
+        git checkout origin/master -- .github/workflows/*
+        git rm +secret
+        git commit -m "Overwrite Unwanted Changes"
+
+    - name: Push Changes
+      run: |
         git push -f -u origin
 
     - name: Open PR
