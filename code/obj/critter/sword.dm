@@ -1,3 +1,5 @@
+#define SWORD_ATTACKING_RANGE 4
+#define SWORD_MOVE_SPEED 5
 /* ================================================== */
 /* --- Syndicate Weapon: Orion Retribution Device --- */
 /* ================================================== */
@@ -78,7 +80,6 @@
 			if(mode == 0 && !changing_modes && !transformation_triggered)	//If in Beacon form and not already transforming...
 				transformation_countdown()									//...the countdown starts.
 		return
-	
 	CritterDeath()
 		..()
 		if (!died_already)
@@ -87,7 +88,6 @@
 				command_announcement("<br><b><span class='alert'>The Syndicate Weapon has been eliminated.</span></b>", "Safety Update", "sound/misc/announcement_1.ogg")
 				logTheThing("combat", src, null, "has been defeated.")
 				message_admins("The Syndicate Weapon: Orion Retribution Device has been defeated.")
-		
 			playsound(src, "sound/effects/ship_engage.ogg", 100, 1)
 
 			var/datum/effects/system/harmless_smoke_spread/smoke = new /datum/effects/system/harmless_smoke_spread()
@@ -107,12 +107,10 @@
 				for(var/board_count = rand(4, 8), board_count > 0, board_count--)
 					new/obj/item/factionrep/ntboard(locate(death_loc_x + rand(-2, 2), death_loc_y + rand(-2, 2), death_loc_z))
 					board_count--
-			
 			SPAWN_DBG(55)
 				for(var/alloy_count = rand(2, 4), alloy_count > 0, alloy_count--)
 					new/obj/item/material_piece/iridiumalloy(locate(death_loc_x + rand(-1, 1), death_loc_y + rand(-1, 1), death_loc_z))
 					alloy_count--
-			
 			SPAWN_DBG(60)
 				new/obj/machinery/power/sword_engine(locate(death_loc_x, death_loc_y, death_loc_z))
 
@@ -139,21 +137,18 @@
 			var/waking = 0
 
 			for (var/client/C)
-				var/mob/M = C.mob
-				if (M && src.z == M.z && get_dist(src,M) <= 64)
-					if (isliving(M))
+				var/mob/living/M = C.mob
+				if (isintangible(M)) continue
+				if (IN_RANGE(src, M, 64))
+					if (!isdead(M))
 						waking = 1
 						break
 
 			for (var/atom in by_cat[TR_CAT_PODS_AND_CRUISERS])
 				var/atom/A = atom
-				if (A && src.z == A.z && get_dist(src,A) <= 64)
+				if (IN_RANGE(src, A, 64))
 					waking = 1
 					break
-
-			if (!waking)
-				if (get_area(src) == colosseum_controller.colosseum)
-					waking = 1
 
 			if(waking)
 				task = "thinking"
@@ -166,15 +161,16 @@
 			var/stay_awake = 0
 
 			for (var/client/C)
-				var/mob/M = C.mob
-				if (M && src.z == M.z && get_dist(src,M) <= 32)
-					if (isliving(M))
+				var/mob/living/M = C.mob
+				if (isintangible(M)) continue
+				if (IN_RANGE(src, M, 32))
+					if (!isdead(M))
 						stay_awake = 1
 						break
 
 			for (var/atom in by_cat[TR_CAT_PODS_AND_CRUISERS])
 				var/atom/A = atom
-				if (A && src.z == A.z && get_dist(src,A) <= 32)
+				if (IN_RANGE(src, A, 32))
 					stay_awake = 1
 					break
 
@@ -205,9 +201,9 @@
 						src.frustration = 0
 						src.task = "thinking"
 						walk_to(src,0)
-					if (target)
-						if (get_dist(get_center(), src.target) <= 3)
-							var/mob/living/carbon/M = src.target
+					if (src.target)
+						if (IN_RANGE(get_center(), src.target, SWORD_ATTACKING_RANGE))
+							var/mob/living/M = src.target
 							if (M)
 								if(!src.attacking) ChaseAttack(M)
 								src.task = "attacking"
@@ -217,7 +213,6 @@
 							if(!stuck_timer)
 								stuck_timer = 12 SECONDS + TIME
 								stuck_location = get_center()
-							
 							if(stuck_timer <= TIME && stuck_location == get_center())
 								cooldown = 4 SECONDS + TIME
 								stuck_timer = null
@@ -236,21 +231,20 @@
 								else
 									WT.ReplaceWithSpace()
 
-								walk_to(src, src.target,1,5)
+							walk_to(src, src.target,1,SWORD_MOVE_SPEED)
 
 							if ((get_dist(get_center(), src.target)) >= (olddist))
 								src.frustration++
 							else
 								src.frustration = 0
-							
 							ability_selection()
 
 					else src.task = "thinking"
 				if("attacking")
-					if ((get_dist(get_center(), src.target) > 3) || ((src.target:loc != src.target_lastloc)))
+					if (!IN_RANGE(get_center(), src.target, SWORD_ATTACKING_RANGE) || (src.target:loc != src.target_lastloc))
 						src.task = "chasing"
 					else
-						if (get_dist(get_center(), src.target) <= 3)
+						if (IN_RANGE(get_center(), src.target, SWORD_ATTACKING_RANGE))
 							var/mob/living/carbon/M = src.target
 							if (!src.attacking) CritterAttack(src.target)
 							if(M != null)
@@ -286,7 +280,7 @@
 						if(mode == 1)						//Unanchored.
 							destructive_flight()
 						else								//Anchored.
-							if (prob(32) && get_dist(get_center(), src.target) <= 9)
+							if (prob(32) && IN_RANGE(src, src.target, 9))
 								linear_purge()
 							else
 								destructive_leap()
@@ -312,8 +306,8 @@
 
 
 //-TRANSFORMATIONS-//
-	
-	proc/transformation(var/transformation_id)				//0 - Beacon. 1 - Unanchored. 2 - Anchored.		
+
+	proc/transformation(var/transformation_id)				//0 - Beacon. 1 - Unanchored. 2 - Anchored.
 		firevuln = 1.25
 		brutevuln = 1.25
 		miscvuln = 0.25
@@ -339,6 +333,7 @@
 					name = true_name
 					desc = true_desc
 					aggressive = 1							//Only after exiting the beacon form will the SWORD become aggressive.
+					defensive = 1
 					health = 6000
 					mode = 1
 
@@ -419,44 +414,52 @@
 			switch (src.dir)
 				if (1)	//N
 					var/turf/T = locate(src.loc.x + 1,src.loc.y + 3,src.loc.z)
-					for (var/mob/M in T)
+					for (var/mob/living/M in T)
+						if (isintangible(M)) continue
 						M.changeStatus("stunned", 2 SECONDS)
 						M.changeStatus("weakened", 4 SECONDS)
 					for(increment = -1; increment <= 1; increment++)
-						for(var/mob/M in locate(src.loc.x + 1 + increment,src.loc.y + 4,src.loc.z))
+						for(var/mob/living/M in locate(src.loc.x + 1 + increment,src.loc.y + 4,src.loc.z))
+							if (isintangible(M)) continue
 							M.changeStatus("stunned", 2 SECONDS)
 							M.changeStatus("weakened", 4 SECONDS)
 							M.throw_at(T, 3, 1)
 
 				if (4)	//E
 					var/turf/T = locate(src.loc.x + 3,src.loc.y + 1,src.loc.z)
-					for (var/mob/M in T)
+					for (var/mob/living/M in T)
+						if (isintangible(M)) continue
 						M.changeStatus("stunned", 2 SECONDS)
 						M.changeStatus("weakened", 4 SECONDS)
 					for(increment = -1; increment <= 1; increment++)
-						for(var/mob/M in locate(src.loc.x + 4,src.loc.y + 1 + increment,src.loc.z))
+						for(var/mob/living/M in locate(src.loc.x + 4,src.loc.y + 1 + increment,src.loc.z))
+							if (isintangible(M)) continue
 							M.changeStatus("stunned", 2 SECONDS)
 							M.changeStatus("weakened", 4 SECONDS)
 							M.throw_at(T, 3, 1)
 
 				if (2)	//S
 					var/turf/T = locate(src.loc.x + 1,src.loc.y - 1,src.loc.z)
-					for (var/mob/M in T)
+					for (var/mob/living/M in T)
+						if (isintangible(M)) continue
 						M.changeStatus("stunned", 2 SECONDS)
 						M.changeStatus("weakened", 4 SECONDS)
 					for(increment = -1; increment <= 1; increment++)
-						for(var/mob/M in locate(src.loc.x + 1 + increment,src.loc.y - 2,src.loc.z))
+						for(var/mob/living/M in locate(src.loc.x + 1 + increment,src.loc.y - 2,src.loc.z))
+							if (isintangible(M)) continue
 							M.changeStatus("stunned", 2 SECONDS)
 							M.changeStatus("weakened", 4 SECONDS)
 							M.throw_at(T, 3, 1)
 
 				if (8)	//W
 					var/turf/T = locate(src.loc.x - 1,src.loc.y + 1,src.loc.z)
-					for (var/mob/M in T)
+					for (var/mob/living/M in T)
+						if (isintangible(M)) continue
 						M.changeStatus("stunned", 2 SECONDS)
 						M.changeStatus("weakened", 4 SECONDS)
 					for(increment = -1; increment <= 1; increment++)
-						for(var/mob/M in locate(src.loc.x - 2,src.loc.y + 1 + increment,src.loc.z))
+						for(var/mob/living/M in locate(src.loc.x - 2,src.loc.y + 1 + increment,src.loc.z))
+							if (isintangible(M)) continue
 							M.changeStatus("stunned", 2 SECONDS)
 							M.changeStatus("weakened", 4 SECONDS)
 							M.throw_at(T, 3, 1)
@@ -551,20 +554,15 @@
 		glow.plane = PLANE_SELFILLUM
 		src.UpdateOverlays(glow, "glow")
 
-		SPAWN_DBG(1)
-			for (var/mob/M in range(5,get_center()))
-				random_brute_damage(M, 32)
-				random_burn_damage(M, 16)
-
-		SPAWN_DBG(5)
+		SPAWN_DBG(0.5 SECONDS)
 			animate_spin(src, spin_dir, 5, 0)
 
-		SPAWN_DBG(6)
-			for (var/mob/M in range(5,get_center()))
+		SPAWN_DBG(1 SECOND)
+			for (var/mob/living/M in range(5,get_center()))
+				if (isintangible(M)) continue
 				random_brute_damage(M, 16)
-				random_burn_damage(M, 32)
+				random_burn_damage(M, 16)
 
-		SPAWN_DBG(10)
 			glow = image('icons/misc/retribution/SWORD/base_o.dmi', "anchored")
 			glow.plane = PLANE_SELFILLUM
 			src.UpdateOverlays(glow, "glow")
@@ -598,17 +596,19 @@
 				src.dir = pick(1,2,4,8)
 			for(var/i in 0 to 7)
 				step(src, src.dir)
-				if(i < 3)
+				if(i <= 3)
 					src.alpha -= 17
 					src.pixel_y += 4
 				else
 					src.alpha += 17
 					src.pixel_y -= 4
 				sleep(5)
-			for (var/mob/M in range(3,get_center()))
+			for (var/mob/living/M in range(3,get_center()))
+				if (isintangible(M)) continue
 				random_brute_damage(M, 60)
 			tile_purge(src.loc.x + 1,src.loc.y + 1,1)
-			for (var/mob/M in get_center())
+			for (var/mob/living/M in get_center())
+				if (isintangible(M)) continue
 				if(prob(69))								//Nice.
 					M.gib()
 				else
@@ -642,22 +642,25 @@
 		glow.plane = PLANE_SELFILLUM
 		src.UpdateOverlays(glow, "glow")
 
-		SPAWN_DBG(2)
-			for (var/mob/M in range(3,get_center()))
+		SPAWN_DBG(0.2 SECONDS)
+			for (var/mob/living/M in range(3,get_center()))
+				if(isintangible(M)) continue
 				random_burn_damage(M, (current_heat_level / 5))
 				M.changeStatus("burning", 4 SECONDS)
 
-		SPAWN_DBG(4)
-			for (var/mob/M in range(3,get_center()))
+		SPAWN_DBG(0.4 SECONDS)
+			for (var/mob/living/M in range(3,get_center()))
+				if(isintangible(M)) continue
 				random_burn_damage(M, (current_heat_level / 4))
 				M.changeStatus("burning", 6 SECONDS)
 
-		SPAWN_DBG(6)
-			for (var/mob/M in range(3,get_center()))
+		SPAWN_DBG(0.6 SECONDS)
+			for (var/mob/living/M in range(3,get_center()))
+				if(isintangible(M)) continue
 				random_burn_damage(M, (current_heat_level / 3))
 				M.changeStatus("burning", 8 SECONDS)
 
-		SPAWN_DBG(8)
+		SPAWN_DBG(0.8 SECONDS)
 			current_heat_level = 0
 			icon = 'icons/misc/retribution/SWORD/base.dmi'
 			icon_state = "unanchored"
@@ -683,7 +686,7 @@
 		glow.plane = PLANE_SELFILLUM
 		src.UpdateOverlays(glow, "glow")
 
-		SPAWN_DBG(12)
+		SPAWN_DBG(1.2 SECONDS)
 			if(health_before_absorption > health)
 				current_heat_level = current_heat_level + health_before_absorption - health
 				health = health_before_absorption
@@ -720,85 +723,86 @@
 		var/increment
 		var/turf/T
 
-		SPAWN_DBG(1)
+		SPAWN_DBG(0)
 			if(past_destructive_rotation == src.dir)
-				src.dir = pick(1,2,4,8)
-			for(var/i in 0 to 7)
+				src.dir = pick(cardinal)
+			for(var/i in 1 to 8)
 				switch (src.dir)
-					if (1)	//N
+					if (NORTH)	//N
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 1 + increment,src.loc.y + 3,src.loc.z)
 							if(T && prob(33))
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 1 + increment,src.loc.y + 3,0)
 
-					if (4)	//E
+					if (EAST)	//E
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 3,src.loc.y + 1 + increment,src.loc.z)
 							if(T && prob(33))
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 3,src.loc.y + 1 + increment,0)
 
-					if (2)	//S
+					if (SOUTH)	//S
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 1 + increment,src.loc.y - 1,src.loc.z)
 							if(T && prob(33))
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 1 + increment,src.loc.y - 1,0)
 
-					if (8)	//W
+					if (WEST)	//W
 						for(increment in -1 to 1)
 							T = locate(src.loc.x - 1,src.loc.y + 1 + increment,src.loc.z)
 							if(T && prob(33))
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x - 1,src.loc.y + 1 + increment,0)
 				step(src, src.dir)
-				sleep(0.4)
-			for (var/mob/M in range(3,get_center()))
+				sleep(0.1 SECONDS)
+			for (var/mob/living/M in range(3,get_center()))
+				if(isintangible(M)) continue
 				random_brute_damage(M, 60)
 			past_destructive_rotation = src.dir
 
-		SPAWN_DBG(8)
+		SPAWN_DBG(0.8 SECONDS)
 			if(past_destructive_rotation == src.dir)
-				src.dir = pick(1,2,4,8)
+				src.dir = pick(cardinal)
 			walk_towards(src, src.target)
 			walk(src,0)
-			for(var/l in 0 to 7)
+			for(var/l in 1 to 8)
 				switch (src.dir)
-					if (1)	//N
+					if (NORTH)	//N
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 1,src.loc.y + 3,src.loc.z)
 							if(T)
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 1 + increment,src.loc.y + 3,0)
 
-					if (4)	//E
+					if (EAST)	//E
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 3,src.loc.y + 1,src.loc.z)
 							if(T)
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 3,src.loc.y + 1 + increment,0)
 
-					if (2)	//S
+					if (SOUTH)	//S
 						for(increment in -1 to 1)
 							T = locate(src.loc.x + 1,src.loc.y - 1,src.loc.z)
 							if(T)
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x + 1 + increment,src.loc.y - 1,0)
 
-					if (8)	//W
+					if (WEST)	//W
 						for(increment in -1 to 1)
 							T = locate(src.loc.x - 1,src.loc.y + 1,src.loc.z)
 							if(T)
 								playsound(get_center(), "sound/effects/smoke_tile_spread.ogg", 70, 1)
 								tile_purge(src.loc.x - 1,src.loc.y + 1 + increment,0)
 				step(src, src.dir)
-				sleep(0.1)
+				sleep(0.1 SECONDS)
 			for (var/mob/O in range(3,get_center()))
 				random_brute_damage(O, 45)
 			past_destructive_rotation = src.dir
 
-		SPAWN_DBG(15)
+		SPAWN_DBG(1.5 SECONDS)
 			icon = 'icons/misc/retribution/SWORD/base.dmi'
 			icon_state = "unanchored"
 			glow = image('icons/misc/retribution/SWORD/base_o.dmi', "unanchored")
@@ -814,7 +818,8 @@
 //-MISCELLANEOUS-//
 
 	proc/tile_purge(var/point_x, var/point_y, var/dam_type)	//A helper proc for Linear Purge, Destructive Leap and Destructive Flight.
-		for (var/mob/M in locate(point_x,point_y,src.z))
+		for (var/mob/living/M in locate(point_x,point_y,src.z))
+			if(isintangible(M)) continue
 			if(!dam_type)
 				if (isrobot(M))
 					M.health = M.health * rand(0.10, 0.20)
@@ -878,3 +883,6 @@
 	proc/get_center()										//Returns the central turf.
 		var/turf/center_tile = get_step(get_turf(src), NORTHEAST)
 		return center_tile
+
+#undef SWORD_ATTACKING_RANGE
+#undef SWORD_MOVE_SPEED
