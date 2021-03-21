@@ -67,3 +67,30 @@
 			elapsed = "[pad_time(hours)]:[pad_time(minutes)]:[pad_time(seconds)] elapsed"
 	else if (current_state == GAME_STATE_FINISHED) elapsed = "ENDING"
 	return "[config.server_name] ([station_name]) [clients.len] players Map: [getMapNameFromID(map_setting)] Mode: [(ticker?.hide_mode) ? "secret" : master_mode]; [elapsed] -- <byond://[world.internet_address]:[world.port]>"
+
+/datum/tgs_chat_command/reboot
+	name = "reboot"
+	help_text = "<normal|hard|tgs>"
+	admin_only_goon_sucks = TRUE
+
+/datum/tgs_chat_command/reboot/Run(datum/tgs_chat_user/sender, params)
+	if(!params)
+		return "Insufficient parameters"
+	var/list/all_params = splittext(params, " ")
+	if(all_params.len != 1 && all_params.len != 2)
+		return "Invalid amount of parameters"
+	var/delay = (all_params.len == 2) ? text2num(all_params[2]) : 1
+	var/mode = all_params[1]
+	var/init_by = "Initiated by an Admin remotely through the TGS Relay."
+	switch(mode)
+		if("normal")
+			out(world, "<span class='bold notice'>Initiating world restart, requested remotely through the TGS relay.</span>")
+			Reboot_server()
+		if("hard")
+			out(world, "<span class='bold notice'>World reboot - [init_by]</span>")
+			world.Reboot()
+		if("tgs")
+			out(world, "<span class='bold notice'>Server restart - [init_by]</span>")
+			world.TgsEndProcess()
+		else
+			return "Invalid reboot mode"
