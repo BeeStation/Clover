@@ -77,9 +77,8 @@
 	if(!params)
 		return "Insufficient parameters"
 	var/list/all_params = splittext(params, " ")
-	if(all_params.len != 1 && all_params.len != 2)
+	if(length(all_params) != 1)
 		return "Invalid amount of parameters"
-	var/delay = (all_params.len == 2) ? text2num(all_params[2]) : 1
 	var/mode = all_params[1]
 	var/init_by = "Initiated by an Admin remotely through the TGS Relay."
 	switch(mode)
