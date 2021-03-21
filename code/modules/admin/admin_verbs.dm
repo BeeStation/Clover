@@ -746,7 +746,7 @@ var/list/special_pa_observing_verbs = list(
 	if (src.owner:stealth)
 		var/key = src.owner:key
 		var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-		discord_send("[name] ([key]) Has enabled stealth mode as ([src.owner:fakekey])")
+		discord_send("[name] ([key]) Has enabled stealth mode as ([src.owner:fakekey])", -1)
 
 /client/proc/alt_key()
 	SET_ADMIN_CAT(ADMIN_CAT_SELF)
