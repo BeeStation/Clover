@@ -270,6 +270,12 @@
 
 						src.stamina_stun()
 						fartcount++
+		#ifdef SECRETS_ENABLED
+						if(fartcount == 69 || fartcount == 420)
+							var/obj/item/paper/grillnasium/fartnasium_recruitment/flyer/F = new(get_turf(src))
+							src.put_in_hand_or_drop(F)
+							src.visible_message("<b>[src]</B> farts out a... wait is this viral marketing?")
+		#endif
 		#ifdef DATALOGGER
 						game_stats.Increment("farts")
 		#endif
@@ -2215,4 +2221,3 @@
 					G.affecting.force_laydown_standup()
 					sleep(1 SECOND) //let us do that combo shit people like with throwing
 					src.force_laydown_standup()
-

@@ -1,0 +1,1 @@
+# Add one ckey per line to let them bypass the server popcap
