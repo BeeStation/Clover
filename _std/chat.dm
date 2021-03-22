@@ -9,6 +9,14 @@
 	if(!world.TgsAvailable())
 		return
 
+	// Sanitize
+	var/static/list/filtered_chars = list(
+		"@" = "\[at]",
+		"#" = "\[hash]"
+	)
+	for(var/char in filtered_chars)
+		message = replacetext(message, char, filtered_chars[char])
+
 	// send everywhere
 	if(channel_tag == null)
 		world.TgsTargetedChatBroadcast(message, FALSE)
