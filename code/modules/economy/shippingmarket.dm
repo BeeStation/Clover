@@ -192,9 +192,9 @@
 						duckets += O:amount
 						pool(O)
 
-		#ifdef SECRETS_ENABLED
+		/*#ifdef SECRETS_ENABLED - MCterra: Unsupported secret code
 		send_to_brazil(sell_crate)
-		#endif
+		#endif*/
 
 		qdel(sell_crate)
 

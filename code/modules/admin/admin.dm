@@ -1830,9 +1830,9 @@ var/global/noir = 0
 
 			var/list/matches = get_matches(CT, "/mob/living/critter")
 			matches -= list(/mob/living/critter, /mob/living/critter/small_animal, /mob/living/critter/aquatic) //blacklist
-#ifdef SECRETS_ENABLED
+/*#ifdef SECRETS_ENABLED - MCterra: Unsupported secret code
 			matches -= list(/mob/living/critter/vending) //secret repo blacklist
-#endif
+#endif*/
 
 			if (!length(matches))
 				return

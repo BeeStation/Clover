@@ -741,10 +741,10 @@ var/global/current_state = GAME_STATE_WORLD_INIT
 	for_by_tcl(P, /obj/bookshelf/persistent) //make the bookshelf save its contents
 		P.build_curr_contents()
 
-#ifdef SECRETS_ENABLED
+/*#ifdef SECRETS_ENABLED - MCterra: Unsupported secret code
 	for_by_tcl(S, /obj/santa_helper)
 		S.save_mail()
-#endif
+#endif*/
 
 	logTheThing("debug", null, null, "Done with books")
 
