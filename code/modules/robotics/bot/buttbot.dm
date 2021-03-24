@@ -482,12 +482,14 @@
 			var/obj/item/material_piece/fart/F = unpool(/obj/item/material_piece/fart)
 			F.set_loc(src.loc)
 	fartcount++
-	/*if(fartcount == 69 || fartcount == 420) // MCterra: ARGHHH secret codde!
+	#ifdef SECRETS_ENABLED
+	if(fartcount == 69 || fartcount == 420)
 		var/obj/item/paper/grillnasium/fartnasium_recruitment/flyer/F = new(get_turf(src))
 		for(var/mob/living/carbon/C in view(2,src))
 			if(C.put_in_hand_or_drop(F))
 				break
-		src.visible_message("<b>[src]</B> farts out a... wait is this viral marketing?")*/
+		src.visible_message("<b>[src]</B> farts out a... wait is this viral marketing?")
+	#endif
 #ifdef DATALOGGER
 	game_stats.Increment("botfarts")
 #endif

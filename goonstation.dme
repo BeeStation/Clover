@@ -19,11 +19,9 @@ var/datum/preMapLoad/preMapLoad = new
 #include "_std\__std.dme"
 
 //Secret Code Handling
-/* MCterra: Only have placeholder objects
 #ifndef FASTDMM
 #include "+secret\__secret.dme"
 #endif
-*/
 #include "code\__secret_public.dme"
 
 // BEGIN_INCLUDE

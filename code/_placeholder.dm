@@ -3,24 +3,12 @@
  * These objects are not in this codebase, but the paths are present on maps.
  */
 /obj/item/device/audio_log/ht_1
-	New()
-		..()
-		qdel(src)
 
 /obj/item/device/audio_log/ht_2
-	New()
-		..()
-		qdel(src)
 
 /obj/item/device/audio_log/ht_3
-	New()
-		..()
-		qdel(src)
 
 /obj/item/paper/grillnasium/fartnasium_recruitment/flyer
-	New()
-		..()
-		qdel(src)
 
 /** Placeholder Spawner
  *  Spawns a designated atom/movable at it's location upon creation
