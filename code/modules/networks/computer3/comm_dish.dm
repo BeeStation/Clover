@@ -82,9 +82,7 @@
 		transmit_to_centcom(var/title, var/message, var/user)
 			command_alert(message, title, override_big_title="Transmission to Central Command")
 			message_admins("[user ? user : "Someone"] sent a message to Central Command:<br>[title]<br><br>[message]")
-			var/ircmsg[] = new()
-			ircmsg["msg"] = "[user ? user : "Unknown"] sent a message to Central Command:\n**[title]**\n[message]"
-			ircbot.export("admin", ircmsg)
+			discord_send("[user ? user : "Unknown"] sent a message to Central Command:\n**[title]**\n[message]", -1)
 
 		add_cargo_logs(var/atom/A)
 			if (!A)

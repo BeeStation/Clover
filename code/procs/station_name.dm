@@ -197,11 +197,9 @@ var/global/lastStationNameChange = 0 //timestamp
 			logTheThing("diary", user, null, "changed the station name to: [name]", "admin")
 			message_admins("[key_name(user)] changed the station name to: [name]")
 
-			var/ircmsg[] = new()
-			ircmsg["key"] = user.client.key
-			ircmsg["name"] = (user?.real_name) ? stripTextMacros(user.real_name) : "NULL"
-			ircmsg["msg"] = "changed the station name to [name]"
-			ircbot.export("admin", ircmsg)
+			var/key = user.client.key
+			var/realname = (user?.real_name) ? stripTextMacros(user.real_name) : "NULL"
+			discord_send("[realname] ([key]) changed the station name to [name]", -1)
 
 	else
 		name = generate_random_station_name()

@@ -239,7 +239,4 @@ var/global/deathConfettiActive = 0
 	logTheThing("diary", src, null, logMessage, "admin")
 	message_admins("[key_name(src)] [logMessage]")
 
-	var/ircmsg[] = new()
-	ircmsg["key"] = src.key
-	ircmsg["msg"] = logMessage
-	ircbot.export("admin", ircmsg)
+	discord_send("[src.key] [logMessage]", -1)

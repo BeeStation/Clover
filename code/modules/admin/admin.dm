@@ -370,11 +370,9 @@ var/global/noir = 0
 				logTheThing("diary", usr, null, "[emergency_shuttle.disabled ? "dis" : "en"]abled calling the Emergency Shuttle", "admin")
 				message_admins("<span class='internal'>[key_name(usr)] [emergency_shuttle.disabled ? "dis" : "en"]abled calling the Emergency Shuttle</span>")
 				// someone forgetting about leaving shuttle calling disabled would be bad so let's inform the Admin Crew if it happens, just in case
-				var/ircmsg[] = new()
-				ircmsg["key"] = src.owner:key
-				ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-				ircmsg["msg"] = "Has [emergency_shuttle.disabled ? "dis" : "en"]abled calling the Emergency Shuttle"
-				ircbot.export("admin", ircmsg)
+				var/key = usr.client.key
+				var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+				discord_send("[name] ([key])(Has [emergency_shuttle.disabled ? "dis" : "en"]abled calling the Emergency Shuttle", -1)
 			else
 				alert("You need to be at least a Primary Administrator to enable/disable shuttle calling.")
 
@@ -422,11 +420,9 @@ var/global/noir = 0
 							logTheThing("diary", usr, null, "deleted note [noteId] belonging to [player].", "admin")
 							message_admins("<span class='internal'>[key_name(usr)] deleted note [noteId] belonging to <A href='?src=%admin_ref%;action=notes&target=[player]'>[player]</A>.</span>")
 
-							var/ircmsg[] = new()
-							ircmsg["key"] = src.owner:key
-							ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-							ircmsg["msg"] = "Deleted note [noteId] belonging to [player]"
-							ircbot.export("admin", ircmsg)
+							var/key =  src.owner:key
+							var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+							discord_send("[name] ([key]) Deleted note [noteId] belonging to [player]", -1)
 
 				if("add")
 					if(src.level < LEVEL_SA)
@@ -444,11 +440,9 @@ var/global/noir = 0
 					logTheThing("diary", usr, null, "added a note for [player]: [the_note]", "admin")
 					message_admins("<span class='internal'>[key_name(usr)] added a note for <A href='?src=%admin_ref%;action=notes&target=[player]'>[player]</A>: [the_note]</span>")
 
-					var/ircmsg[] = new()
-					ircmsg["key"] = src.owner:key
-					ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-					ircmsg["msg"] = "Added a note for [player]: [the_note]"
-					ircbot.export("admin", ircmsg)
+					var/key = src.owner:key
+					var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+					discord_send("[name] ([key]) Added a note for [player]: [the_note]", -1)
 
 		if("viewcompids")
 			var/player = href_list["targetckey"]
@@ -2112,11 +2106,9 @@ var/global/noir = 0
 					logTheThing("diary", usr, null, "has removed [C]'s adminship", "admin")
 					message_admins("[key_name(usr)] has removed [C]'s adminship")
 
-					var/ircmsg[] = new()
-					ircmsg["key"] = usr.client.key
-					ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-					ircmsg["msg"] = "has removed [C]'s adminship"
-					ircbot.export("admin", ircmsg)
+					var/key = usr.client.key
+					var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+					discord_send("[name] ([key]) has removed [C]'s adminship", -1)
 
 					admins.Remove(C.ckey)
 					onlineAdmins.Remove(C)
@@ -2127,11 +2119,9 @@ var/global/noir = 0
 					logTheThing("diary", usr, null, "has made [C] a [rank]", "admin")
 					message_admins("[key_name(usr)] has made [C] a [rank]")
 
-					var/ircmsg[] = new()
-					ircmsg["key"] = usr.client.key
-					ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-					ircmsg["msg"] = "has made [C] a [rank]"
-					ircbot.export("admin", ircmsg)
+					var/key = usr.client.key
+					var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+					discord_send("[name] ([key]) has made [C] a [rank]", -1)
 
 					admins[C.ckey] = rank
 					onlineAdmins.Add(C)
@@ -4227,11 +4217,9 @@ var/global/noir = 0
 		logTheThing("admin", usr, null, "initiated a reboot.")
 		logTheThing("diary", usr, null, "initiated a reboot.", "admin")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = usr.client.key
-		ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-		ircmsg["msg"] = "manually restarted the server."
-		ircbot.export("admin", ircmsg)
+		var/key = usr.client.key
+		var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+		discord_send("[name] ([key]) manually restarted the server.", -1)
 
 		round_end_data(2) //Wire: Export round end packet (manual restart)
 
@@ -4297,7 +4285,7 @@ var/global/noir = 0
 		logTheThing("admin", usr, null, "removed the restart delay and triggered an immediate restart.")
 		logTheThing("diary", usr, null, "removed the restart delay and triggered an immediate restart.", "admin")
 		message_admins("<span class='internal'>[usr.key] removed the restart delay and triggered an immediate restart.</span>")
-		ircbot.event("roundend")
+		discord_send("Round just ended on [config.server_name].", -1)
 		Reboot_server()
 
 	else if (game_end_delayed == 0)
@@ -4307,11 +4295,9 @@ var/global/noir = 0
 		logTheThing("diary", usr, null, "delayed the server restart.", "admin")
 		message_admins("<span class='internal'>[usr.key] delayed the server restart.</span>")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = (usr?.client) ? usr.client.key : "NULL"
-		ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-		ircmsg["msg"] = "has delayed the server restart."
-		ircbot.export("admin", ircmsg)
+		var/key = (usr?.client) ? usr.client.key : "NULL"
+		var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+		discord_send("[name] ([key]) has delayed the server restart.", "event")
 
 	else if (game_end_delayed == 1)
 		game_end_delayed = 0
@@ -4320,11 +4306,9 @@ var/global/noir = 0
 		logTheThing("diary", usr, null, "removed the restart delay.", "admin")
 		message_admins("<span class='internal'>[usr.key] removed the restart delay.</span>")
 
-		var/ircmsg[] = new()
-		ircmsg["key"] = (usr?.client) ? usr.client.key : "NULL"
-		ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-		ircmsg["msg"] = "has removed the server restart delay."
-		ircbot.export("admin", ircmsg)
+		var/key = (usr?.client) ? usr.client.key : "NULL"
+		var/name = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
+		discord_send("[name] ([key]) has removed the server restart delay.", "event")
 
 /mob/proc/revive()
 	if(ishuman(src))

@@ -503,7 +503,7 @@ var/global/list/vpn_ip_checks = list() //assoc list of ip = true or ip = false. 
 		if (winget(src, null, "hwmode") != "true")
 			alert(src, "Hardware rendering is disabled.  This may cause errors displaying lighting, manifesting as BIG WHITE SQUARES.\nPlease enable hardware rendering from the byond preferences menu.","Potential Rendering Issue")
 
-		ircbot.event("login", src.key)
+		discord_send("[src.key] logged into [config.server_name]", "event")
 #if defined(RP_MODE) && !defined(IM_TESTING_SHIT_STOP_BARFING_CHANGELOGS_AT_ME)
 		src.verbs += /client/proc/cmd_rp_rules
 		if (istype(src.mob, /mob/new_player))
@@ -966,13 +966,10 @@ var/global/curr_day = null
 			logTheThing("admin_help", src, null, "<b>PM'd [target]</b>: [t]")
 			logTheThing("diary", src, null, "PM'd [target]: [t]", "ahelp")
 
-			var/ircmsg[] = new()
-			ircmsg["key"] = src.mob && src ? src.key : ""
-			ircmsg["name"] = stripTextMacros(src.mob.real_name)
-			ircmsg["key2"] = target
-			ircmsg["name2"] = "Discord"
-			ircmsg["msg"] = html_decode(t)
-			ircbot.export("pm", ircmsg)
+			var/key = src.mob && src ? src.key : ""
+			var/realname = stripTextMacros(src.mob.real_name)
+
+			discord_send("Admin-PM from [realname] ([key]) to [target] (Discord): [html_decode(t)]", -1)
 
 			//we don't use message_admins here because the sender/receiver might get it too
 			for (var/client/C)
@@ -1000,13 +997,10 @@ var/global/curr_day = null
 			logTheThing("mentor_help", src, null, "<b>Mentor PM'd [target]</b>: [t]")
 			logTheThing("diary", src, null, "Mentor PM'd [target]: [t]", "admin")
 
-			var/ircmsg[] = new()
-			ircmsg["key"] = src.mob && src ? src.key : ""
-			ircmsg["name"] = stripTextMacros(src.mob.real_name)
-			ircmsg["key2"] = target
-			ircmsg["name2"] = "Discord"
-			ircmsg["msg"] = html_decode(t)
-			ircbot.export("mentorpm", ircmsg)
+			var/key = src.mob && src ? src.key : ""
+			var/name = stripTextMacros(src.mob.real_name)
+
+			discord_send("MENTOR PM: From [name] ([key]) To [target] (Discord): [html_decode(t)]", -1)
 
 			//we don't use message_admins here because the sender/receiver might get it too
 			var/mentormsg = "<span class='mhelp'><b>MENTOR PM: [key_name(src.mob,0,0,1)] <i class='icon-arrow-right'></i> [target] (Discord)</b>: <span class='message'>[t]</span></span>"
@@ -1050,13 +1044,12 @@ var/global/curr_day = null
 				logTheThing("mentor_help", src.mob, M, "Mentor PM'd [constructTarget(M,"mentor_help")]: [t]")
 				logTheThing("diary", src.mob, M, "Mentor PM'd [constructTarget(M,"diary")]: [t]", "admin")
 
-				var/ircmsg[] = new()
-				ircmsg["key"] = src.mob && src ? src.key : ""
-				ircmsg["name"] = stripTextMacros(src.mob.real_name)
-				ircmsg["key2"] = (M != null && M.client != null && M.client.key != null) ? M.client.key : ""
-				ircmsg["name2"] = (M != null && M.real_name != null) ? stripTextMacros(M.real_name) : ""
-				ircmsg["msg"] = html_decode(t)
-				ircbot.export("mentorpm", ircmsg)
+				var/key = src.mob && src ? src.key : ""
+				var/name = stripTextMacros(src.mob.real_name)
+				var/key2 = (M != null && M.client != null && M.client.key != null) ? M.client.key : ""
+				var/name2 = (M != null && M.real_name != null) ? stripTextMacros(M.real_name) : ""
+
+				discord_send("Mentor-PM from [name] ([key]) to [name2] ([key2]): [html_decode(t)]", -1)
 
 				var/mentormsg = "<span class='mhelp'><b>MENTOR PM: [key_name(src.mob,0,0,1)] <i class='icon-arrow-right'></i> [key_name(M,0,0,1)]</b>: <span class='message'>[t]</span></span>"
 				for (var/client/C)

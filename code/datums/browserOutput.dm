@@ -173,12 +173,7 @@ var/global
 						message_admins("[src.owner] just attempted to crash the server using at least 5 '\['s in a row.")
 						logTheThing("admin", src.owner, null, "just attempted to crash the server using at least 5 '\['s in a row.", "admin")
 
-						//Irc message too
-						var/ircmsg[] = new()
-						ircmsg["key"] = owner.key
-						ircmsg["name"] = stripTextMacros(owner.mob.name)
-						ircmsg["msg"] = "just attempted to crash the server using at least 5 '\['s in a row."
-						ircbot.export("admin", ircmsg)
+						discord_send("[stripTextMacros(owner.mob.name)] ([owner.key]) just attempted to crash the server using at least 5 '\['s in a row.", -1)
 					return
 
 				var/list/connData = json_decode(cookie)
@@ -202,11 +197,7 @@ var/global
 
 						//Irc message too
 						if(owner)
-							var/ircmsg[] = new()
-							ircmsg["key"] = owner.key
-							ircmsg["name"] = stripTextMacros(owner.mob.name)
-							ircmsg["msg"] = "has a cookie from banned account [found["ckey"]](IP: [found["ip"]], CompID: [found["compID"]])"
-							ircbot.export("admin", ircmsg)
+							discord_send("[stripTextMacros(owner.mob.name)] ([owner.key]) has a cookie from banned account [found["ckey"]](IP: [found["ip"]], CompID: [found["compID"]])", -1)
 
 						var/banData[] = new()
 						banData["ckey"] = src.owner.ckey

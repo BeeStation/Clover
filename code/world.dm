@@ -542,7 +542,7 @@ var/f_color_selector_handler/F_Color_Selector
 	SetupOccupationsList()
 
 	Z_LOG_DEBUG("World/Init", "Notifying Discord of new round")
-	ircbot.event("serverstart", list("map" = getMapNameFromID(map_setting), "gamemode" = (ticker?.hide_mode) ? "secret" : master_mode))
+	discord_send("New round starting on [config.server_name] with map [getMapNameFromID(map_setting)] and gamemode [(ticker?.hide_mode) ? "secret" : master_mode]!", "status")
 	world.log << "Map: [getMapNameFromID(map_setting)]"
 
 	Z_LOG_DEBUG("World/Init", "Notifying hub of new round")
@@ -1607,7 +1607,7 @@ var/f_color_selector_handler/F_Color_Selector
 					ircmsg["msg"] = "Removed the restart delay."
 
 					SPAWN_DBG(1 DECI SECOND)
-						ircbot.event("roundend")
+						discord_send("Round just ended on [config.server_name].", -1)
 						Reboot_server()
 
 					return ircbot.response(ircmsg)

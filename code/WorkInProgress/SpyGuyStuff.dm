@@ -1093,13 +1093,7 @@ proc/Create_Tommyname()
 		logTheThing("admin", M, null, message)
 		logTheThing("diary", M, null, message, "admin")
 
-		if(external_alert)
-			//IRCbot alert, for fun
-			var/ircmsg[] = new()
-			ircmsg["key"] =  M.key
-			ircmsg["name"] = stripTextMacros(M.real_name)
-			ircmsg["msg"] = "[message] and got themselves got by the anti-cheat cluwne."
-			ircbot.export("admin", ircmsg)
+		discord_send("[stripTextMacros(M.real_name)] ([M.key]) [message] and got themselves got by the anti-cheat cluwne.", -1)
 
 		M.cluwnegib(15, 1)
 

@@ -216,7 +216,7 @@ var/global/current_state = GAME_STATE_WORLD_INIT
 	round_time_check = world.timeofday
 
 	SPAWN_DBG(0)
-		ircbot.event("roundstart")
+		discord_send("Round has begun on [config.server_name].", -1)
 		mode.post_setup()
 
 		event_wormhole_buildturflist()
@@ -452,11 +452,9 @@ var/global/current_state = GAME_STATE_WORLD_INIT
 
 					message_admins("<span class='internal'>Server would have restarted now, but the restart has been delayed[game_end_delayer ? " by [game_end_delayer]" : null]. Remove the delay for an immediate restart.</span>")
 					game_end_delayed = 2
-					var/ircmsg[] = new()
-					ircmsg["msg"] = "Server would have restarted now, but the restart has been delayed[game_end_delayer ? " by [game_end_delayer]" : null]."
-					ircbot.export("admin", ircmsg)
+					discord_send("Server would have restarted now, but the restart has been delayed[game_end_delayer ? " by [game_end_delayer]" : null].", -1)
 				else
-					ircbot.event("roundend")
+					discord_send("Round just ended on [config.server_name].", -1)
 					//logTheThing("debug", null, null, "Zamujasa: [world.timeofday] REBOOTING THE SERVER!!!!!!!!!!!!!!!!!")
 					Reboot_server()
 
